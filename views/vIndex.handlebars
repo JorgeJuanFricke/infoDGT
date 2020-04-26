@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Enlaza dgt</title>
+    <!-- Font Awesome -->
+    <link href="/css/vendor/bootstrap.min.css" rel="stylesheet">
+    <!-- Your custom styles (optional) -->
+    <link rel="stylesheet" href="/css/vendor/font-awesome.min.css">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/vendor/fontRope.css" type="text/css" charset="utf-8">
+    <link href="/css/vendor/select2.min.css" rel="stylesheet" />
+    <!--link href="/css/bootstrap-wysihtml5-0.0.02.css" rel="stylesheet" /-->
+    <link href="/css/jumbotron.css" rel="stylesheet" />
+    <link href="/css/vendor/select2-bootstrap.min.css" type="text/css" rel="stylesheet" />
+<style>
+
+.main {
+    width: 50%;
+    margin: 50px auto;
+}
+
+/* Bootstrap 4 text input with search icon */
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+</style>
+
+
+</head>
+
+
+<body>
+
+
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand text-warning" href="#">Busca dgt</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto ">
+                <form class="form-inline">
+                   <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            A
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" onclick="nuevoRecurso()" href="#">nuevo recurso</a>
+                            <a class="dropdown-item" href="#">permiso usuarios</a>
+                            <a class="dropdown-item" href="#">Exportar datos</a>
+                            <a class="dropdown-item" href="#">Importar datos</a>
+                            <a id="usuario" class="dropdown-item" href="#">Permisos</a>
+
+                        </div>
+                    </div>
+                    
+                   <select id="tipos" class="form-control">
+                   </select>
+                   <!-- Another variation with a button -->
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search this blog">
+                        <div class="input-group-append">
+                        <button class="btn btn-secondary" onclick="muestraListaRecursos()" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        </div>
+                    </div>
+                 
+                    
+                     <p class="nav-item">
+
+                        {{#if currentUser}}
+                        {{currentUser.email}}
+                        <a id="logout" href="#" class="nav-link" onclick="logout()"><i class="fas fa-user"></i>logout</a>
+
+                        {{else}}
+
+                        <a id="login" href="#" class="nav-link" onclick="login()"><i class="fas fa-user"></i>login</a>
+
+                        {{/if}}
+
+                    </p>
+                </form>
+            </ul>
+        </div>
+    </nav>
+
+
+    <article id="principal" class="container-fluid">
+        <div class="row">
+
+            <div id="jumbotron" class="col col-lg-3 float-left">
+                <ul class="accordion">
+                    {{#with treeTipos}}
+                    {{> Jumbotron}}
+                    {{/with}}
+                </ul>
+            </div>
+
+            <div class="col col-lg-9 float-right">
+                
+              
+                <section id="recursos"></section>
+            </div>
+
+        </div>
+        <section id=paginacion></section>
+        <div class="row">
+            <footer>
+                <p>{{nombreOficina}}.{{usuario}}</p>
+            </footer>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="/js/hbs/handlebars.js"></script>
+    <script src="/js/hbs/customHelpers.js"></script>
+   
+    <script src="/js/hbs/vRecurso.tmpl.js"></script>
+     <script src="/js/hbs/vLogin.tmpl.js"></script>
+
+    <script type="text/javascript" src="/js/vendor/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/vendor/popper/popper.js"></script>
+    <script type="text/javascript" src="/js/vendor/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/vendor/d3.js"></script>
+    <!--script type="text/javascript" src="/js/vendor/all.min.js"></script-->
+    <!--load all styles -->
+    <script src="/js/vendor/select2.min.js"></script>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/recursos.js"></script>
+    <script src="/js/enlaza.js"></script>
+    <script src="/js/admin.js"></script>
+    <script src="/js/vendor/jquery.ui.widget.js"></script>
+    <script src="/js/vendor/jquery.iframe-transport.js"></script>
+    <script src="/js/vendor/jquery.fileupload.js"></script>
+    <script src="/js/vendor/jquery.fileupload-process.js"></script>
+    <script src="/js/vendor/jquery.fileupload-validate.js"></script>
+    <!--script src="/js/jquery.fileupload.jquery-ui.js"></--script-->
+    <script src="/js/upload.js"></script>
+    <script src="/js/boe.js"></script>
+    <script src="/js/vendor/wysihtml5/bootstrap-wysihtml5-0.0.2.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#tags").select2({
+                 tags: true,
+                 tokenSeparators: [',']
+
+        })
+    </script>
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            $(".dropdown-toggle").dropdown();
+
+            
+        })
+    </script>
+
+
+    
+    <script>
+        // TIPOS
+        $(document).ready(function () {
+           
+            $('#tipos').select2({
+                width: '150px',
+                ajax: {
+                    url: "http://localhost:3000/tipos",
+                    dataType: 'json'
+                }
+            });
+
+            $("#tipos").on("change", function(e) { 
+                muestraListaRecursos();
+            })
+        });    
+    
+        
+    </script>
+
+    <script>
+       
+
+
+
+
+
+
+
+</body>
+
+</html>

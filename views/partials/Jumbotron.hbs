@@ -1,0 +1,25 @@
+{{#each children}}
+<li class="nav-item">
+
+    <div class="titulo">
+        <a class="btn btn-primary data" data-toggle="collapse" href="#{{espacio2Guion id}}" role="button">
+            {{id}}
+        </a>
+    </div>
+    <ul class="collapse" id="{{espacio2Guion id}}">
+        {{#each children}}
+        <li class="tipo">
+            <span><a class="recurso" href="#" data-tipo="{{id}}" onclick="listaRecursos()">
+                    {{id}}
+                </a></span>
+              
+            <span><a class="Nuevo" href="#" data-id="{{id}}" data-url="{{data._doc.url}}" onclick="nuevoRecurso(this)">+++<i
+                        class="fas fa-pen-alt"></i></a></span>
+
+        </li>
+
+        {{/each}}
+    </ul>
+
+</li>
+{{/each}}

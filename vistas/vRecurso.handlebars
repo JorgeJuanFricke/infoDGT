@@ -1,0 +1,99 @@
+<div class="modal" id="modalRecurso">
+  
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+
+            <div class="modal-header">
+                <h4 class="modal-title">Recurso</h4>
+                <button type="button" class="close" data-dismiss="modal"></button>
+
+                
+
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+
+            <div class="form" > 
+                <input type="hidden" name="_csrf" value="{{csrf}}">
+                <input type="hidden" class="form-control" name="tipo" value="{{tipo}}">
+           
+                
+                <div class="form-group row">
+                    <div class="col-3">
+                        <label>tipo:</label>
+                        <select id="recursoTipos" class="form-control" autofocus="true" >
+                            {{#each tipos}}
+                               <span>codigo</span>
+                            {{/each}} 
+                        </select>
+                     </div>      
+                    
+                </div>
+                 <div class="form-group row">
+                    <select id="tags" name="tags"  multiple="multiple">
+                       
+                    </select> 
+                </div>   
+                
+                <div class="form-group">
+                    <label for="nombre" class="control-label">nombre:</label>
+                    <input type="text" class="form-control" name="nombre" value="{{nombre}}"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion" class="control-label">descripción:</label>
+                    <textarea class="form-control" name="descripcion" id="demo" cols="80" rows="4">
+                            {{ descripcion }}
+                      </textarea>
+                </div>
+
+               
+                <div class="form-group">
+                    <label for="url" class="control-label">url:</label>
+                    <input type="text" class="form-control" name="url" value="{{url}}">
+                </div>
+
+                  
+
+                <div class="form-group row">
+                    <div class="col-4"> 
+                        <label for="procedencia" class="control-label">procedencia:</label>
+                        <input type="text" class="form-control" name="procedencia" value="{{procedencia}}">
+                    </div> 
+                    <div class="col-2">
+                        <label for="publicacion" class="control-label">publicación:</label>
+                        <input type="date" class="form-control" name="publicacion"
+                            value="{{publicacion}}"></input>
+                    </div>
+                    <div class="col-2">
+                        <label for="derogacion" class="control-label">derogación:</label>
+                        <input type="date" class="form-control" name="derogacion" value="{{derogacion}}"></input>
+                    </div>
+                </div>
+
+                    <div class="from-group row">
+                        <!--label for="documento" class="control-label">documento</label-->
+                        <div class="col">
+                            <span class="btn btn-default btn-file">
+                                <input id="fileupload" type="file" name="documento" class="form-control"
+                                    data-url="/upload">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+               
+                <div class="form-group">
+                    <button id="Aceptar" type="button" class="btn btn-primary">Grabar</button>
+                    <button type="button" class="btn btn-secundary" onclick="">Cancelar</button>
+
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+  
+
+</div>

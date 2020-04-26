@@ -1,0 +1,71 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Enlaza dgt</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <!-- Your custom styles (optional) -->
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/fontRope.css" type="text/css" charset="utf-8" />
+
+    {{{_sections.head}}}
+
+</head>
+
+<body>
+<div class="container">
+
+    {{#if flash}}
+        <div class="alert alert-dismissible alert-danger">
+            {{#each flash}}
+                <p>{{this}}</p>
+
+            {{/each}}
+        </div>
+    {{/if}}
+
+
+
+    <div class="modal-content" id="myModal" role="dialog" data-backdrop="false" >
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New message to undefined</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        </div>
+        <div class="modal-body">
+
+            {{{body}}}
+
+        </div>
+
+    </div>
+
+    <!-- /Start your project here-->
+
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+    <script type="text/javascript" src="/js/vendor/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="/js/vendor/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="/js/vendor/bootstrap.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {$(".dropdown-toggle").dropdown()});
+    </script>
+
+    {{{_sections.jquery}}}
+
+</div>
+</body>
+</html>
+
+

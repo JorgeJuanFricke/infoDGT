@@ -1,0 +1,86 @@
+   [
+      {
+         "codigo": " ",
+         "sigla": "",
+         "permisos": ["ADMIN","OAT", "OI", "EX", "SAN"]
+      },
+   
+
+    
+     {
+        "codigo": "oficio",
+        "sigla": "OFI",
+        "permisos": ["ADMIN","OAT", "OI", "EX", "SAN"]
+     },
+     {
+      "codigo": "solicitud",
+      "sigla": "SOL",
+      "permisos": ["ADMIN","OAT", "OI", "EX", "SAN"]
+     },
+     {
+        "codigo": "informe",
+        "sigla": "INF",
+        "permisos": ["ADMIN","OAT", "OI", "EX", "SAN"]
+     },
+
+     {
+        "codigo": "circular",
+        "sigla": "CIR",
+        "permisos": ["ADMIN", "OI"]
+     },
+     {
+      "codigo": "hoja de requisitos",
+      "sigla": "REQ",
+      "permisos": ["ADMIN", "OI"]
+      },
+      {
+         "codigo": "alegación",
+         "sigla": "ALE",
+         "permisos": ["ADMIN", "OI"]
+      },
+      {
+         "codigo": "resolución",
+         "sigla": "RES",
+         "permisos": ["ADMIN", "OI"]
+      },
+      {
+         "codigo": "ley",
+         "sigla": "LEY",
+         "permisos": ["ADMIN", "OI"]
+      },
+      {
+         "codigo": "norma",
+         "sigla": "NOR",
+         "permisos": ["ADMIN", "OI"]
+      },
+      {
+         "codigo": "tasa",
+         "sigla": "TAS",
+         "permisos": ["ADMIN", "OI"]
+      },
+      {
+         "codigo": "sanción",
+         "sigla": "SAN",
+         "permisos": ["ADMIN", "OI"]
+      },
+      {
+         "codigo": "manual",
+         "sigla": "MAN",
+         "permisos": ["ADMIN", "OI"]
+      },
+      {
+         "codigo": "declaración",
+         "sigla": "DEC",
+         "permisos": ["ADMIN", "OI"]
+      },
+     {
+        "codigo": "tarea administrativa",
+        "sigla": "ADM",
+        "permisos": ["ADMIN", "OI" ]
+     },
+     {
+        "codigo": "tarea informática",
+        "sigla": "INF",
+        "permisos": ["ADMIN","OAT"]
+     }
+]

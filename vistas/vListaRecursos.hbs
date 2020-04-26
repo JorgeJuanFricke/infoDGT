@@ -1,0 +1,117 @@
+{{#section 'head'}}
+
+
+<!-- TEMPLATE RECURSO -------------------------->
+
+<script id="tptRecurso" type="text/x-handlebars-template">
+
+<div class="card center">
+    <div class="card-body">
+    \{{#with this}}
+        <h3 class="card-title">\{{tipo.padre}}/\{{tipo.codigo}}</h3>
+        <h4 class="card-title">\{{nombre}}</h4>
+
+        <div class="card-text">
+            <p class="card-text"><span>\{{autor}}</span><span>\{{oficina}}</span></p>
+            <p class="card-text"><span>creado:\{{createdAt}}</span><span>Ultima actualización:\{{updatedAt}}</span></p>
+            <p class="card-text">\{{descripcion}}</p>
+            \{{#if codBoe}}
+                <a class="card-text" href="\{{codBoe}}">Ley:\{{tituloLey}}</a>
+                <p class="card-text">\{{posicion}}</p>
+            \{{/if}}
+
+            <div>
+                \{{#if enlaces}}
+                    <table class="table table-striped table-hover"> id="tablaEnlaces">
+                        <tbody>
+                        \{{#each enlaces}}
+                            <tr>
+                                <td class="relacion">\{{relacion}}</td>
+                                <td class="enlace"><a href="/recurso/\{{objetoId}}">\{{objetoNombre}}</a></td>
+
+                                <!--signo y enlace para borrar enlace-->
+                                <td><a href="/enlace/borra/\{{_id}}"><i class="fas fa-pen-alt"></i></a></td>');
+
+                            </tr>
+                        \{{/each}}
+                        </tbody>
+                    </table>
+                \{{/if}}
+            </div>
+            <!-- Trigger the modal with a button -->
+
+        </div>
+     \{{/with}}
+    </div>
+</div>
+
+</script>
+
+
+
+
+    <!-- TEMPLATE lista de RECURSOS  ------------------------------------>
+
+    <script id="tptListaRecursos" type="text/x-handlebars-template">
+
+        <div class="container">
+
+            <div class="container">
+                {{#if contador}}
+                    <div class="col-xs-6">
+                         <ul class="pagination">
+                            <li class="prev disabled">
+                                <a href="#">← Previous</a>
+                            </li>
+                            <li class="next">
+                                <a href="#">Next → </a>
+                            </li>
+                        </ul>
+                    </div>
+                {{/if}}
+                <ul id="list-group tablaRecursos">
+
+                    \{{#each this}}
+                    <li class="list-group-item">
+
+                        <span><a class="recurso list-inline-item" href="/api/\{{_id}}">\{{nombre}}</a></span>
+                        {{#if_Propietario currentUser autor}}
+                            <a class="list-inline-item" id="recurso" href="\{{tipo.url}}/\{{_id}}"><i class="fas fa-pen-alt"/></a>
+                        {{/if_Propietario}}
+
+                        <span><a class ="enlace list-inline-item" href="/api/enlaza/\{{_id}}"><i class="fas fa-share-alt"/></a></span>
+
+                        <span><a class="list-inline-item" href="\{{tipo.url}}/\{{_id}}"><i class="fas fa-pen-alt"/></a></span>
+
+                    </li>
+                    \{{/each}}
+
+                 </ul>
+
+            </div>
+
+        </div>
+
+    </script>
+
+
+
+
+{{/section}}
+
+
+
+
+
+
+{{#section 'jquery'}}
+
+
+
+
+
+<script>
+
+{{/section}}
+
+

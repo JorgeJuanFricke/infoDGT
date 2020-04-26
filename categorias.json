@@ -1,0 +1,33 @@
+ [
+    {"topic": "DGT"},
+    {"topic": "permiso de conducción AM"},
+    {"topic": "permiso de conducción A1"},
+    {"topic": "permiso de conducción A2 "},
+    {"topic": "permiso de conducción A"},
+    {"topic": "permiso de conducción B"},
+    {"topic": "permiso de conducción C"},
+    {"topic": "permiso de conducción D"},
+    {"topic": "permiso de conducción C1"},
+    {"topic": "permiso de conducción D1"},
+    {"topic": "permiso de conducción EC"},
+    {"topic": "permiso de conducción ED"},
+    {"topic": "permiso de conducción EB"},
+    {"topic": "permiso de conducción EC1"},
+    {"topic": "permiso de conducción ED1"},
+
+    {"topic": "canje del permiso conducción"},
+    {"topic": "canje permiso conducción no europeo"},
+    {"topic": "canje permiso conducción Europeo"},
+    {"topic": "cambio de titularidad"},
+    {"topic": "notificación de venta"},
+    {"topic": "matriculación ordinaria vehículos"},
+    {"topic": "matriculación temporal vehículos"},
+    {"topic": "baja temporal vehículos"},
+    {"topic": "duplicado permiso de conducción"},
+    {"topic": "permiso internacional de conducción"},
+    {"topic": "permiso de circulación"},
+
+    {"topic": "tarjeta inspección técnica"},
+    {"topic": "certificado médico"},
+    {"topic": "mercancias peligrosas"}
+] 
