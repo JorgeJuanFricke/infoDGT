@@ -173,7 +173,7 @@ app.use("/upload", function(req, res, next) {
 
 /**** actualizar datos ******************/
 ini.updateTipos();
-ini.updateCategorias();
+
 
 
 
