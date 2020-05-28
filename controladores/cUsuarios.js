@@ -366,6 +366,7 @@ exports.login = async (req, res, next) => {
   }
 };
 
+
 exports.updateUsuario = async (req, res, next) => {
   try {
     const usuario = await Usuario.findById(req.usuarioId);
