@@ -107,8 +107,17 @@ const nuevoRecurso = (btn) => {
     try {
         
         let template = Handlebars.templates.vRecurso;
-        
+        // cargar tipos de recursos
+                
+      
         $("body").append(template(recurso));
+        $('#tiposRecurso').select2({
+            width: '150px',
+            ajax: {
+                url: "http://localhost:3000/tipos",
+                dataType: 'json'
+            }
+        });
         $('#Aceptar').off().on('click', putRecurso);
         $('#modalRecurso').modal({
             show: true
