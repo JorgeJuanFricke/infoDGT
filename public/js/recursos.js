@@ -133,7 +133,7 @@ const nuevoRecurso = (btn) => {
 
 
 const putRecurso = () => {
-    fetch("http://localhost:3000/recurso/", {
+    fetch("http://localhost:3000/recurso", {
             method: "PUT",
             headers: {
                 "csrf-token": "csrf23454345"

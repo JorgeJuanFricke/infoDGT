@@ -19,8 +19,7 @@ const UsuarioSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    status: String,
-    reset: Boolean,
+    estado: Number,
     admin: Boolean,
     oi: Boolean,
     oat: Boolean,
@@ -38,7 +37,7 @@ const UsuarioSchema = mongoose.Schema({
 
 const noop = function () {};
 
-UsuarioSchema.pre('findOneAndUpdate', function (next) {
+UsuarioSchema.pre('insertMany', function (next) {
     try {
         this._update.password = bcryptjs.hashSync(this._update.password, 10);
     } catch {
@@ -47,7 +46,7 @@ UsuarioSchema.pre('findOneAndUpdate', function (next) {
     next();
 });
 
-/*
+
 UsuarioSchema.pre("update", {query:true}, function(done) {
      let Usuario = this;
     if (!Usuario.isModified("password")) {
@@ -62,7 +61,7 @@ UsuarioSchema.pre("update", {query:true}, function(done) {
         });
     });
 });
-*****/
+
 
 UsuarioSchema.methods.checkPassword = function (guess, done) {
     bcryptjs.compare(guess, this.password, function (err, isMatch) {

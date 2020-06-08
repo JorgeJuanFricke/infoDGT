@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const fs = require("fs");
 const Tipo = require('../modelos/mTipo.js');
+const Usuario = require('../modelos/mUsuario.js');
 const async = require("async");
 
 exports.updateTipos =  () => {
@@ -18,6 +19,15 @@ exports.updateTipos =  () => {
     },  function(err, res){
         if (err) {console.log(err)}
         else console.log("actualizado tipos")
+    });
+   
+};
+
+exports.creaUsuarios =  () => {
+    let usuarios = JSON.parse(fs.readFileSync('./usuarios.json'));
+   Usuario.insertMany(usuarios, { ordered: false },  function(err, res){
+        if (err) {console.log(err)}
+        else console.log("actualizado usuarios")
     });
    
 };

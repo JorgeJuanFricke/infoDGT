@@ -36,7 +36,7 @@ $(document).ready(function () {
 
 
 
-login = () => {
+muestralogin = () => {
     var template = Handlebars.templates.vLogin;
     console.log(template({}));
     $('body').append(template({}));
@@ -55,32 +55,30 @@ goRegistro = () => {
 }
 
 
+// 'Authorization': 'Bearer ' + token
+
 logea = () => {
-    url = 'http://localhost:3000/' + this.action
+    url = 'http://localhost:3000/usuario/login'
     d3.json(url, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
+              
             },
             method: 'GET',
             dataType: 'json',
 
         }).then(res => {
             if (res.status !== 200) {
-                throw new Error('Fallo login/signup');
+                throw new Error('Fallo login');
             }
             return res.json();
         })
         .then(resData => {
-            this.setState({
-                title: resData.post.title,
-                author: resData.post.creator.name,
-                image: 'http://localhost:8080/' + resData.post.imageUrl,
-                date: new Date(resData.post.createdAt).toLocaleDateString('en-US'),
-                content: resData.post.content
-            });
-        })
+            //poner el nombre del logueado
+           
+            })
+       
         .catch(err => {
             console.log(err);
         });

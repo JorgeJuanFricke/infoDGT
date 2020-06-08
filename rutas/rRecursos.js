@@ -51,25 +51,25 @@ VALIDAIMPORTE = [
 
 /*** RECURSO general **************************************/
 
-recursosRouter.get('/recurso', Auto.esAutenticado, function (req, res, next) {
+recursosRouter.get('/', Auto.esAutenticado, function (req, res, next) {
     cRecursos.getRecurso(req, res, next);
 });
 
 
-recursosRouter.get('/recurso/:Id', Auto.esAutenticado, function (req, res, next) {
+recursosRouter.get('/:Id', Auto.esAutenticado, function (req, res, next) {
     cRecursos.getRecurso(req, res, next);
 });
 
 
 recursosRouter.put(
-    '/recurso', 
+    '/', 
     Auto.esAutenticado, 
     Auto.esAutorizadoAñadir, 
     VALIDA, function (req, res, next) {
     cRecursos.putRecurso(req, res, next);
 });
 
-recursosRouter.post('/recurso:Id', Auto.esAutenticado, Auto.esAutorizadoEditar, VALIDA, function (req, res, next) {
+recursosRouter.post('/:Id', Auto.esAutenticado, Auto.esAutorizadoEditar, VALIDA, function (req, res, next) {
     cRecursos.updateRecurso(req, res, next);
 });
 

@@ -1,0 +1,14 @@
+
+[
+    {
+    "email": "jjuan@dgt.es",
+    "password": "lkjhl",
+    "nombre": "Jorge Juan Fricke",
+    "estado": "1",
+    "reset": true,
+    "admin": true,
+    "oi": true,
+    "oat": true
+    }
+   
+]

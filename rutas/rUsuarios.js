@@ -13,9 +13,6 @@ const usuariosRouter = express.Router();
 
 
 
-usuariosRouter.post("/login", cUsuarios.login);
-
-
 
 
 
@@ -29,7 +26,7 @@ usuariosRouter.get("/logout", function (req, res) {
 
 //usuariosRouter.get('/signup', cUsuarios.getSignup);
 
-usuariosRouter.post('/login',
+usuariosRouter.get('/login',
   [
     body('email')
       .isEmail()
