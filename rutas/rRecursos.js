@@ -18,7 +18,7 @@ const {
 VALIDATEXTO = [
     body('nombre').not().isEmpty().withMessage("debe introducir un nombre"),
     body('url').not().isEmpty().withMessage("debe introducir la url del documento"),
-    body('descripcion').not().isEmpty().withMessage("debe introducir una descripción"),
+    
 
     sanitizeBody('nombre').escape(),
     sanitizeBody('url').escape(),
@@ -68,6 +68,9 @@ recursosRouter.put(
     VALIDA, function (req, res, next) {
     cRecursos.putRecurso(req, res, next);
 });
+
+
+
 
 recursosRouter.post('/:Id', Auto.esAutenticado, Auto.esAutorizadoEditar, VALIDA, function (req, res, next) {
     cRecursos.updateRecurso(req, res, next);

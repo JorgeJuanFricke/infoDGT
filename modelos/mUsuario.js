@@ -19,7 +19,7 @@ const UsuarioSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    estado: Number,
+    suspendido: Boolean,
     admin: Boolean,
     oi: Boolean,
     oat: Boolean,
@@ -36,7 +36,7 @@ const UsuarioSchema = mongoose.Schema({
 
 
 const noop = function () {};
-
+/*
 UsuarioSchema.pre('insertMany', function (next) {
     try {
         this._update.password = bcryptjs.hashSync(this._update.password, 10);
@@ -45,7 +45,7 @@ UsuarioSchema.pre('insertMany', function (next) {
     }
     next();
 });
-
+*/
 
 UsuarioSchema.pre("update", {query:true}, function(done) {
      let Usuario = this;

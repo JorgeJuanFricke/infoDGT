@@ -102,7 +102,7 @@ const nuevaCategoria = () => {
 */
 
 
-const nuevoRecurso = (btn) => {
+const modalRecurso = (btn) => {
     let recurso = {};
     try {
         
@@ -118,7 +118,8 @@ const nuevoRecurso = (btn) => {
                 dataType: 'json'
             }
         });
-        $('#Aceptar').off().on('click', putRecurso);
+        $('#Aceptar').off().on('click', creaRecurso);
+        //"csrf23454345"
         $('#modalRecurso').modal({
             show: true
         });
@@ -131,27 +132,39 @@ const nuevoRecurso = (btn) => {
 
 
 
-
-const putRecurso = () => {
-    fetch("http://localhost:3000/recurso", {
+ //    "csrf-token": "csrf23454345"
+const creaRecurso = () => {
+    fetch("http://localhost:3000/recurso/", {
             method: "PUT",
+        
             headers: {
-                "csrf-token": "csrf23454345"
+           
             }
     })
     .then(result => {
-        return result.json();
+        console.log(result);
+        if (result.status !== 200) {
+            console.log(result);
+            throw new Error(result.message);
+          }
+          return result.json();
+  
     })
     .then(data => {
-        muestraRecurso(data);
+        console.log(data);
+        alert("recurso creado!");
+        muestralistaRecursos();
     })
-    .catch(err => { console.log(err)})
-} ;
+    .catch(err => { 
+        console.log("err:"+err);
+        alert ("se ha producido el error:"+err);
+    })
+ } ;
          
 
 
 
-const editaRecurso = (btn) => {
+const leeRecurso = (btn) => {
     recurso = $(btn).val();
     fetch('http://localhost:3000/recurso/' + recurso, {
             method: 'GET',
@@ -178,7 +191,7 @@ const editaRecurso = (btn) => {
 
 
 
-const postRecurso = (recurso) => {
+const actualizaRecurso = (recurso) => {
 
     fetch("http://localhost:3000/recurso/" + recurso, {
             method: "POST",

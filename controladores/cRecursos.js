@@ -83,7 +83,7 @@ exports.getRecurso = async (req, res, next) => {
       }
     ]
     try {
-      let recurso = await Recurso.aggregate().exec();
+      let recurso = await Recurso.aggregate(query).exec();
       if (!recurso) {
         const error = new Error('El recurso no existe');
         error.statusCode = 404;
@@ -103,12 +103,16 @@ exports.getRecurso = async (req, res, next) => {
   };
 
 
+  
+
 
 exports.putRecurso = async (req, res, next) => {
+  try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const error = new Error('validación fallida.');
       error.statusCode = 422;
+      error.message ='validación fallida';
       error.data = errors;
       throw error;
     }
@@ -119,21 +123,20 @@ exports.putRecurso = async (req, res, next) => {
     recurso.actualizadoPor = req.user.email;
     //Object.assign(recurso, req.body);
     
-
-    try {
-        await recurso.save();
+      await recurso.save();
+      
+      res.status(201).json({
+        message: 'recurso creado!',
+        recurso: recurso,
         
-        res.status(201).json({
-          message: 'recurso creado!',
-          recurso: recurso,
-          
-        });
-      } catch (err) {
-        if (!err.statusCode) {
-          err.statusCode = 500;
-        }
-        next(err);
+      });
+      
+    } catch (err) {
+      if (!err.statusCode) {
+        err.statusCode = 500;
       }
+      next(err);
+    }
 };
      
  

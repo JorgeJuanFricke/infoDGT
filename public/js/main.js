@@ -37,21 +37,9 @@ $(document).ready(function () {
 
 
 muestralogin = () => {
-    var template = Handlebars.templates.vLogin;
-    console.log(template({}));
+    let template = Handlebars.templates.vLogin;
     $('body').append(template({}));
     $('#modalLogin').modal('show');
-}
-
-
-logout = () => {
-    $('#modalLogout').modal('show');
-}
-
-
-
-goRegistro = () => {
-  $('#modalLogin').modal('show');
 }
 
 
@@ -85,7 +73,82 @@ logea = () => {
 
 };
 
+logout = () => {
+    $('#modalLogout').modal('show');
+}
 
+
+
+
+muestraRegistraUsuario = (nuevo) => {
+    let template = Handlebars.templates.vRegistraUsuario;
+    $('body').append(template({}));
+    $('#modalRegistraUsuario').modal('show');
+   
+}
+
+registraUsuario = (email) => {
+    url = 'http://localhost:3000/usuario/';
+    //cargar datos
+    d3.json(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              
+            },
+            method: 'GET',
+            dataType: 'json',
+
+        }).then(res => {
+            if (res.status !== 200) {
+                throw new Error('Error creando usuario');
+            }
+            return res.json();
+        })
+       .then(usuario => {
+           // llenar los inputs
+       })
+        .catch(err => {
+            console.log(err);
+        });
+
+}
+
+
+
+muestraActualizaUsuario = (nuevo) => {
+    let template = Handlebars.templates.vActualizaUsuario;
+    $('body').append(template({}));
+    $('#modalActualizaUsuario').modal('show');
+   
+}
+
+actualizaUsuario = (email) => {
+    url = 'http://localhost:3000/usuario/' +email;
+    // cargar datos
+    d3.json(url, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              
+            },
+            method: 'GET',
+            dataType: 'json',
+
+        }).then(res => {
+            if (res.status !== 200) {
+                throw new Error('Error actualizando usuario');
+            }
+            return res.json();
+        })
+       .then(usuario => {
+           // llenar los inputs
+       })
+        .catch(err => {
+            console.log(err);
+        });
+
+}
 
 
 

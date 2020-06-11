@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 
 exports.esAutenticado = (req, res, next) => {
     next();
+    /*
     const authHeader = req.get("Authorization");
     if (!authHeader) {
         const error = new Error("No autenticado.");
@@ -22,7 +23,7 @@ exports.esAutenticado = (req, res, next) => {
         throw error;
     }
     req.userId = decodedToken.userId;
-    next();
+   */
 };
 
 exports.esAutorizadoAñadir = (req, res, next) => {
