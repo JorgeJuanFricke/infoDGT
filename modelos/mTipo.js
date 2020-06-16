@@ -17,8 +17,5 @@ const TipoSchema = mongoose.Schema({
   
 });
 
-TipoSchema.index({
-  codigo: 1
-});
 let Tipo = mongoose.model("Tipo", TipoSchema);
 module.exports = Tipo;

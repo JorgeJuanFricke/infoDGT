@@ -4,9 +4,14 @@ const mongoose = require("mongoose");
 const express = require("express");
 const path = require("path");
 const logger = require("morgan");
+const bodyParser = require("body-parser");
 const exphbs = require("express-handlebars");
-const app = express();
 const ini = require("./controladores/cIni");
+const env = require("dotenv").config();
+
+const app = express();
+
+
 
 /**** directorios  ***************/
 const fs = require("fs");
@@ -19,16 +24,26 @@ app.use(logger("combined"));
 
 /*******  body parsers ****************/
 
-const bodyParser = require("body-parser");
-app.use(express.json());
+
+app.use(bodyParser.json()); // application/json
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'OPTIONS, GET, POST, PUT, PATCH, DELETE'
+  );
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+/*
 app.use(
   express.urlencoded({
     extended: false
   })
 );
-
+*/
 /********* mongo ******************/
-const env = require("dotenv").config();
+
 console.log(process.env.NODE_ENV);
 
 switch (process.env.NODE_ENV) {
@@ -149,8 +164,13 @@ hbs.registerHelper("margen", (depth, options) => {
 hbs.registerHelper("espacio2Guion", (frase, options) => {
   return (frase = frase.replace(" ", "-"));
 });
-*/
 
+
+hbs.registerHelper('formateaFecha', function (date, formato) {
+  var mmnt = moment(date);
+  return mmnt.format(formato);
+})
+*/
 /*** usuario actual para handlebars *************/
 app.use(function(req, res, next) {
   res.locals.currentUser = req.user;

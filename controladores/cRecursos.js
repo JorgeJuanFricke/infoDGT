@@ -8,9 +8,11 @@ const rp = require('request-promise');
 const $ = require('cheerio');
 const xml2js = require('xml2js');
 const parseString = require('xml2js').parseString;
+
 const {
     validationResult
 } = require('express-validator/check');
+
 const R = require('ramda');
 
 
@@ -109,19 +111,39 @@ exports.getRecurso = async (req, res, next) => {
 exports.putRecurso = async (req, res, next) => {
   try {
     const errors = validationResult(req);
+    
     if (!errors.isEmpty()) {
       const error = new Error('validación fallida.');
       error.statusCode = 422;
       error.message ='validación fallida';
-      error.data = errors;
+      error.data = errors.array();
       throw error;
     }
-    if (recurso.tipo === 'Norma') {
-        recurso = validaLeyBOE(req.body.codBOE);
-    }
-    const recurso = new Recurso(req.body);
-    recurso.actualizadoPor = req.user.email;
-    //Object.assign(recurso, req.body);
+    
+   
+    const tipo = req.body.tipo;
+    const nombre = req.body.nombre;
+    const descripcion = req.body.descripcion;
+    const url = req.body.url;
+    const procedencia = req.body.procedencia;
+    const publicacion = req.body.publicacion;
+    const derogacion = req.body.derogacion;
+
+    let recurso = new Recurso({
+      tipo: tipo,
+      nombre: nombre,
+      descripcion: descripcion,
+      url: url,
+      procedencia:procedencia,
+      publicacion:publicacion,
+      derogacion:derogacion,
+      oficina: '3502',
+      autor: 'jjuan@dgt.es'
+
+     
+    });
+     // oficina: config.Oficina
+     //autor: req.user.email,
     
       await recurso.save();
       

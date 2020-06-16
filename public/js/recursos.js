@@ -134,18 +134,41 @@ const modalRecurso = (btn) => {
 
  //    "csrf-token": "csrf23454345"
 const creaRecurso = () => {
-    fetch("http://localhost:3000/recurso/", {
-            method: "PUT",
-        
-            headers: {
-           
-            }
+    const formData = new FormData();
+    let publicacion =  $('input:text[name=publicacion]').val();
+    let derogacion =  $('input:text[name=derogacion]').val();
+    publicacion = publicacion ? publicacion : "";
+    derogacion =  derogacion ? derogacion : "";
+
+    formData.append('tipo', $('#tiposRecurso').children("option:selected").text());
+    formData.append('nombre', $('input:text[name=nombre]').val());
+    formData.append('descripcion',$('#Descrip').val());
+    formData.append('procedencia',$('input:text[name=procedencia]').val() );
+    formData.append('publicacion', new Date("2020/06/20"));
+    formData.append('derogacion', "");
+    formData.append('url', $('input:text[name=url]').val());
+    let url = 'http://localhost:3000/recurso/';
+    let method = 'PUT';
+    
+    var object = {};
+    formData.forEach((value, key) => {object[key] = value});
+    var json = JSON.stringify(object);
+
+    fetch(url, {
+      method: method,
+      body: json,
+      headers: {
+
+        Authorization: 'Bearer ' + "el token", //this.props.token,
+        'Content-Type': 'application/json'
+
+      }
     })
     .then(result => {
         console.log(result);
         if (result.status !== 200) {
             console.log(result);
-            throw new Error(result.message);
+            throw new Error(result);
           }
           return result.json();
   

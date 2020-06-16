@@ -1,32 +1,26 @@
-const Tipo = require('./mTipo');
+
 const mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
 
-const RecursoSchema = new Schema({
+
+let RecursoSchema = mongoose.Schema({
     url: {
         type: String,
         required: true
     },
+
     tipo: {
         type: String,
         required: true
     },
-    tags: [{
-        type: String,
-        required: true
-    }],
+   
     
-    titulo: {
+    nombre: {
         type: String,
         required: true
     },
 
-    etiqueta: {
-        type: String,
-        required: true
-    },
-
+   
     descripcion:  {
         type: String,
         required: true
@@ -34,30 +28,38 @@ const RecursoSchema = new Schema({
 
     oficina: {
         type: String,
-        required: true
+        //required: true
     },
 
     autor: {
         type: String,
-        required: true
+        //required: true
     },
 
-    publicacion: {type:Date,required: true},
+
+    actualizadoPor: {
+        type: String
+        
+    },
+
+    procedencia: {type: String},
+
+    publicacion: {type:Date},
   
     derogacion: {type:Date},
 
     
 });
 
-RecursoSchema.index({ titulo: 'text', etiqueta: 'text', descripcion: 'text', autor: 'text' },
+RecursoSchema.index({ nombre: 'text', descripcion: 'text' },
 
 {
-    name: "recursos_textos",
+    name: "nombreydescripcion",
 
     //  (default es 1)
     weights: {
-        titulo: 5,  
-        etiqueta: 4  
+        nombre: 5,  
+        descripcion: 4  
     }
 });
 
@@ -79,16 +81,5 @@ RecursoSchema.pre('save', function (next) {
     })
 });
 
-
-RecursoSchema.pre('save', function (next) {
-    Categoria.findOne({
-        categoria: this.categoria
-    }, function (error, categoria) {
-        if ((error) || !categoria) {
-            return next('categoría no existe')
-        }
-        return next();
-    })
-});
-
-module.exports = RecursoSchema;
+const Recurso = mongoose.model('Recurso', RecursoSchema);
+module.exports = Recurso;

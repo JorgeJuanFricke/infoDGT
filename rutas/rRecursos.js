@@ -15,37 +15,23 @@ const {
 
 
 
-VALIDATEXTO = [
-    body('nombre').not().isEmpty().withMessage("debe introducir un nombre"),
-    body('url').not().isEmpty().withMessage("debe introducir la url del documento"),
-    
-
-    sanitizeBody('nombre').escape(),
-    sanitizeBody('url').escape(),
-];
-
-
-VALIDANORMA = [
-    body('nombre').not().isEmpty().withMessage("debe introducir un nombre"),
-    body('descripcion').not().isEmpty().withMessage("debe introducir una descripción"),
-    body('codBOE').not().isEmpty().withMessage("debe introducir el código del BOE"),
-    sanitizeBody('nombre').escape(),
-    sanitizeBody('codBOE').escape(),
-
-];
-
 VALIDA = [
     body('nombre').not().isEmpty().withMessage("debe introducir un nombre"),
-
+    body('url').not().isEmpty().withMessage("debe introducir la url del documento"),
+    body('descripcion').not().isEmpty().withMessage("debe introducir una descripción"),
+    body('euros').optional().not().isEmpty().withMessage("debe introducir un importe"),
+    body('procedencia').optional().not().isEmpty().withMessage("debe introducir la procedencia"),
+    body('publicacion').not().isEmpty().withMessage("debe introducir fecha publicación"),
+    body('derogacion').optional().not().isEmpty().withMessage("debe introducir un importe"),
     sanitizeBody('nombre').escape(),
+    sanitizeBody('url').escape(),
+    sanitizeBody('descripcion').escape(),
+    sanitizeBody('procedencia').escape()
+   
+
 ];
 
 
-VALIDAIMPORTE = [
-    body('nombre').not().isEmpty().withMessage("debe introducir un nombre"),
-    body('euros').not().isEmpty().withMessage("debe introducir un importe"),
-    sanitizeBody('nombre').escape(),
-];
 
 
 
