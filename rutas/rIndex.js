@@ -8,7 +8,7 @@ indexRouter.get('/tipos', (req, res, next) => Index.getTipos(req, res, next));
 
 indexRouter.get('/categorias', (req, res, next) => Index.getCategorias(req, res, next));
 
-indexRouter.get('/listaRecursos', (req, res, next) => Index.getListaRecursos(req, res, next));
+indexRouter.get('/recursos', (req, res, next) => Index.getRecursos(req, res, next));
 
 
 

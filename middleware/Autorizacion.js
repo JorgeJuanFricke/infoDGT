@@ -35,6 +35,7 @@ exports.esAutorizadoAñadir = (req, res, next) => {
 
 exports.esAutorizadoEditar = async (req, res, next) => {
     next();
+    /*
     try {
         recurso = await Recurso.findById(req.recurso);
         usuario = req.user;
@@ -52,6 +53,6 @@ exports.esAutorizadoEditar = async (req, res, next) => {
         error.statusCode = 500;
         throw error;
     }
-
+    */
 
 }

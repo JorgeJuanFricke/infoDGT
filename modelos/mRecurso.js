@@ -1,6 +1,6 @@
 
 const mongoose = require('mongoose');
-
+const Tipo = require('../modelos/mTipo.js');
 
 
 let RecursoSchema = mongoose.Schema({

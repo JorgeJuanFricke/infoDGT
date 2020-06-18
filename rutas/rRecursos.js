@@ -21,8 +21,8 @@ VALIDA = [
     body('descripcion').not().isEmpty().withMessage("debe introducir una descripción"),
     body('euros').optional().not().isEmpty().withMessage("debe introducir un importe"),
     body('procedencia').optional().not().isEmpty().withMessage("debe introducir la procedencia"),
-    body('publicacion').not().isEmpty().withMessage("debe introducir fecha publicación"),
-    body('derogacion').optional().not().isEmpty().withMessage("debe introducir un importe"),
+   // body('publicacion').not().isEmpty().withMessage("debe introducir fecha publicación"),
+    //body('derogacion').optional().not().isEmpty().withMessage("intrduzca fecha derogación"),
     sanitizeBody('nombre').escape(),
     sanitizeBody('url').escape(),
     sanitizeBody('descripcion').escape(),
@@ -64,6 +64,10 @@ recursosRouter.post('/:Id', Auto.esAutenticado, Auto.esAutorizadoEditar, VALIDA,
 
 
 
+recursosRouter.delete('/:Id', Auto.esAutenticado, Auto.esAutorizadoEditar,
+ function (req, res, next) {
+    cRecursos.deleteRecurso(req, res, next);
+});
 
 
 

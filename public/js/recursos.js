@@ -2,22 +2,38 @@
   
 
 
-
-muestraListaRecursos = () => {
-    
-    let tipo = $('#tipos').children("option:selected").val();
+const leeListaRecursos = () => {
+    let tipo = $('#tipos').children("option:selected").text();
     let query = `?tipo=${tipo}`;
     let pagina = "";
+    
+    fetch('http://localhost:3000/recursos' + query , {
+            method: 'GET',
+            headers: {
+                //'csrf-token': "csrf23454345"
+            }
+        })
+        .then(res => {
+            return res.json();
+        })
+        .then(resultado => {
+            muestraListaRecursos(resultado.recursos);
+                        
+            
+        }).catch(err => console.log(err));
 
-    // tal vez post para tipo y categoria y query para limits y skips
+};
 
-    // BUSCAR INDICE TEXTO
-    d3.json("/recursos" + query).then(function (data) {
-        d3.select("article")
-            .selectAll("div")
+
+
+
+muestraListaRecursos = (data) => {
+  
+        d3.select("section.recursos")
+            .selectAll("div.data")
             .remove();
-        let filas = d3
-            .select("#listaRecursos")
+
+        let filas = d3.select("section.recursos")
             .selectAll("div.data")
             .data(data, function (d) {
                 return d._id;
@@ -40,9 +56,17 @@ muestraListaRecursos = () => {
             .append("a")
             .attr("href", "#")
             .on("click", function (d) {
-                muestraRecurso(d);
+                $.get(d.url)
+                    .done(function() { 
+                        window.location.href = d.url;
+                   
+                }).fail(function() { 
+                   alert("La página no se encuentra");
+                })
+   
             })
             .text(function (d) {
+                console.log(d.nombre);
                 return d.nombre;
             });
 
@@ -53,9 +77,9 @@ muestraListaRecursos = () => {
 
             .on("click", function (d) {
                 console.log(d);
-                enlazaRecurso(d);
+                editaRecurso(d._id);
             })
-            .text("ENL");
+            .text("EDIT");
 
         fila
             .append("span")
@@ -64,11 +88,11 @@ muestraListaRecursos = () => {
 
             .on("click", function (d) {
                 console.log(d);
-                borraRecurso(d);
+                deleteRecurso(d._id);
             })
             .text("DEL");
-    });
-}
+    
+};
 
 muestraPaginas = () => {
     /*
@@ -102,7 +126,7 @@ const nuevaCategoria = () => {
 */
 
 
-const modalRecurso = (btn) => {
+const nuevoRecurso = (btn) => {
     let recurso = {};
     try {
         
@@ -118,7 +142,7 @@ const modalRecurso = (btn) => {
                 dataType: 'json'
             }
         });
-        $('#Aceptar').off().on('click', creaRecurso);
+        $('#Aceptar').off().on('click', putRecurso);
         //"csrf23454345"
         $('#modalRecurso').modal({
             show: true
@@ -133,7 +157,7 @@ const modalRecurso = (btn) => {
 
 
  //    "csrf-token": "csrf23454345"
-const creaRecurso = () => {
+const putRecurso = () => {
     const formData = new FormData();
     let publicacion =  $('input:text[name=publicacion]').val();
     let derogacion =  $('input:text[name=derogacion]').val();
@@ -165,10 +189,10 @@ const creaRecurso = () => {
       }
     })
     .then(result => {
-        console.log(result);
-        if (result.status !== 200) {
+        
+        if ( result.status !== 201) {
             console.log(result);
-            throw new Error(result);
+            throw new Error(result.message);
           }
           return result.json();
   
@@ -176,7 +200,7 @@ const creaRecurso = () => {
     .then(data => {
         console.log(data);
         alert("recurso creado!");
-        muestralistaRecursos();
+        leeListaRecursos();
     })
     .catch(err => { 
         console.log("err:"+err);
@@ -187,16 +211,22 @@ const creaRecurso = () => {
 
 
 
-const leeRecurso = (btn) => {
-    recurso = $(btn).val();
-    fetch('http://localhost:3000/recurso/' + recurso, {
+const editaRecurso = (recursoId) => {
+
+       fetch('http://localhost:3000/recurso/' + recursoId, {
             method: 'GET',
             headers: {
-                'csrf-token': "csrf23454345"
+               // 'csrf-token': "csrf23454345"
             }
         })
         .then(result => {
-            return result.json();
+             
+        if ( result.status !== 200) {
+            console.log(result);
+            throw new Error(result.message);
+          }
+          return result.json();
+           
         })
         .then(recurso => {
             var template = Handlebars.templates.vRecurso;
@@ -214,7 +244,7 @@ const leeRecurso = (btn) => {
 
 
 
-const actualizaRecurso = (recurso) => {
+const postRecurso = (recurso) => {
 
     fetch("http://localhost:3000/recurso/" + recurso, {
             method: "POST",
@@ -223,7 +253,13 @@ const actualizaRecurso = (recurso) => {
             }
         })
         .then(result => {
-            return result.json();
+             
+        if ( result.status !== 200) {
+            console.log(result);
+            throw new Error(result.message);
+          }
+          return result.json();
+         
         })
         .then(data => {
             muestraRecurso(data);
@@ -239,29 +275,35 @@ const actualizaRecurso = (recurso) => {
 
 
 
-const borraRecurso = (btn) => {
+const deleteRecurso = (recursoId) => {
     // para input
     // delete solo admin
     // csrf-token en main?
-    let recurso = $(btn).val();
 
     //const prodId = btn.parentNode.querySelector('[name=productId]').value;
     //const csrf = btn.parentNode.querySelector('[name=_csrf]').value;
 
     //const productElement = btn.closest('article');
 
-    fetch("https://localhost:3000/recurso/" + recurso, {
+    fetch("http://localhost:3000/recurso/" + recursoId, {
             method: "DELETE",
             headers: {
-                "csrf-token": csrf
+               // "csrf-token": csrf
             }
         })
         .then(result => {
-            return result.json();
+             
+        if ( result.status !== 200) {
+            console.log(result);
+            throw new Error(result.message);
+          }
+          return result.json();
+           
         })
         .then(data => {
-            console.log(data);
-            muestraListaRecursos;
+            
+            alert("recurso borrado");
+            leeListaRecursos();
         })
         .catch(err => {
             console.log(err);

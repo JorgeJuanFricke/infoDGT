@@ -21,51 +21,6 @@ const R = require('ramda');
 
 
 
-exports.getRecursos = async (req, res, next) => {
-     const currentPage = req.query.page || 1;
-     const perPage = 2;
-     // necesito limites y pagina
-     try {
-        let tipo = req.query.tipo;
-        
-        let query = [
-          {
-                $match: {
-                    categoria: req.query.categoria,
-                    tipo: req.query.tipo
-                }
-            },
-            {
-                $lookup: {
-                    from: 'tipos',
-                    localField: 'tipo',
-                    foreignField: 'codigo',
-                    as: 'tipo'
-                }
-            },
-            {
-                $unwind: '$tipo'
-            }
-        ];
-        let totalRecursos = await Recurso.aggregate(query).countDocuments();
-        let recursos = await Recurso.aggregate(query)
-        .skip((currentPage - 1) * perPage)
-        .limit(perPage);
-        res.status(200).json({
-          message: 'página de recursos cargados correctamente!!.',
-          recursos: recursos,
-          totalItems: totalItems
-        });
-    } catch (err) {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    }
-  };
-
-
-
 exports.getRecurso = async (req, res, next) => {
     let query = [{
           $match: {
@@ -183,7 +138,7 @@ exports.postRecurso = async (req, res, next) => {
       }
       Object.assign(recurso, req.body);
     
-      recurso.actualizadoPor = req.user.email;
+      recurso.actualizadoPor = 'jjuan@dgt.es';  // cambiar!!!!!!
       
       const result = await recurso.save();
       res.status(200).json({ message: 'recurso modificado!', recurso: result });
@@ -199,8 +154,8 @@ exports.postRecurso = async (req, res, next) => {
 
 
   
-  exports.deletePost = async (req, res, next) => {
-    const recursoId = req.params.id;
+  exports.deleteRecurso = async (req, res, next) => {
+    const recursoId = req.params.Id;
     try {
       const recurso = await Recurso.findById(recursoId);
   

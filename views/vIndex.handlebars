@@ -67,7 +67,7 @@
                             A
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" onclick="modalRecurso()" href="#">nuevo recurso</a>
+                            <a class="dropdown-item" onclick="nuevoRecurso()" href="#">nuevo recurso</a>
                             <a class="dropdown-item" onclick="muestraRegistraUsuario()" href="#">registra usuario</a>
                             <a class="dropdown-item" onclick="muestraActualizaUsuario()" href="#">permisos usuario</a>
                             <a class="dropdown-item" href="#">permiso usuarios</a>
@@ -110,7 +110,9 @@
     </nav>
 
 
-    <article id="principal" class="container-fluid">
+    <article class="container-fluid">
+        <section class="recursos"></section>
+        <!--
         <div class="row">
 
             <div id="jumbotron" class="col col-lg-3 float-left">
@@ -124,19 +126,20 @@
             <div class="col col-lg-9 float-right">
                 
               
-                <section id="recursos"></section>
+             
             </div>
 
         </div>
+        -->
         <section id=paginacion></section>
         <div class="row">
             <footer>
                 <p>{{nombreOficina}}.{{usuario}}</p>
             </footer>
         </div>
-    </div>
+    </article>
 
-
+    
 
 
 
@@ -205,7 +208,7 @@
             });
 
             $("#tipos").on("change", function(e) { 
-                muestraListaRecursos();
+                leeListaRecursos();
             })
         });    
     
@@ -213,13 +216,13 @@
     </script>
 
    
-
-
-
-
-
-
-
 </body>
+
+
+
+
+
+
+
 
 </html>
