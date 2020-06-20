@@ -5,31 +5,38 @@
             <!-- Modal Header -->
 
             <div class="modal-header">
-                <h4 class="modal-title">Recurso</h4>
+                {{#if tipo}}
+                    <h4 class="modal-title">{{tipo}}</h4>
+                {{else}}    
+                 <h4 class="modal-title">Recurso</h4>
+                {{/if}}
                 <button type="button" class="close" data-dismiss="modal"></button>
-
-                
 
             </div>
 
             <!-- Modal body -->
             <div class="modal-body">
-
+            
              <form id="formRecurso" class="form" > 
                 <input type="hidden" name="_csrf" value="{{csrf}}">
-                <input type="hidden" class="form-control" name="tipo" value="{{tipo}}">
-           
-                
-                <div class="form-group row">
-                    <div class="col-3">
-                        <label>tipo:</label>
-                        <select id="tiposRecurso" class="form-control" autofocus="true" >
-                          
-                        </select>
-                     </div>      
-                    
-                </div>
-                 
+                <input type="hidden" name="_id" value="{{_id}}">
+
+               
+                {{#if tipo}}
+                     <input type="hidden" class="form-control" name="tipo" value="{{tipo}}">
+                {{else}}
+                    <div class="form-group row">
+                        <div class="col-3">
+                            <label>tipo:</label>
+                            <select id="tiposRecurso" class="form-control" autofocus="true" >
+                            
+                            </select>
+                        </div>      
+                        
+                    </div>
+              
+                     
+                 {{/if}}
                 
                 <div class="form-group">
                     <label for="nombre" class="control-label">nombre:</label>
@@ -39,7 +46,7 @@
                 <div class="form-group">
                     <label for="descripcion" class="control-label">descripción:</label>
                     <textarea class="form-control" id ="Descrip" name="descripcion"  cols="80" rows="4">
-                            {{ descripcion }}
+                            {{descripcion}}
                       </textarea>
                 </div>
 
@@ -80,10 +87,11 @@
 
                
                 <div class="form-group">
-                    <button id="Aceptar" type="button" class="btn btn-primary" onclick="putRecurso()">Grabar</button>
+                    <button id="GrabarRecurso" type="button" class="btn btn-primary">Grabar</button>
                     <button type="button" class="btn btn-secondary close btn" data-dismiss="modal">Salir</button>
 
                 </div>
+              
                 </form>
             </div>
         </div>

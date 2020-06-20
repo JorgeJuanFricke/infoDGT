@@ -1,5 +1,6 @@
 body {
 
+ 
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -8,6 +9,7 @@ a {
 }
 
 article {
+  padding-top: 70px;
   overflow:scroll;
 }
 
@@ -17,8 +19,6 @@ article {
   z-index: 10;
   width: 100%;
 }
-.padding {
-  padding-top: 20px;
-}
+
 
 .modal-backdrop { opacity: 0 !important; }

@@ -48,9 +48,10 @@
 
 <body>
 
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
 
-
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    
         <a class="navbar-brand text-warning" href="#">Busca dgt</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -82,9 +83,9 @@
                    </select>
                    <!-- Another variation with a button -->
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search this blog">
+                        <input id="buscaRecursos" type="text" class="form-control" placeholder="texto a buscar (precedido de - NO)">
                         <div class="input-group-append">
-                        <button class="btn btn-secondary" onclick="muestraListaRecursos()" type="button">
+                        <button class="btn btn-secondary" onclick="leeListaRecursos()" type="button">
                             <i class="fa fa-search"></i>
                         </button>
                         </div>
@@ -107,31 +108,16 @@
                 </form>
             </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
 
-    <article class="container-fluid">
-        <section class="recursos"></section>
-        <!--
-        <div class="row">
-
-            <div id="jumbotron" class="col col-lg-3 float-left">
-                <ul class="accordion">
-                    {{#with treeTipos}}
-                    {{> Jumbotron}}
-                    {{/with}}
-                </ul>
-            </div>
-
-            <div class="col col-lg-9 float-right">
-                
-              
-             
-            </div>
-
-        </div>
-        -->
-        <section id=paginacion></section>
+    <article  class="container">
+        <section class="row">
+            <ul id="listaRecursos" class="list-group"></ul>
+        </section>
+       
+        <section id="paginacion"></section>
         <div class="row">
             <footer>
                 <p>{{nombreOficina}}.{{usuario}}</p>
@@ -141,10 +127,9 @@
 
     
 
-
-
-    <script src="/js/hbs/handlebars.js"></script>
-    <script src="/js/hbs/customHelpers.js"></script>
+    <script src="/js/hbs/handlebars.runtime-v4.7.6.js"></script>
+    <!--script src="/js/hbs/handlebars.js"></script-->
+    <!--script src="/js/hbs/customHelpers.js"></script-->
    
     <script src="/js/hbs/vRecurso.tmpl.js"></script>
     <script src="/js/hbs/vLogin.tmpl.js"></script>

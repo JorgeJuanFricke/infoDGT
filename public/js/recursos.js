@@ -4,7 +4,8 @@
 
 const leeListaRecursos = () => {
     let tipo = $('#tipos').children("option:selected").text();
-    let query = `?tipo=${tipo}`;
+    let texto =$('#buscaRecursos').val();
+    let query = `?tipo=${tipo}&texto=${texto}`;
     let pagina = "";
     
     fetch('http://localhost:3000/recursos' + query , {
@@ -25,19 +26,92 @@ const leeListaRecursos = () => {
 };
 
 
+/*
+<ul class="list-group">
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Cras justo odio
+    <span class="badge badge-primary badge-pill">14</span>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Dapibus ac facilisis in
+    <span class="badge badge-primary badge-pill">2</span>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Morbi leo risus
+    <span class="badge badge-primary badge-pill">1</span>
+  </li>
+</ul>
+*/
 
 
 muestraListaRecursos = (data) => {
-  
-        d3.select("section.recursos")
-            .selectAll("div.data")
-            .remove();
+    var ul = d3.select('#listaRecursos')
+    
+    var li = ul.selectAll('li.list-group')
+    .data(data, function(d) { return d._id });
 
-        let filas = d3.select("section.recursos")
+    li.exit().remove();
+
+    var newli = li.enter().append('li')
+    .attr("class","list-group-item d-flex justify-content-between align-items-center");
+
+    newli.append('span')
+    .text(function(d){ return d.tipo.codigo });
+
+    newli.append("span")
+   
+     .append("a")
+     .attr("href", "#")
+    .on("click", function (d) {
+        window.open(d.url); 
+       
+    })
+    .text(function (d) {
+        return d.nombre;
+    });
+
+
+    newli.append("span")
+    .attr("class", "badge badge-primary badge-pill")
+    .append("a")
+    .attr("href", "#")
+
+    .on("click", function (d) {
+       
+        editaRecurso(d._id);
+        
+    })
+    .text("EDIT");
+
+
+
+
+    newli.append("span")
+    .attr("class", "badge badge-primary badge-pill")
+    .append("a")
+    .attr("href", "#")
+
+    .on("click", function (d) {
+        console.log(d);
+        deleteRecurso(d._id);
+    })
+    .text("DEL");
+
+}
+    
+
+
+
+
+muestraListaRecursos2 = (data) => {
+  
+        let filas = d3.select("#listaRecursos")
             .selectAll("div.data")
+            .remove()
             .data(data, function (d) {
                 return d._id;
             });
+
 
         let seleccionExit = filas.exit();
         seleccionExit.remove();
@@ -47,27 +121,21 @@ muestraListaRecursos = (data) => {
         let fila = seleccionEnter
             .append("div")
             .attr("class", "data")
+            
             .style("top", function (d, i) {
-                return 40 + i * 40 + "px";
+                return 70 + i * 40 + "px";
             });
-
+            
         fila
             .append("span")
             .append("a")
             .attr("href", "#")
             .on("click", function (d) {
-                $.get(d.url)
-                    .done(function() { 
-                        window.location.href = d.url;
-                   
-                }).fail(function() { 
-                   alert("La página no se encuentra");
-                })
-   
+                window.open(d.url); 
+               
             })
             .text(function (d) {
-                console.log(d.nombre);
-                return d.nombre;
+                return d.tipo.codigo + " " + d.nombre;
             });
 
         fila
@@ -76,8 +144,9 @@ muestraListaRecursos = (data) => {
             .attr("href", "#")
 
             .on("click", function (d) {
-                console.log(d);
+               
                 editaRecurso(d._id);
+                
             })
             .text("EDIT");
 
@@ -142,11 +211,13 @@ const nuevoRecurso = (btn) => {
                 dataType: 'json'
             }
         });
-        $('#Aceptar').off().on('click', putRecurso);
+     
         //"csrf23454345"
         $('#modalRecurso').modal({
             show: true
         });
+        $('#GrabarRecurso').off().on('click',function() {
+            putRecurso()});
        
     } catch (err) {
         console.log(err);
@@ -198,7 +269,7 @@ const putRecurso = () => {
   
     })
     .then(data => {
-        console.log(data);
+      
         alert("recurso creado!");
         leeListaRecursos();
     })
@@ -212,29 +283,33 @@ const putRecurso = () => {
 
 
 const editaRecurso = (recursoId) => {
-
+        console.log(recursoId);
        fetch('http://localhost:3000/recurso/' + recursoId, {
             method: 'GET',
             headers: {
                // 'csrf-token': "csrf23454345"
             }
         })
-        .then(result => {
+        .then(res => {
              
-        if ( result.status !== 200) {
-            console.log(result);
-            throw new Error(result.message);
+        if ( res.status !== 200) {
+          
+            throw new Error(res.message);
           }
-          return result.json();
+          return res.json();
            
         })
-        .then(recurso => {
-            var template = Handlebars.templates.vRecurso;
+        .then(resultado => {
+            let template = Handlebars.templates.vRecurso;
+            let recurso = resultado.recurso;  
+            $("#modalRecurso").remove();  
             $("body").append(template(recurso));
-            $('#Aceptar').off().on('click', function(){postRecurso()});
+           
             $('#modalRecurso').modal({
                 show: true
             });
+            $('#GrabarRecurso').off().on('click',function() {
+                postRecurso(recurso)});
             
         }).catch(err => console.log(err));
 
@@ -245,13 +320,39 @@ const editaRecurso = (recursoId) => {
 
 
 const postRecurso = (recurso) => {
+    $('#ModalRecurso').modal('hide');
+    let recursoId = recurso._id;
+    let tipo = recurso.tipo;
+    const formData = new FormData();
+    let publicacion =  $('input:text[name=publicacion]').val();
+    let derogacion =  $('input:text[name=derogacion]').val();
+    publicacion = publicacion ? publicacion : "";
+    derogacion =  derogacion ? derogacion : "";
 
-    fetch("http://localhost:3000/recurso/" + recurso, {
-            method: "POST",
-            headers: {
-                "csrf-token": "csrf23454345"
-            }
-        })
+    formData.append('tipo', tipo);
+    formData.append('nombre', $('input:text[name=nombre]').val());
+    formData.append('descripcion',$('#Descrip').val());
+    formData.append('procedencia',$('input:text[name=procedencia]').val() );
+    formData.append('publicacion', new Date("2020/06/20"));
+    formData.append('derogacion', "");
+    formData.append('url', $('input:text[name=url]').val());
+    let url = 'http://localhost:3000/recurso/'+ recursoId ;
+    let method = 'POST';
+    
+    var object = {};
+    formData.forEach((value, key) => {object[key] = value});
+    var json = JSON.stringify(object);
+
+    fetch(url, {
+      method: method,
+      body: json,
+      headers: {
+
+        Authorization: 'Bearer ' + "el token", //this.props.token,
+        'Content-Type': 'application/json'
+
+      }
+    })
         .then(result => {
              
         if ( result.status !== 200) {
@@ -262,7 +363,8 @@ const postRecurso = (recurso) => {
          
         })
         .then(data => {
-            muestraRecurso(data);
+            alert("recurso modificado");
+            leeListaRecursos(tipo);
            
         })
         .catch(err => {

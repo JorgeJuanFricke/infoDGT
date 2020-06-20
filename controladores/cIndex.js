@@ -39,16 +39,18 @@ exports.getRecursos = async (req, res, next) => {
     const paginaActual = req.query.pagina || 1;
     const recursosPorPagina = 10;
     // necesito limites y pagina
+    let tipo = req.query.tipo;
+    let texto = req.query.texto;
     try {
-       let tipo = req.query.tipo;
+     
        
        let query = [
-         {
-               $match: {
-                  
-                   tipo: tipo
-               }
-           },
+         
+              
+                {$match:  { $text: { $search: texto, $language: "es" }}} ,
+                {$sort: { score: { $meta: "textScore" } } },
+                
+        
            {
                $lookup: {
                    from: 'tipos',
@@ -62,9 +64,9 @@ exports.getRecursos = async (req, res, next) => {
            }
        ];
        let totalRecursos = await Recurso.countDocuments(query);
-       let recursos =  await Recurso.find({tipo: tipo}) 
+       let recursos =  await Recurso.aggregate(query) 
             .skip((paginaActual - 1) * recursosPorPagina)
-            .limit(recursosPorPagina);;
+            .limit(recursosPorPagina).exec();
        /*
        let recursos = await Recurso.aggregate(query)
            .skip((paginaActual - 1) * recursosPorPagina)

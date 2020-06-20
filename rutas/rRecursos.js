@@ -24,7 +24,7 @@ VALIDA = [
    // body('publicacion').not().isEmpty().withMessage("debe introducir fecha publicación"),
     //body('derogacion').optional().not().isEmpty().withMessage("intrduzca fecha derogación"),
     sanitizeBody('nombre').escape(),
-    sanitizeBody('url').escape(),
+    //sanitizeBody('url').escape(),
     sanitizeBody('descripcion').escape(),
     sanitizeBody('procedencia').escape()
    
@@ -59,7 +59,7 @@ recursosRouter.put(
 
 
 recursosRouter.post('/:Id', Auto.esAutenticado, Auto.esAutorizadoEditar, VALIDA, function (req, res, next) {
-    cRecursos.updateRecurso(req, res, next);
+    cRecursos.postRecurso(req, res, next);
 });
 
 

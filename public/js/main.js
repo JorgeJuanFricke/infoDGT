@@ -11,17 +11,6 @@ $(document).ready(function () {
 });
 
 
-$(document).ready(function () {
-    $('#categoria').on('change', function () {
-        let categoria = $('#categoria').children("option:selected").val();
-        let tipo = $('ul#tipos > li.selected a').val();
-        let path = $("#tipos").children("option:selected").data("url");
-        this.href = path + "?tipo=" + tipo + "categoria=" + categoria;
-        $.get(url);
-
-    });
-});
-
 
 
 

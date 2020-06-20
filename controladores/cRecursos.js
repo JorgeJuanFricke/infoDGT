@@ -22,9 +22,10 @@ const R = require('ramda');
 
 
 exports.getRecurso = async (req, res, next) => {
+    /*
     let query = [{
           $match: {
-              _id: mongoose.Types.ObjectId(req.params.id)
+              _id: mongoose.Types.ObjectId(req.params.Id)
           }
       },
       {
@@ -39,18 +40,20 @@ exports.getRecurso = async (req, res, next) => {
           $unwind: '$tipo'
       }
     ]
+    let recurso = await Recurso.aggregate(query).exec();
+    */
+   const recursoId = req.params.Id;
     try {
-      let recurso = await Recurso.aggregate(query).exec();
+      
+      const recurso = await Recurso.findById(recursoId);
       if (!recurso) {
         const error = new Error('El recurso no existe');
         error.statusCode = 404;
         throw error;
       }
-      let enlaces = await enlaces.find({sujeto: recurso._id});
-      let referencias = await enlaces.find({objeto: recurso._id});
-      if (enlaces) {recurso.enlaces = enlaces};
-      if (referencias) {recurso.referencias = referencias};
+     
       res.status(200).json({ message: 'recurso encontrado.', recurso: recurso });
+      
     } catch (err) {
         if (!err.statusCode) {
           err.statusCode = 500;
@@ -121,7 +124,7 @@ exports.putRecurso = async (req, res, next) => {
 
 
 exports.postRecurso = async (req, res, next) => {
-    const recursoId = req.params.id;
+    const recursoId = req.params.Id;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const error = new Error('Validation failed, entered data is incorrect.');
