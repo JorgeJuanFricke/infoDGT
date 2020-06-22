@@ -2,105 +2,6 @@
   
 
 
-const leeListaRecursos = () => {
-    let tipo = $('#tipos').children("option:selected").text();
-    let texto =$('#buscaRecursos').val();
-    let query = `?tipo=${tipo}&texto=${texto}`;
-    let pagina = "";
-    
-    fetch('http://localhost:3000/recursos' + query , {
-            method: 'GET',
-            headers: {
-                //'csrf-token': "csrf23454345"
-            }
-        })
-        .then(res => {
-            return res.json();
-        })
-        .then(resultado => {
-            muestraListaRecursos(resultado.recursos);
-                        
-            
-        }).catch(err => console.log(err));
-
-};
-
-
-/*
-<ul class="list-group">
-  <li class="list-group-item d-flex justify-content-between align-items-center">
-    Cras justo odio
-    <span class="badge badge-primary badge-pill">14</span>
-  </li>
-  <li class="list-group-item d-flex justify-content-between align-items-center">
-    Dapibus ac facilisis in
-    <span class="badge badge-primary badge-pill">2</span>
-  </li>
-  <li class="list-group-item d-flex justify-content-between align-items-center">
-    Morbi leo risus
-    <span class="badge badge-primary badge-pill">1</span>
-  </li>
-</ul>
-*/
-
-
-muestraListaRecursos = (data) => {
-    var ul = d3.select('#listaRecursos')
-    
-    var li = ul.selectAll('li.list-group')
-    .data(data, function(d) { return d._id });
-
-    li.exit().remove();
-
-    var newli = li.enter().append('li')
-    .attr("class","list-group-item d-flex justify-content-between align-items-center");
-
-    newli.append('span')
-    .text(function(d){ return d.tipo.codigo });
-
-    newli.append("span")
-   
-     .append("a")
-     .attr("href", "#")
-    .on("click", function (d) {
-        window.open(d.url); 
-       
-    })
-    .text(function (d) {
-        return d.nombre;
-    });
-
-
-    newli.append("span")
-    .attr("class", "badge badge-primary badge-pill")
-    .append("a")
-    .attr("href", "#")
-
-    .on("click", function (d) {
-       
-        editaRecurso(d._id);
-        
-    })
-    .text("EDIT");
-
-
-
-
-    newli.append("span")
-    .attr("class", "badge badge-primary badge-pill")
-    .append("a")
-    .attr("href", "#")
-
-    .on("click", function (d) {
-        console.log(d);
-        deleteRecurso(d._id);
-    })
-    .text("DEL");
-
-}
-    
-
-
 
 
 muestraListaRecursos2 = (data) => {
@@ -211,11 +112,20 @@ const nuevoRecurso = (btn) => {
                 dataType: 'json'
             }
         });
-     
+      
         //"csrf23454345"
         $('#modalRecurso').modal({
             show: true
         });
+        
+ 
+        $('#Descrip').summernote({
+        placeholder: '',
+        tabsize: 2,
+        height: 100
+        });
+        $('#Descrip').summernote('reset');
+       
         $('#GrabarRecurso').off().on('click',function() {
             putRecurso()});
        
@@ -235,13 +145,21 @@ const putRecurso = () => {
     publicacion = publicacion ? publicacion : "";
     derogacion =  derogacion ? derogacion : "";
 
-    formData.append('tipo', $('#tiposRecurso').children("option:selected").text());
+    formData.append('tipo', $('#tiposRecurso').children("option:selected").val());
     formData.append('nombre', $('input:text[name=nombre]').val());
-    formData.append('descripcion',$('#Descrip').val());
     formData.append('procedencia',$('input:text[name=procedencia]').val() );
     formData.append('publicacion', new Date("2020/06/20"));
     formData.append('derogacion', "");
     formData.append('url', $('input:text[name=url]').val());
+
+    var descripcion = $('#Descrip').summernote('code');
+    $('#Descrip').summernote('destroy');
+    console.log(descripcion);
+  
+   
+   
+    formData.append('descripcion', descripcion);
+
     let url = 'http://localhost:3000/recurso/';
     let method = 'PUT';
     
@@ -304,7 +222,7 @@ const editaRecurso = (recursoId) => {
             let recurso = resultado.recurso;  
             $("#modalRecurso").remove();  
             $("body").append(template(recurso));
-           
+            $('#Descrip').summernote('code', recurso.descripcion);
             $('#modalRecurso').modal({
                 show: true
             });

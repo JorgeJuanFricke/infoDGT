@@ -1,27 +1,104 @@
-$(document).ready(function () {
-
-    let categoria = $('#categoria').children("option:selected").val();
-    //let tipo = $('ul#tipos > li.selected a').val();
-    //let path = $("#tipos").children("option:selected").data("url");
-    //this.href = path + "?tipo=" + tipo + "categoria=" + categoria;
-
-    // fetch lista de recursos con cat DGT y tipo procedimientos administrativos
 
 
-});
+const leeListaRecursos = () => {
+    let tipo = $('#tipos').children("option:selected").text();
+    let texto =$('#buscaRecursos').val();
+    let query = `?tipo=${tipo}&texto=${texto}`;
+    let pagina = "";
+    
+    fetch('http://localhost:3000/recursos' + query , {
+            method: 'GET',
+            headers: {
+                //'csrf-token': "csrf23454345"
+            }
+        })
+        .then(res => {
+            return res.json();
+        })
+        .then(resultado => {
+            muestraListaRecursos(resultado.recursos);
+                        
+            
+        }).catch(err => console.log(err));
+
+};
 
 
+/*
+<ul class="list-group">
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Cras justo odio
+    <span class="badge badge-primary badge-pill">14</span>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Dapibus ac facilisis in
+    <span class="badge badge-primary badge-pill">2</span>
+  </li>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    Morbi leo risus
+    <span class="badge badge-primary badge-pill">1</span>
+  </li>
+</ul>
+*/
 
 
+muestraListaRecursos = (data) => {
+    var ul = d3.select('#listaRecursos')
+    
+    var li = ul.selectAll('li.list-group-item list-group-flush ')
+    .data(data, function(d) { return d._id });
 
+    li.exit().remove();
 
+    var newli = li.enter().append('li')
+    .attr("class","list-group-item d-flex justify-content-between align-items-center");
 
-$(document).ready(function () {
-    $('#modalTipo').on("submit", function () {
-        let tiposPermitidos = [];
-        tiposPermitidos = $('#permitidos').val();
+    newli.append('span')
+    .text(function(d){ return d.tipo.codigo });
+
+    newli.append("span")
+   
+     .append("a")
+     .attr("href", "#")
+    .on("click", function (d) {
+        window.open(d.url); 
+       
+    })
+    .text(function (d) {
+        return d.nombre;
     });
-});
+
+
+    newli.append("span")
+    .attr("class", "badge badge-primary badge-pill")
+    .append("a")
+    .attr("href", "#")
+
+    .on("click", function (d) {
+       
+        editaRecurso(d._id);
+        
+    })
+    .text("EDIT");
+
+
+
+
+    newli.append("span")
+    .attr("class", "badge badge-primary badge-pill")
+    .append("a")
+    .attr("href", "#")
+
+    .on("click", function (d) {
+        console.log(d);
+        deleteRecurso(d._id);
+    })
+    .text("DEL");
+
+}
+    
+
+
 
 
 
@@ -141,7 +218,7 @@ actualizaUsuario = (email) => {
 
 
 
-/*** on submit tex to *************************/
+/*** on submit texto *************************/
 $(document).ready(function () {
     $('#texto').on('submit', function () {
         let texto = this.val();

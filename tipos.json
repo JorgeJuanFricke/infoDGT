@@ -83,4 +83,9 @@
         "sigla": "INF",
         "permisos": ["ADMIN","OAT"]
      }
+     {
+      "codigo": "aplicación web",
+      "sigla": "APW",
+      "permisos": ["ADMIN","OAT","OI"]
+   }
 ]

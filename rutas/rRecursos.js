@@ -18,14 +18,14 @@ const {
 VALIDA = [
     body('nombre').not().isEmpty().withMessage("debe introducir un nombre"),
     body('url').not().isEmpty().withMessage("debe introducir la url del documento"),
-    body('descripcion').not().isEmpty().withMessage("debe introducir una descripción"),
+    //body('descripcion').not().isEmpty().withMessage("debe introducir una descripción"),
     body('euros').optional().not().isEmpty().withMessage("debe introducir un importe"),
     body('procedencia').optional().not().isEmpty().withMessage("debe introducir la procedencia"),
    // body('publicacion').not().isEmpty().withMessage("debe introducir fecha publicación"),
     //body('derogacion').optional().not().isEmpty().withMessage("intrduzca fecha derogación"),
     sanitizeBody('nombre').escape(),
     //sanitizeBody('url').escape(),
-    sanitizeBody('descripcion').escape(),
+    //sanitizeBody('descripcion').escape(),
     sanitizeBody('procedencia').escape()
    
 

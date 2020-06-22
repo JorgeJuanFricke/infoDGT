@@ -9,10 +9,8 @@ let RecursoSchema = mongoose.Schema({
         required: true
     },
 
-    tipo: {
-        type: String,
-        required: true
-    },
+    tipo: { type: mongoose.Schema.Types.ObjectId, ref: 'Tipo', index:true },
+    
    
     
     nombre: {
@@ -69,17 +67,16 @@ RecursoSchema.index({
 });
 
 
-
+/*
+no hace falta?
 RecursoSchema.pre('save', function (next) {
-    Tipo.findOne({
-        codigo: this.tipo
-    }, function (error, tipo) {
+    Tipo.findById({this.tipo}, function (error, tipo) {
         if ((error) || !tipo) {
             return next('tipo no existe')
         }
         return next();
     })
 });
-
+*/
 const Recurso = mongoose.model('Recurso', RecursoSchema);
 module.exports = Recurso;

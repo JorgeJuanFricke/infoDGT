@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/css/vendor/fontRope.css" type="text/css" charset="utf-8">
     <link href="/css/vendor/select2.min.css" rel="stylesheet" />
     <!--link href="/css/bootstrap-wysihtml5-0.0.02.css" rel="stylesheet" /-->
+     <link href="/css/summernote-bs4.min.css" rel="stylesheet">
     <link href="/css/jumbotron.css" rel="stylesheet" />
     <link href="/css/vendor/select2-bootstrap.min.css" type="text/css" rel="stylesheet" />
 <style>
@@ -48,12 +49,12 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand navbar-light bg-light">
   <div class="container-fluid">
 
     
         <a class="navbar-brand text-warning" href="#">Busca dgt</a>
-
+       
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -62,27 +63,8 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto ">
                 <form class="form-inline">
-                   <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            A
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" onclick="nuevoRecurso()" href="#">nuevo recurso</a>
-                            <a class="dropdown-item" onclick="muestraRegistraUsuario()" href="#">registra usuario</a>
-                            <a class="dropdown-item" onclick="muestraActualizaUsuario()" href="#">permisos usuario</a>
-                            <a class="dropdown-item" href="#">permiso usuarios</a>
-                            <a class="dropdown-item" href="#">Exportar datos</a>
-                            <a class="dropdown-item" href="#">Importar datos</a>
-                            <a id="usuario" class="dropdown-item" href="#">Permisos</a>
-
-                        </div>
-                    </div>
-                    
-                   <select id="tipos" class="form-control">
-                   </select>
-                   <!-- Another variation with a button -->
-                    <div class="input-group">
+                  
+                    <div class="input-group nav-item">
                         <input id="buscaRecursos" type="text" class="form-control" placeholder="texto a buscar (precedido de - NO)">
                         <div class="input-group-append">
                         <button class="btn btn-secondary" onclick="leeListaRecursos()" type="button">
@@ -90,6 +72,11 @@
                         </button>
                         </div>
                     </div>
+                    {{#if current.user}}
+                    
+                    {{/if}}
+                   <!-- incluir en el if de arriba -->
+                   <a class="nav-item" onclick="nuevoRecurso()" href="#"><i class="fa fa-search"></i></a>
                  
                     
                      <p class="nav-item">
@@ -103,6 +90,24 @@
                         <a id="login" href="#" class="nav-link" onclick="muestralogin()"><i class="fas fa-user"></i>login</a>
 
                         {{/if}}
+                        {{#if currentUser.admin}}
+                         <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                A
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                
+                                <a class="dropdown-item" onclick="muestraRegistraUsuario()" href="#">registra usuario</a>
+                                <a class="dropdown-item" onclick="muestraActualizaUsuario()" href="#">permisos usuario</a>
+                                <a class="dropdown-item" href="#">permiso usuarios</a>
+                                <a class="dropdown-item" href="#">Exportar datos</a>
+                                <a class="dropdown-item" href="#">Importar datos</a>
+                                <a id="usuario" class="dropdown-item" href="#">Permisos</a>
+
+                            </div>
+                         </div> 
+                        {{/if}} 
 
                     </p>
                 </form>
@@ -141,6 +146,10 @@
     <script type="text/javascript" src="/js/vendor/bootstrap.js"></script>
     <script type="text/javascript" src="/js/vendor/d3.js"></script>
     <!--script type="text/javascript" src="/js/vendor/all.min.js"></script-->
+    <!-- include summernote css/js -->
+   
+    <script type="text/javascript" src="/js/vendor/summernote-bs4.min.js"></script
+
     <!--load all styles -->
     <script src="/js/vendor/select2.min.js"></script>
 
@@ -159,13 +168,6 @@
     <script src="/js/vendor/wysihtml5/bootstrap-wysihtml5-0.0.2.js"></script>
 
 
-    <script>
-        $(document).ready(function () {
-            $("#tags").select2({
-                 tags: true,
-                 tokenSeparators: [','] });
-        });         
-    </script>
 
 
 
@@ -179,35 +181,7 @@
     </script>
 
 
-    
-    <script>
-        // TIPOS
-        $(document).ready(function () {
-           
-            $('#tipos').select2({
-                width: '150px',
-                ajax: {
-                    url: "http://localhost:3000/tipos",
-                    dataType: 'json'
-                }
-            });
-
-            $("#tipos").on("change", function(e) { 
-                leeListaRecursos();
-            })
-        });    
-    
-        
-    </script>
-
    
 </body>
-
-
-
-
-
-
-
 
 </html>
