@@ -1,4 +1,6 @@
 
+
+
 (function(Handlebars) {
 
     Handlebars.registerHelper("if_eq", 
@@ -6,8 +8,12 @@
         {return opts.fn(this)}
      else
       {return opts.inverse(this);}
-    }
-)}(window.Handlebars));
+    });
+
+    Handlebars.registerHelper("formatDate", function (datetime, format) {
+        return moment(datetime).format(format);
+    });
+}(window.Handlebars));
 
 
 

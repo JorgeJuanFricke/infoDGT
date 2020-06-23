@@ -43,9 +43,10 @@ const leeListaRecursos = () => {
 
 
 muestraListaRecursos = (data) => {
-    var ul = d3.select('#listaRecursos')
+    var ul = d3.select('#listaRecursos');
+    ul.attr("class", "list-group w-100");
     
-    var li = ul.selectAll('li.list-group-item list-group-flush ')
+    var li = ul.selectAll('li.list-group-item')
     .data(data, function(d) { return d._id });
 
     li.exit().remove();
@@ -68,6 +69,11 @@ muestraListaRecursos = (data) => {
         return d.nombre;
     });
 
+    newli.append("span")
+   
+    .text(function (d) {
+        return moment(d.publicacion).format("MM-YYYY");
+    });
 
     newli.append("span")
     .attr("class", "badge badge-primary badge-pill")

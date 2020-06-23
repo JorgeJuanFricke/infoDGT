@@ -89,6 +89,9 @@ var hbs = exphbs.create({
   layoutsDir: __dirname + "/views/layouts/",
   // Specify helpers which are only registered on this instance.
   helpers: {
+    formatDate: function (datetime, format) {
+      return moment(datetime).format(format);
+    },
     if_eq: function(a, b, opts) {
       if (a == b) {
         return opts.fn(this);
@@ -106,28 +109,7 @@ var hbs = exphbs.create({
   }
 });
 
-/*
-app.engine('hbs', exphbs({
-  extname: 'hbs', 
-  defaultLayout: 'main', 
-  layoutsDir: __dirname + '/vistas/layouts/',
-  helpers: {
 
-    if_eq: function(a, b, opts) {
-      if (a == b) {
-        return opts.fn(this);
-      } else {
-        return opts.inverse(this);
-      }
-    },
-    margen: function (depth, options) {
-      return "_".repeat(parseInt(depth));
-    },
-    espacio2Guion: function (frase, options) {
-      return (frase = frase.replace(" ", "-"));
-    }
-}}));
-*/
 
 hbs.getPartials().then(function(partials) {
   console.log(partials);
@@ -136,7 +118,10 @@ hbs.getPartials().then(function(partials) {
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
+const Handlebars = require("handlebars");
 
+const MomentHandler = require("handlebars.moment");
+MomentHandler.registerHelpers(Handlebars);
 
 
 

@@ -1,6 +1,4 @@
 
-  
-
 
 
 
@@ -142,15 +140,14 @@ const putRecurso = () => {
     const formData = new FormData();
     let publicacion =  $('input:text[name=publicacion]').val();
     let derogacion =  $('input:text[name=derogacion]').val();
-    publicacion = publicacion ? publicacion : "";
-    derogacion =  derogacion ? derogacion : "";
+    //publicacion = publicacion ? publicacion : "";
+    //derogacion =  derogacion ? derogacion : "";
 
     formData.append('tipo', $('#tiposRecurso').children("option:selected").val());
     formData.append('nombre', $('input:text[name=nombre]').val());
     formData.append('procedencia',$('input:text[name=procedencia]').val() );
-    formData.append('publicacion', new Date("2020/06/20"));
-    formData.append('derogacion', "");
     formData.append('url', $('input:text[name=url]').val());
+    formData.append('publicacion', moment(publicacion));
 
     var descripcion = $('#Descrip').summernote('code');
     $('#Descrip').summernote('destroy');
@@ -187,8 +184,9 @@ const putRecurso = () => {
   
     })
     .then(data => {
-      
+     
         alert("recurso creado!");
+        $('#modalRecurso').modal('hide');
         leeListaRecursos();
     })
     .catch(err => { 
@@ -220,6 +218,7 @@ const editaRecurso = (recursoId) => {
         .then(resultado => {
             let template = Handlebars.templates.vRecurso;
             let recurso = resultado.recurso;  
+           
             $("#modalRecurso").remove();  
             $("body").append(template(recurso));
             $('#Descrip').summernote('code', recurso.descripcion);
@@ -238,22 +237,18 @@ const editaRecurso = (recursoId) => {
 
 
 const postRecurso = (recurso) => {
-    $('#ModalRecurso').modal('hide');
+   
     let recursoId = recurso._id;
     let tipo = recurso.tipo;
     const formData = new FormData();
-    let publicacion =  $('input:text[name=publicacion]').val();
-    let derogacion =  $('input:text[name=derogacion]').val();
-    publicacion = publicacion ? publicacion : "";
-    derogacion =  derogacion ? derogacion : "";
-
+   
     formData.append('tipo', tipo);
     formData.append('nombre', $('input:text[name=nombre]').val());
     formData.append('descripcion',$('#Descrip').val());
     formData.append('procedencia',$('input:text[name=procedencia]').val() );
-    formData.append('publicacion', new Date("2020/06/20"));
-    formData.append('derogacion', "");
     formData.append('url', $('input:text[name=url]').val());
+    formData.append('publicacion', $('#publicacion').val());
+    formData.append('derogacion', $('#derogacion').val());
     let url = 'http://localhost:3000/recurso/'+ recursoId ;
     let method = 'POST';
     
@@ -282,6 +277,7 @@ const postRecurso = (recurso) => {
         })
         .then(data => {
             alert("recurso modificado");
+            $('#modalRecurso').modal('hide');
             leeListaRecursos(tipo);
            
         })

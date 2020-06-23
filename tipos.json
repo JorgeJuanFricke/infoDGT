@@ -33,11 +33,7 @@
       "sigla": "REQ",
       "permisos": ["ADMIN", "OI"]
       },
-      {
-         "codigo": "alegación",
-         "sigla": "ALE",
-         "permisos": ["ADMIN", "OI"]
-      },
+     
       {
          "codigo": "resolución",
          "sigla": "RES",
@@ -82,10 +78,15 @@
         "codigo": "tarea informática",
         "sigla": "INF",
         "permisos": ["ADMIN","OAT"]
-     }
+     },
      {
       "codigo": "aplicación web",
       "sigla": "APW",
       "permisos": ["ADMIN","OAT","OI"]
-   }
+      },
+      {
+         "codigo": "alegación",
+         "sigla": "ALE",
+         "permisos": ["ADMIN","OI"]
+         }
 ]

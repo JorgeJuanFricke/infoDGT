@@ -5,8 +5,7 @@
   "scripts": {
     "run": "nodemon .bin/www",
     "start": "node ./bin/www",
-    
-    "hbs": "handlebars ./vistas/vRecurso.handlebars -f ./public/js/hbs/vRecurso.tmpl.js -k know"
+    "hbs": "handlebars ./vistas/vRecurso.handlebars -f ./public/js/hbs/vRecurso.tmpl.js -k know "
   },
   "dependencies": {
     "async": "^3.2.0",
@@ -30,6 +29,7 @@
     "jquery": "^3.4.1",
     "jquery-file-upload-middleware": "^0.1.8",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.27.0",
     "mongoose": "^5.9.6",
     "morgan": "~1.9.0",
     "node-fetch": "^2.6.0",

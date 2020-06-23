@@ -12,6 +12,7 @@ const {
 const {
     sanitizeBody
 } = require('express-validator/filter');
+const { exists } = require('../modelos/mRecurso');
 
 
 
@@ -21,7 +22,7 @@ VALIDA = [
     //body('descripcion').not().isEmpty().withMessage("debe introducir una descripción"),
     body('euros').optional().not().isEmpty().withMessage("debe introducir un importe"),
     body('procedencia').optional().not().isEmpty().withMessage("debe introducir la procedencia"),
-   // body('publicacion').not().isEmpty().withMessage("debe introducir fecha publicación"),
+    body('publicacion').exists().not().isEmpty().withMessage("debe introducir fecha publicación"),
     //body('derogacion').optional().not().isEmpty().withMessage("intrduzca fecha derogación"),
     sanitizeBody('nombre').escape(),
     //sanitizeBody('url').escape(),

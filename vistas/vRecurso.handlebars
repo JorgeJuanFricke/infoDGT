@@ -1,21 +1,12 @@
 <div class="modal" id="modalRecurso">
   
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
             <!-- Modal Header -->
 
             <div class="modal-header">
                 <div class="form-group row">
-                    {{#if tipo}}
-                        <h4 class="modal-title">{{tipo.codigo}}</h4>
-                        <input type="hidden" class="form-control" name="tipo" value="{{tipo.codigo}}">
-                    {{else}}    
-                    <h4 class="modal-title">Recurso:</h4>
-                    <span>
-                        <select id="tiposRecurso" class="form-control" autofocus="true">
-                        </select>
-                    </span>
-                    {{/if}}
+                 
                 <button type="button" class="close" data-dismiss="modal"></button>
             </div>
             </div>
@@ -29,9 +20,20 @@
 
              
                 
-                <div class="form-group">
-                    <label for="nombre" class="control-label">nombre:</label>
-                    <input type="text" class="form-control" name="nombre" value="{{nombre}}"></input>
+                <div class="form-group row">
+                    <div class="col-4">
+                     {{#if tipo}}
+                        <input type="text" class="form-control" name="tipo" value="{{tipo.codigo}}" disabled>
+                     {{else}}    
+                        <select id="tiposRecurso" class="form-control" autofocus="true">
+                        </select>
+                     {{/if}}
+                   </div>
+                    <div class="col-8">
+                        <input type="text" class="form-control" name="nombre" value="{{nombre}}">  
+                    </div>
+                   
+
                 </div>
 
                 <div class="form-group">
@@ -54,14 +56,14 @@
                         <label for="procedencia" class="control-label">procedencia:</label>
                         <input type="text" class="form-control" name="procedencia" value="{{procedencia}}">
                     </div> 
-                    <div class="col-2">
+                    <div class="col-4">
                         <label for="publicacion" class="control-label">publicación:</label>
-                        <input type="date" class="form-control" name="publicacion"
+                        <input type="date" id="publicacion" class="form-control" name="publicacion"
                             value="{{publicacion}}">
                     </div>
-                    <div class="col-2">
+                    <div class="col-4">
                         <label for="derogacion" class="control-label">derogación:</label>
-                        <input type="date" class="form-control" name="derogacion" value="{{derogacion}}">
+                        <input type="date" id="derogacion" class="form-control" name="derogacion" value="{{derogacion}}">
                     </div>
                 </div>
 
