@@ -5,27 +5,36 @@ const express = require("express");
 const path = require("path");
 const logger = require("morgan");
 const bodyParser = require("body-parser");
-const exphbs = require("express-handlebars");
 const ini = require("./controladores/cIni");
 const env = require("dotenv").config();
+const moment = require('moment');
+const exphbs = require('express-handlebars');
+
+upload = require('jquery-file-upload-middleware');
 
 const app = express();
 
 
 
+
 /**** directorios  ***************/
 const fs = require("fs");
-const dataDir = __dirname + "/upload";
+const dataDir = __dirname + "/public/uploads";
 fs.existsSync(dataDir) || fs.mkdirSync(dataDir);
+
+
 
 /*** logger **********************/
 
 app.use(logger("combined"));
+/********** static ******************/
+app.use(express.static(path.join(__dirname, "/public")));
+app.use(express.static(path.join(__dirname, "/public/uploads")));
 
-/*******  body parsers ****************/
 
 
 app.use(bodyParser.json()); // application/json
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
@@ -35,6 +44,23 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
+
+
+// configure upload middleware
+
+app.use('/upload', function(req, res, next){
+  upload.fileHandler({
+      uploadDir: function () {
+          return __dirname + '/public/uploads/'
+      },
+      uploadUrl: function () {
+          return '/uploads'
+      }
+  })(req, res, next);
+});
+
+
+
 /*
 app.use(
   express.urlencoded({
@@ -76,13 +102,11 @@ switch (process.env.NODE_ENV) {
 const expressValidator = require("express-validator");
 app.use(expressValidator());
 
-/********** static ******************/
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, "upload")));
 
 /********  handlebars ***********************/
 
 var hbs = exphbs.create({
+
   extname: "hbs",
   defaultLayout: "main",
   partialsDir: __dirname + "/views/partials/",
@@ -118,63 +142,21 @@ hbs.getPartials().then(function(partials) {
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
-const Handlebars = require("handlebars");
-
-const MomentHandler = require("handlebars.moment");
-MomentHandler.registerHelpers(Handlebars);
 
 
 
-/*
-hbs.registerHelper("if_Propietario", function(usuario, autor, opts) {
-  if (usuario && (usuario.admin || usuario.email === autor)) {
-    return opts.fn(this);
-  } else {
-    return opts.inverse(this);
-  }
-});
 
-hbs.registerHelper("if_admin", function(usuario, options) {
-  if (usuario && usuario.admin) {
-    return options.fn(this);
-  } else {
-    return options.inverse(this);
-  }
-});
-
-hbs.registerHelper("margen", (depth, options) => {
-  return "_".repeat(parseInt(depth));
-});
-
-hbs.registerHelper("espacio2Guion", (frase, options) => {
-  return (frase = frase.replace(" ", "-"));
-});
-
-
-hbs.registerHelper('formateaFecha', function (date, formato) {
-  var mmnt = moment(date);
-  return mmnt.format(formato);
-})
-*/
 /*** usuario actual para handlebars *************/
 app.use(function(req, res, next) {
   res.locals.currentUser = req.user;
   next();
 });
 
-const jqupload = require("jquery-file-upload-middleware");
-app.use("/upload", function(req, res, next) {
-  jqupload.fileHandler({
-    uploadDir: function() {
-      return config.upLoadDir;
-    },
-    uploadUrl: function() {
-      return config.upLoadUrl;
-    }
-  })(req, res, next);
 
-  // enviar json (con nombre y path)
-});
+
+
+
+
 
 /**** actualizar datos ******************/
 ini.updateTipos();
@@ -194,9 +176,9 @@ app.use("/admin", adminRouter);
 app.use("/usuario", usuariosRouter);
 app.use("/", indexRouter);
 
-
-
-
+upload.on('error', function (e, req, res) {
+  console.log(e.message);
+});
 
 /****** error 404 *******************/
 app.use((req, res, next) => {
