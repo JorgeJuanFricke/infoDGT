@@ -9,7 +9,7 @@ let RecursoSchema = mongoose.Schema({
         required: true
     },
 
-    tipo: { type: mongoose.Schema.Types.ObjectId, ref: 'Tipo', index:true },
+    tipo: { type: mongoose.Schema.Types.ObjectId, ref: 'Tipo', required: true, index:true },
     
    
     

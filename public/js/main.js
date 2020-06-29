@@ -1,9 +1,9 @@
 
 
 const leeListaRecursos = () => {
-    let tipo = $('#tipos').children("option:selected").text();
+    //let tipo = $('#tipos').children("option:selected").text();
     let texto =$('#buscaRecursos').val();
-    let query = `?tipo=${tipo}&texto=${texto}`;
+    let query = `?texto=${texto}`;
     let pagina = "";
     
     fetch('http://localhost:3000/recursos' + query , {
@@ -230,4 +230,6 @@ $(document).ready(function () {
         let texto = this.val();
         $("#texto").attr("action", "texto=" + texto);
     });
+
+    
 });

@@ -88,5 +88,10 @@
          "codigo": "alegación",
          "sigla": "ALE",
          "permisos": ["ADMIN","OI"]
+      },
+      {
+         "codigo": "hoja calculo",
+         "sigla": "CAL",
+         "permisos": ["ADMIN","OI","OAT"]
          }
 ]

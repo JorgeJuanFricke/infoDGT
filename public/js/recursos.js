@@ -1,66 +1,215 @@
+creaFormRecurso = (recurso) => {
 
+    $("#modalRecurso").remove();
+    //var dateFmt = d3.time.format('%d-%m-%Y');
 
+let formulario = d3.select("body").append("div")
+    .attr("class", "modal")
+    .attr("id", "modalRecurso")
+    .append("div")
+    .attr("class","modal-dialog modal-xl modal-dialog-centered")
+    .append("div")
+    .attr("class", "modal-content")
+    .append("div")
+    .attr("class", "modal-body")
+    .append("form")
+    .attr("class","form");
 
+    let linea1 = formulario.append("div")
+    .attr("class","form-group row");
 
-muestraListaRecursos2 = (data) => {
-  
-        let filas = d3.select("#listaRecursos")
-            .selectAll("div.data")
-            .remove()
-            .data(data, function (d) {
-                return d._id;
-            });
+    tipo = linea1.append("div")
+    .attr("id", "tipo")
+    .attr("class","col-4");
 
-
-        let seleccionExit = filas.exit();
-        seleccionExit.remove();
-
-        let seleccionEnter = filas.enter();
-
-        let fila = seleccionEnter
-            .append("div")
-            .attr("class", "data")
-            
-            .style("top", function (d, i) {
-                return 70 + i * 40 + "px";
-            });
-            
-        fila
-            .append("span")
-            .append("a")
-            .attr("href", "#")
-            .on("click", function (d) {
-                window.open(d.url); 
-               
-            })
-            .text(function (d) {
-                return d.tipo.codigo + " " + d.nombre;
-            });
-
-        fila
-            .append("span")
-            .append("a")
-            .attr("href", "#")
-
-            .on("click", function (d) {
-               
-                editaRecurso(d._id);
-                
-            })
-            .text("EDIT");
-
-        fila
-            .append("span")
-            .append("a")
-            .attr("href", "#")
-
-            .on("click", function (d) {
-                console.log(d);
-                deleteRecurso(d._id);
-            })
-            .text("DEL");
     
-};
+    if (!isEmpty(recurso)) {
+
+        tipo.append("label")
+        .attr("class","control-label h5")
+        .text(recurso.tipo.codigo);
+     
+    
+    } else {
+       
+        tipo.append("select")
+         .attr("id", "tiposRecurso")
+         .attr("class","form-control");
+         
+        $('#tiposRecurso').select2({
+            width: '150px',
+            ajax: {
+                url: "http://localhost:3000/tipos",
+                dataType: 'json'
+            }
+        });
+    }
+
+     nombre = linea1.append("div")
+    .attr("class", "col-8");
+
+    nombre.append("input")
+    .attr("type", "text")
+    .attr("class", "form-control")
+    .attr("name", "nombre")
+    .attr("value", recurso.nombre) ;    
+
+    let linea2 = formulario.append("div")
+    .attr("class","form-group")
+    .append("textarea")
+    .attr("id", "Descrip")
+    .attr("class", "form-control");
+   
+    $('#Descrip').summernote({
+        placeholder: '',
+        tabsize: 2,
+        height: 100
+     });
+     
+     $('#Descrip').summernote('code', recurso.descripcion);
+
+    let url = formulario.append("div")
+    .attr("class","form-group");
+
+    url.append("label")
+    .attr("for", "url")
+    .attr("class","control-label")
+    .text("url");
+
+    url.append("div")
+      .append("input")
+    .attr("type", "text")
+    .attr("class", "form-control")
+    .attr("name", "url")
+    .attr("value", recurso.url) ;    
+             
+          
+    let linea4 = formulario.append("div")
+    .attr("class","form-group row");
+
+    let procedencia = linea4.append("div")
+    .attr("class","col-4");
+
+    procedencia.append("label")
+    .attr("for", "procedencia")
+    .attr("class","control-label")
+    .text("procedencia");     
+    
+    procedencia.append("input")
+    .attr("type","text")
+    .attr("class","form-control")
+    .attr("name","procedencia")
+    .attr("value", recurso.procedencia) ;    
+             
+
+    
+    let publicacion = linea4.append("div")
+    .attr("class","col-4");         
+   
+    publicacion.append("label")
+    .attr("for", "publicacion")
+    .attr("class","control-label")
+    .text("publicación");     
+    
+    publicacion.append("input")
+    .attr("type","text")
+    .attr("class","form-control")
+    .attr("name","publicacion")    
+    .attr("id","publicacion")
+    .attr("value", function() {return moment(recurso.publicacion).format("DD/MM/YYYY")}) ;       
+ 
+   
+
+    derogacion = linea4.append("div")
+    .attr("class","col-4");         
+   
+    derogacion.append("label")
+    .attr("for", "derogacion")
+    .attr("class","control-label")
+    .text("derogación");     
+    
+    derogacion.append("input")
+    .attr("type","text")
+    .attr("class","form-control")
+    .attr("name","derogacion")    
+    .attr("id","derogacion")
+    .attr("value", function() {return moment(recurso.derogacion).format("DD/MM/YYYY")}) ;
+  
+ 
+            
+    let linea5 = formulario.append("div")
+    .attr("class","form-group row");
+
+    archivo = linea5.append("div")
+    .attr("class","col")
+    .append("span")
+    .attr("class","btn btn-default btn-file")
+    .append("input")
+    .attr("id", "fileupload")
+    .attr("type","file")
+    .attr("name", "files[]")
+    .attr("class", "form-control")
+    .attr("data-url","/upload");
+
+  
+    
+    $('#fileupload').fileupload({
+       
+        dataType: 'json',
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+               
+                 $('input[name=url]').val(file.url);
+            });
+        }
+    });
+    
+    
+
+    let linea6 = formulario.append("div")
+    .attr("class","form-group");
+
+   
+    Aceptar = linea6.append("div")
+    .append("button")
+    .attr("id", "GrabarRecurso")
+    .attr("type","button")
+    .attr("class","btn btn-primary")
+    .text("Aceptar");
+
+    if (recurso) {
+  
+        Aceptar.on("click", function() {
+        postRecurso(recurso._id)})
+     }
+      else {
+          
+        Aceptar.on("click", function() {
+            putRecurso()})  
+        
+     };
+    
+    
+    linea6.append("button")
+    .attr("id", "Salir")
+    .attr("type","button")
+    .attr("class","btn btn-secondary close btn")
+    .attr("data-dismiss", "modal")
+    .text("Salir");
+  
+
+}  
+
+
+
+           
+function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}  
 
 muestraPaginas = () => {
     /*
@@ -97,35 +246,15 @@ const nuevaCategoria = () => {
 const nuevoRecurso = (btn) => {
     let recurso = {};
     try {
-        
-        let template = Handlebars.templates.vRecurso;
-        // cargar tipos de recursos
-                
+                  
+        creaFormRecurso(recurso);
       
-        $("body").append(template(recurso));
-        $('#tiposRecurso').select2({
-            width: '150px',
-            ajax: {
-                url: "http://localhost:3000/tipos",
-                dataType: 'json'
-            }
-        });
       
-        //"csrf23454345"
         $('#modalRecurso').modal({
             show: true
         });
         
  
-        $('#Descrip').summernote({
-        placeholder: '',
-        tabsize: 2,
-        height: 100
-        });
-        $('#Descrip').summernote('reset');
-       
-        $('#GrabarRecurso').off().on('click',function() {
-            putRecurso()});
        
     } catch (err) {
         console.log(err);
@@ -138,23 +267,19 @@ const nuevoRecurso = (btn) => {
  //    "csrf-token": "csrf23454345"
 const putRecurso = () => {
     const formData = new FormData();
-    let publicacion =  $('input:text[name=publicacion]').val();
-    let derogacion =  $('input:text[name=derogacion]').val();
-    //publicacion = publicacion ? publicacion : "";
-    //derogacion =  derogacion ? derogacion : "";
-
+    let publicacion =  $('#publicacion').val();
+    let derogacion =  $('#derogacion').val();
+    
     formData.append('tipo', $('#tiposRecurso').children("option:selected").val());
     formData.append('nombre', $('input:text[name=nombre]').val());
     formData.append('procedencia',$('input:text[name=procedencia]').val() );
     formData.append('url', $('input:text[name=url]').val());
-    formData.append('publicacion', moment(publicacion));
-
+    formData.append('publicacion', publicacion);
+    formData.append('derogacion', derogacion);
+    
     var descripcion = $('#Descrip').summernote('code');
     $('#Descrip').summernote('destroy');
-    console.log(descripcion);
-  
-   
-   
+     
     formData.append('descripcion', descripcion);
 
     let url = 'http://localhost:3000/recurso/';
@@ -199,7 +324,7 @@ const putRecurso = () => {
 
 
 const editaRecurso = (recursoId) => {
-        console.log(recursoId);
+        
        fetch('http://localhost:3000/recurso/' + recursoId, {
             method: 'GET',
             headers: {
@@ -216,17 +341,17 @@ const editaRecurso = (recursoId) => {
            
         })
         .then(resultado => {
-            let template = Handlebars.templates.vRecurso;
+           
+           
             let recurso = resultado.recurso;  
            
-            $("#modalRecurso").remove();  
-            $("body").append(template(recurso));
-            $('#Descrip').summernote('code', recurso.descripcion);
-            $('#modalRecurso').modal({
-                show: true
-            });
-            $('#GrabarRecurso').off().on('click',function() {
-                postRecurso(recurso)});
+            creaFormRecurso(recurso);
+          
+            
+           
+                $('#modalRecurso').modal({
+                    show: true
+                });
             
         }).catch(err => console.log(err));
 
@@ -236,19 +361,18 @@ const editaRecurso = (recursoId) => {
 
 
 
-const postRecurso = (recurso) => {
+const postRecurso = (recursoId) => {
    
-    let recursoId = recurso._id;
-    let tipo = recurso.tipo;
     const formData = new FormData();
-   
-    formData.append('tipo', tipo);
+    let publicacion =  moment($('#publicacion').val(),'DDMMYYYY').format();
+    let derogacion  = moment($('#derogacion').val(),'DDMMYYYY').format();
+    //formData.append('tipo', tipo.codigo);
     formData.append('nombre', $('input:text[name=nombre]').val());
     formData.append('descripcion',$('#Descrip').val());
     formData.append('procedencia',$('input:text[name=procedencia]').val() );
     formData.append('url', $('input:text[name=url]').val());
-    formData.append('publicacion', $('#publicacion').val());
-    formData.append('derogacion', $('#derogacion').val());
+    formData.append('publicacion', publicacion);
+    formData.append('derogacion', derogacion);
     let url = 'http://localhost:3000/recurso/'+ recursoId ;
     let method = 'POST';
     
@@ -268,7 +392,7 @@ const postRecurso = (recurso) => {
     })
         .then(result => {
              
-        if ( result.status !== 200) {
+        if ( result.status !== 200 ) {
             console.log(result);
             throw new Error(result.message);
           }
@@ -278,7 +402,7 @@ const postRecurso = (recurso) => {
         .then(data => {
             alert("recurso modificado");
             $('#modalRecurso').modal('hide');
-            leeListaRecursos(tipo);
+            leeListaRecursos();
            
         })
         .catch(err => {

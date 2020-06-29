@@ -24,30 +24,11 @@ const recursosRouter = require('../rutas/rRecursos.js');
 
 
 exports.getRecurso = async (req, res, next) => {
-    /*
-    let query = [{
-          $match: {
-              _id: mongoose.Types.ObjectId(req.params.Id)
-          }
-      },
-      {
-          $lookup: {
-              from: 'tipos',
-              localField: 'tipo',
-              foreignField: 'codigo',
-              as: 'tipo'
-          }
-      },
-      {
-          $unwind: '$tipo'
-      }
-    ]
-    let recurso = await Recurso.aggregate(query).exec();
-    */
+   
    const recursoId = req.params.Id;
     try {
       
-      const recurso = await Recurso.findById(recursoId);
+      const recurso = await Recurso.findById(recursoId).populate('tipo');
       if (!recurso) {
         const error = new Error('El recurso no existe');
         error.statusCode = 404;
@@ -144,12 +125,12 @@ exports.postRecurso = async (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-      recurso.tipo = req.body.tipo;
       recurso.nombre = req.body.nombre;
       recurso.descripcion = req.body.descripcion;
       recurso.url = req.body.url;
       recurso.procedencia = req.body.procedencia;
-      recurso.publicacion = new Date(req.body.publicacion);
+      recurso.publicacion = req.body.publicacion;
+      recurso.derogacion = req.body.derogacion;
       /*
       if (req.body.derogacion) {
          recurso.derogacion = new Date(req.body.derogacion);}

@@ -3,7 +3,7 @@ const nombreOficina = 'OLT Fuerteventura';
 const nuevo = 45;
 const desarrollo = 'mongodb://127.0.0.1:27017/deDGT';
 const produccion = 'mongodb://127.0.0.1:27017/deDGT';
-const upLoadDir = 'C:/Users/42795331/WebstormProjects/deOAT/upload';
+const upLoadDir = 'C:/Users/jorge/buscaDgt/upload';
 const upLoadUrl = '/upload';
 // 
 
