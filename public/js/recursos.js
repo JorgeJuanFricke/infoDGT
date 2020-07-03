@@ -1,3 +1,6 @@
+
+
+
 creaFormRecurso = (recurso) => {
 
     $("#modalRecurso").remove();
@@ -13,6 +16,10 @@ let formulario = d3.select("body").append("div")
     .append("div")
     .attr("class", "modal-body")
     .append("form")
+    .attr("id","formRecurso")
+    .attr("action", "/documento")
+    .attr("method", "post")
+    .attr("enctype","multipart/form-data")
     .attr("class","form");
 
     let linea1 = formulario.append("div")
@@ -81,7 +88,8 @@ let formulario = d3.select("body").append("div")
     .attr("type", "text")
     .attr("class", "form-control")
     .attr("name", "url")
-    .attr("value", recurso.url) ;    
+    .attr("value", recurso.url)   
+    .on("change()", $('input:text[name=documento]').empty()); 
              
           
     let linea4 = formulario.append("div")
@@ -116,9 +124,10 @@ let formulario = d3.select("body").append("div")
     .attr("class","form-control")
     .attr("name","publicacion")    
     .attr("id","publicacion")
-    .attr("value", function() {return moment(recurso.publicacion).format("DD/MM/YYYY")}) ;       
- 
-   
+    .attr("value", function() {
+        var d = moment(recurso.publicacion, "DD/MM/YYYY");
+        return recurso.publicacion && d.isValid() ? d.format('MM/DD/YYYY') : '';
+      });
 
     derogacion = linea4.append("div")
     .attr("class","col-4");         
@@ -133,8 +142,11 @@ let formulario = d3.select("body").append("div")
     .attr("class","form-control")
     .attr("name","derogacion")    
     .attr("id","derogacion")
-    .attr("value", function() {return moment(recurso.derogacion).format("DD/MM/YYYY")}) ;
-  
+    .attr("value", function() {
+        var d = moment(recurso.derogacion, "DD/MM/YYYY");
+        return recurso.derogacion && d.isValid() ? d.format('MM/DD/YYYY') : '';
+      });
+   
  
             
     let linea5 = formulario.append("div")
@@ -145,25 +157,47 @@ let formulario = d3.select("body").append("div")
     .append("span")
     .attr("class","btn btn-default btn-file")
     .append("input")
-    .attr("id", "fileupload")
+    .attr("id", "documento")
     .attr("type","file")
-    .attr("name", "files[]")
+    .attr("name", "documento")
     .attr("class", "form-control")
-    .attr("data-url","/upload");
 
-  
     
-    $('#fileupload').fileupload({
-       
-        dataType: 'json',
-        done: function (e, data) {
-            $.each(data.result.files, function (index, file) {
-               
-                 $('input[name=url]').val(file.url);
-            });
-        }
+    .on("change", function () {
+      
+        let documento = $('#documento')[0].files[0]; 
+        let formData = new FormData();
+        formData.append('documento',  documento);
+        $.ajax({
+            url: '/documento',
+            data: formData,
+            type: 'POST',
+            contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
+            processData: false, // NEEDED, DON'T OMIT THIS
+            // ... Other options like success and etc
+        })
+        .then(result => {
+            console.log(result);
+            $('input[name=url').val(result.path);
+           
+
+        }).catch(alert('error subiendo documento'))
     });
-    
+
+     
+        /*
+        fetch('/documento', {
+            method: 'POST',
+            body: formData,
+            header: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data',
+            }
+        
+       
+        
+    */
+   
     
 
     let linea6 = formulario.append("div")
@@ -177,7 +211,7 @@ let formulario = d3.select("body").append("div")
     .attr("class","btn btn-primary")
     .text("Aceptar");
 
-    if (recurso) {
+    if (!isEmpty(recurso)) {
   
         Aceptar.on("click", function() {
         postRecurso(recurso._id)})
@@ -267,57 +301,63 @@ const nuevoRecurso = (btn) => {
  //    "csrf-token": "csrf23454345"
 const putRecurso = () => {
     const formData = new FormData();
-    let publicacion =  $('#publicacion').val();
-    let derogacion =  $('#derogacion').val();
-    
-    formData.append('tipo', $('#tiposRecurso').children("option:selected").val());
+    let pub =  $('#publicacion').val();
+    let publicacion = pub ? moment(pub,"DD/MM/YYYY"): "";
+    let der =  $('#derogacion').val();
+    let derogacion =  der ? moment(der,"DD/MM/YYYY"): "";
+    let tip = $('#tiposRecurso').children("option:selected").val();
+    let tipo =  tip ? tip: "";
+    formData.append('tipo', tipo);
     formData.append('nombre', $('input:text[name=nombre]').val());
     formData.append('procedencia',$('input:text[name=procedencia]').val() );
     formData.append('url', $('input:text[name=url]').val());
     formData.append('publicacion', publicacion);
     formData.append('derogacion', derogacion);
-    
+   
     var descripcion = $('#Descrip').summernote('code');
     $('#Descrip').summernote('destroy');
      
     formData.append('descripcion', descripcion);
 
-    let url = 'http://localhost:3000/recurso/';
-    let method = 'PUT';
     
     var object = {};
     formData.forEach((value, key) => {object[key] = value});
     var json = JSON.stringify(object);
-
-    fetch(url, {
-      method: method,
-      body: json,
-      headers: {
-
-        Authorization: 'Bearer ' + "el token", //this.props.token,
-        'Content-Type': 'application/json'
-
-      }
-    })
-    .then(result => {
+    d3.json('http://localhost:3000/recurso/', {
+        method:"PUT",
+        body: json,
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
         
-        if ( result.status !== 201) {
-            console.log(result);
-            throw new Error(result.message);
-          }
-          return result.json();
-  
-    })
-    .then(data => {
-     
-        alert("recurso creado!");
-        $('#modalRecurso').modal('hide');
-        leeListaRecursos();
-    })
-    .catch(err => { 
-        console.log("err:"+err);
-        alert ("se ha producido el error:"+err);
-    })
+    
+    }})
+    .then(response => {
+        response.json()
+            .then(json => {
+                // validacion fallida
+                if (response.status = 299) {
+                    console.log(json);
+                    alert(json.message + json.data[0].msg)
+                } 
+                // recurso creado
+                if (response.status = 201) {
+                    alert(json.message);
+                    $('#modalRecurso').modal('hide');
+                    leeListaRecursos();
+                }  
+                throw new Error(response.status);  
+            })
+            
+            .catch(err => { 
+            alert("respuesta ok sin json")
+            })
+       
+    })  
+   .catch(err =>  {
+       console.log(err)
+        alert (err);
+     })
+    
  } ;
          
 
@@ -328,16 +368,18 @@ const editaRecurso = (recursoId) => {
        fetch('http://localhost:3000/recurso/' + recursoId, {
             method: 'GET',
             headers: {
-               // 'csrf-token': "csrf23454345"
-            }
+                'Content-Type': 'application/json'
+            },
+           
+            
         })
         .then(res => {
-             
-        if ( res.status !== 200) {
-          
-            throw new Error(res.message);
-          }
-          return res.json();
+                
+            if ( res.status !== 200) {
+            
+                throw new Error(res.message);
+            }
+            return res.json();
            
         })
         .then(resultado => {
@@ -362,7 +404,7 @@ const editaRecurso = (recursoId) => {
 
 
 const postRecurso = (recursoId) => {
-   
+ 
     const formData = new FormData();
     let publicacion =  moment($('#publicacion').val(),'DDMMYYYY').format();
     let derogacion  = moment($('#derogacion').val(),'DDMMYYYY').format();
@@ -373,23 +415,20 @@ const postRecurso = (recursoId) => {
     formData.append('url', $('input:text[name=url]').val());
     formData.append('publicacion', publicacion);
     formData.append('derogacion', derogacion);
-    let url = 'http://localhost:3000/recurso/'+ recursoId ;
-    let method = 'POST';
     
     var object = {};
     formData.forEach((value, key) => {object[key] = value});
     var json = JSON.stringify(object);
 
-    fetch(url, {
-      method: method,
-      body: json,
-      headers: {
-
-        Authorization: 'Bearer ' + "el token", //this.props.token,
-        'Content-Type': 'application/json'
-
-      }
-    })
+    
+    d3.json('http://localhost:3000/recurso/', {
+        method:"POST",
+        body: json,
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        
+    
+    }})
         .then(result => {
              
         if ( result.status !== 200 ) {
@@ -408,6 +447,7 @@ const postRecurso = (recursoId) => {
         .catch(err => {
             console.log(err);
         });
+  
 };
 
 
@@ -424,13 +464,15 @@ const deleteRecurso = (recursoId) => {
     //const csrf = btn.parentNode.querySelector('[name=_csrf]').value;
 
     //const productElement = btn.closest('article');
-
-    fetch("http://localhost:3000/recurso/" + recursoId, {
-            method: "DELETE",
-            headers: {
-               // "csrf-token": csrf
-            }
-        })
+    d3.json('http://localhost:3000/recurso/', {
+        method:"DELETE",
+        body: json,
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        
+    
+    }})
+   
         .then(result => {
              
         if ( result.status !== 200) {
