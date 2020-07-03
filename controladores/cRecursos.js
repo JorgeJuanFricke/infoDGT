@@ -36,7 +36,7 @@ exports.getRecurso = async (req, res, next) => {
       }
      
       
-      res.status(200).json({ message: 'recurso encontrado.', recurso: recurso });
+      return res.status(200).json({ message: 'recurso encontrado.', recurso: recurso });
       
     } catch (err) {
         if (!err.statusCode) {
@@ -51,18 +51,18 @@ exports.getRecurso = async (req, res, next) => {
 
 
 exports.putRecurso = async (req, res, next) => {
-  try {
+  
+     
     const errors = validationResult(req);
     
     if (!errors.isEmpty()) {
       const error = new Error('validación fallida.');
-      error.statusCode = 422;
       error.message ='validación fallida';
       error.data = errors.array();
-      throw error;
+      return res.status(299).json(error);
     }
     
-   
+  try {
     const tipo = req.body.tipo;
     const nombre = req.body.nombre;
     const descripcion = req.body.descripcion;
@@ -87,20 +87,20 @@ exports.putRecurso = async (req, res, next) => {
      // oficina: config.Oficina
      //autor: req.user.email,
     
-      await recurso.save();
-      
-      res.status(201).json({
-        message: 'recurso creado!',
-        recurso: recurso,
-        
-      });
+      await recurso.save()
+  
+         return res.status(201).json({
+          message: 'recurso creado!',
+          recurso: recurso,
+          
+        });
+       
       
     } catch (err) {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
       next(err);
     }
+     
+    
 };
      
  
@@ -138,7 +138,8 @@ exports.postRecurso = async (req, res, next) => {
       recurso.actualizadoPor = 'jjuan@dgt.es';  // cambiar!!!!!!
       
       const result = await recurso.save();
-      res.status(200).json({ message: 'recurso modificado!', recurso: result });
+      return res.status(200).json({ message: 'recurso modificado!', recurso: result });
+
     } catch (err) {
       if (!err.statusCode) {
         err.statusCode = 500;
@@ -165,7 +166,7 @@ exports.postRecurso = async (req, res, next) => {
       await Recurso.findByIdAndRemove(recursoId);
   
       
-      res.status(200).json({ message: 'recurso borrado.' });
+      return res.status(200).json({ message: 'recurso borrado.' });
     } catch (err) {
       if (!err.statusCode) {
         err.statusCode = 500;

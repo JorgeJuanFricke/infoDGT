@@ -5,31 +5,19 @@ const recursosRouter = express.Router();
 
 const cRecursos = require('../controladores/cRecursos');
 const Auto = require('../middleware/Autorizacion');
-const {
-    body,
-    validationResult
-} = require('express-validator/check');
-const {
-    sanitizeBody
-} = require('express-validator/filter');
-const { exists } = require('../modelos/mRecurso');
+const {body, validationResult} = require('express-validator');
+
+
 
 
 
 VALIDA = [
-    body('nombre').not().isEmpty().withMessage("debe introducir un nombre"),
-    body('url').not().isEmpty().withMessage("debe introducir la url del documento"),
-    //body('descripcion').not().isEmpty().withMessage("debe introducir una descripción"),
-    body('euros').optional().not().isEmpty().withMessage("debe introducir un importe"),
+    body('tipo').trim().exists().not().isEmpty().withMessage("debe seleccionar el tipo"),
+    body('nombre').trim().exists().not().isEmpty().withMessage("debe introducir el nombre"),
+    body('url').trim().not().isEmpty().withMessage("debe introducir la url del documento"),
     body('procedencia').optional().not().isEmpty().withMessage("debe introducir la procedencia"),
-    //body('publicacion').exists().not().isEmpty().withMessage("debe introducir fecha publicación"),
-    //body('derogacion').optional().not().isEmpty().withMessage("intrduzca fecha derogación"),
-    sanitizeBody('nombre').escape(),
-    //sanitizeBody('url').escape(),
-    //sanitizeBody('descripcion').escape(),
-    sanitizeBody('procedencia').escape()
-   
-
+    body('publicacion').exists().not().isEmpty().withMessage("debe introducir fecha publicación")
+  
 ];
 
 
@@ -49,10 +37,8 @@ recursosRouter.get('/:Id', Auto.esAutenticado, function (req, res, next) {
 
 
 recursosRouter.put(
-    '/', 
-    Auto.esAutenticado, 
-    Auto.esAutorizadoAñadir, 
-    VALIDA, function (req, res, next) {
+    '/', Auto.esAutenticado, Auto.esAutorizadoEditar, VALIDA,
+        function (req, res, next) {
     cRecursos.putRecurso(req, res, next);
 });
 

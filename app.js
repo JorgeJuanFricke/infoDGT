@@ -3,18 +3,24 @@ let config = require("./configuracion.js");
 const mongoose = require("mongoose");
 const express = require("express");
 const path = require("path");
-const logger = require("morgan");
+//const logger = require("morgan");
 const bodyParser = require("body-parser");
 const ini = require("./controladores/cIni");
 const env = require("dotenv").config();
 const moment = require('moment');
 const exphbs = require('express-handlebars');
 
-upload = require('jquery-file-upload-middleware');
+const morgan = require("morgan");
+
+
+
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' })
 
 const app = express();
 
 
+app.use(morgan('dev'));
 
 
 /**** directorios  ***************/
@@ -22,18 +28,18 @@ const fs = require("fs");
 const dataDir = __dirname + "/public/uploads";
 fs.existsSync(dataDir) || fs.mkdirSync(dataDir);
 
+const dataDir2 = __dirname + "/uploads";
+fs.existsSync(dataDir2) || fs.mkdirSync(dataDir2);
 
 
-/*** logger **********************/
 
-app.use(logger("combined"));
 /********** static ******************/
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.static(path.join(__dirname, "/public/uploads")));
 
 
 
-app.use(bodyParser.json()); // application/json
+
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -46,28 +52,23 @@ app.use((req, res, next) => {
 });
 
 
-// configure upload middleware
 
-app.use('/upload', function(req, res, next){
-  upload.fileHandler({
-      uploadDir: function () {
-          return __dirname + '/public/uploads/'
-      },
-      uploadUrl: function () {
-          return '/uploads'
-      }
-  })(req, res, next);
-});
-
-
-
-/*
 app.use(
   express.urlencoded({
     extended: false
   })
 );
-*/
+
+app.post('/documento', upload.single('documento'), function (req, res, next) {
+  // req.file is the `avatar` file
+  
+  return res.json(req.file);
+})
+
+app.use(express.json());
+
+
+
 /********* mongo ******************/
 
 console.log(process.env.NODE_ENV);
@@ -98,9 +99,6 @@ switch (process.env.NODE_ENV) {
 }
 
 
-/****** express validator *****************/
-const expressValidator = require("express-validator");
-app.use(expressValidator());
 
 
 /********  handlebars ***********************/
@@ -176,9 +174,7 @@ app.use("/admin", adminRouter);
 app.use("/usuario", usuariosRouter);
 app.use("/", indexRouter);
 
-upload.on('error', function (e, req, res) {
-  console.log(e.message);
-});
+
 
 /****** error 404 *******************/
 app.use((req, res, next) => {
@@ -189,11 +185,10 @@ app.use((req, res, next) => {
 
 /********  error 500 ***************/
 app.use((error, req, res, next) => {
-  console.log(error);
+ 
   const status = error.statusCode || 500;
-  const message = error.message;
-  const data = error.data;
-  res.status(status).json({ message: message, data: data });
+  
+  res.status(status).json(error);
 });
 
 
