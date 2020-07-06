@@ -110,14 +110,15 @@ exports.putRecurso = async (req, res, next) => {
 exports.postRecurso = async (req, res, next) => {
     const recursoId = req.params.Id;
     const errors = validationResult(req);
-    try {
-      if (!errors.isEmpty()) {
-        const error = new Error('Validation failed, entered data is incorrect.');
-        error.statusCode = 422;
-        error.data = errors;
-        throw error;
-      }
-   
+
+    if (!errors.isEmpty()) {
+      const error = new Error('validación fallida.');
+      error.message ='validación fallida';
+      error.data = errors.array();
+      return res.status(299).json(error);
+    };
+     
+   try {
       const recurso = await Recurso.findById(recursoId);
 
       if (!recurso) {
@@ -137,7 +138,7 @@ exports.postRecurso = async (req, res, next) => {
          */
       recurso.actualizadoPor = 'jjuan@dgt.es';  // cambiar!!!!!!
       
-      const result = await recurso.save();
+      let result = await recurso.save();
       return res.status(200).json({ message: 'recurso modificado!', recurso: result });
 
     } catch (err) {

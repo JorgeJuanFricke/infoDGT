@@ -11,16 +11,23 @@ const {body, validationResult} = require('express-validator');
 
 
 
-VALIDA = [
+VALIDAPUT = [
     body('tipo').trim().exists().not().isEmpty().withMessage("debe seleccionar el tipo"),
     body('nombre').trim().exists().not().isEmpty().withMessage("debe introducir el nombre"),
-    body('url').trim().not().isEmpty().withMessage("debe introducir la url del documento"),
+    body('url').isURL({require_protocol:false, require_host:false}).withMessage("debe introducir la url válida para el documento"),
     body('procedencia').optional().not().isEmpty().withMessage("debe introducir la procedencia"),
     body('publicacion').exists().not().isEmpty().withMessage("debe introducir fecha publicación")
   
 ];
 
-
+VALIDAPOST = [
+    
+    body('nombre').trim().exists().not().isEmpty().withMessage("debe introducir el nombre"),
+    body('url').isURL({require_protocol: false, require_host:false}).withMessage("debe introducir la url válida para el documento"),
+    body('procedencia').optional().not().isEmpty().withMessage("debe introducir la procedencia"),
+    body('publicacion').exists().not().isEmpty().withMessage("debe introducir fecha publicación")
+  
+];
 
 
 
@@ -37,7 +44,7 @@ recursosRouter.get('/:Id', Auto.esAutenticado, function (req, res, next) {
 
 
 recursosRouter.put(
-    '/', Auto.esAutenticado, Auto.esAutorizadoEditar, VALIDA,
+    '/', Auto.esAutenticado, Auto.esAutorizadoEditar, VALIDAPUT,
         function (req, res, next) {
     cRecursos.putRecurso(req, res, next);
 });
@@ -45,7 +52,7 @@ recursosRouter.put(
 
 
 
-recursosRouter.post('/:Id', Auto.esAutenticado, Auto.esAutorizadoEditar, VALIDA, function (req, res, next) {
+recursosRouter.post('/:Id', Auto.esAutenticado, Auto.esAutorizadoEditar, VALIDAPOST, function (req, res, next) {
     cRecursos.postRecurso(req, res, next);
 });
 

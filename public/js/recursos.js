@@ -4,7 +4,7 @@
 creaFormRecurso = (recurso) => {
 
     $("#modalRecurso").remove();
-    //var dateFmt = d3.time.format('%d-%m-%Y');
+    
 
 let formulario = d3.select("body").append("div")
     .attr("class", "modal")
@@ -125,8 +125,8 @@ let formulario = d3.select("body").append("div")
     .attr("name","publicacion")    
     .attr("id","publicacion")
     .attr("value", function() {
-        var d = moment(recurso.publicacion, "DD/MM/YYYY");
-        return recurso.publicacion && d.isValid() ? d.format('MM/DD/YYYY') : '';
+        var d = moment.utc(recurso.publicacion);
+        return recurso.publicacion && d.isValid() ? d.format('DD/MM/YYYY') : '';
       });
 
     derogacion = linea4.append("div")
@@ -143,8 +143,8 @@ let formulario = d3.select("body").append("div")
     .attr("name","derogacion")    
     .attr("id","derogacion")
     .attr("value", function() {
-        var d = moment(recurso.derogacion, "DD/MM/YYYY");
-        return recurso.derogacion && d.isValid() ? d.format('MM/DD/YYYY') : '';
+        var d = moment.utc(recurso.derogacion);
+        return recurso.derogacion && d.isValid() ? d.format('DD/MM/YYYY') : '';
       });
    
  
@@ -178,25 +178,15 @@ let formulario = d3.select("body").append("div")
         })
         .then(result => {
             console.log(result);
-            $('input[name=url').val(result.path);
-           
+            url  = result.path.replace(/\\/g,"/");
+            $('input[name=url').val(url);
+          
 
-        }).catch(alert('error subiendo documento'))
+        })
+        .catch(alert('error subiendo documento'))
     });
 
-     
-        /*
-        fetch('/documento', {
-            method: 'POST',
-            body: formData,
-            header: {
-                'Accept': 'application/json',
-                'Content-Type': 'multipart/form-data',
-            }
-        
-       
-        
-    */
+    
    
     
 
@@ -301,18 +291,18 @@ const nuevoRecurso = (btn) => {
  //    "csrf-token": "csrf23454345"
 const putRecurso = () => {
     const formData = new FormData();
-    let pub =  $('#publicacion').val();
-    let publicacion = pub ? moment(pub,"DD/MM/YYYY"): "";
-    let der =  $('#derogacion').val();
-    let derogacion =  der ? moment(der,"DD/MM/YYYY"): "";
+    let pub =  moment.utc($('#publicacion').val(),'DD/MM/YYYY');
+  
+    let der =  moment.utc($('#derogacion').val(), 'DD/MM/YYYY');
+  
     let tip = $('#tiposRecurso').children("option:selected").val();
     let tipo =  tip ? tip: "";
     formData.append('tipo', tipo);
     formData.append('nombre', $('input:text[name=nombre]').val());
     formData.append('procedencia',$('input:text[name=procedencia]').val() );
     formData.append('url', $('input:text[name=url]').val());
-    formData.append('publicacion', publicacion);
-    formData.append('derogacion', derogacion);
+    formData.append('publicacion', pub.isValid()? pub: "");
+    formData.append('derogacion', der.isValid()? der: "");
    
     var descripcion = $('#Descrip').summernote('code');
     $('#Descrip').summernote('destroy');
@@ -323,29 +313,41 @@ const putRecurso = () => {
     var object = {};
     formData.forEach((value, key) => {object[key] = value});
     var json = JSON.stringify(object);
-    d3.json('http://localhost:3000/recurso/', {
-        method:"PUT",
-        body: json,
-        headers: {
-          "Content-type": "application/json; charset=UTF-8"
-        
-    
-    }})
+
+    let url = 'http://localhost:3000/recurso/';
+    let method = 'PUT';
+   
+
+    fetch(url, {
+      method: method,
+      body: json,
+      headers: {
+
+        Authorization: 'Bearer ' + "el token", //this.props.token,
+        'Content-Type': 'application/json'
+
+      }
+    })
+   
+   
     .then(response => {
         response.json()
             .then(json => {
                 // validacion fallida
-                if (response.status = 299) {
+                if (response.status === 299) {
                     console.log(json);
-                    alert(json.message + json.data[0].msg)
+                    alert(json.data[0].msg)
                 } 
                 // recurso creado
-                if (response.status = 201) {
+                else if (response.status === 201) {
                     alert(json.message);
                     $('#modalRecurso').modal('hide');
                     leeListaRecursos();
                 }  
-                throw new Error(response.status);  
+                else {
+                    alert("Se ha producido el error: "+response.status);
+                   
+                }
             })
             
             .catch(err => { 
@@ -405,50 +407,71 @@ const editaRecurso = (recursoId) => {
 
 const postRecurso = (recursoId) => {
  
+    let pub =  moment.utc($('#publicacion').val(),'DD/MM/YYYY');
+    let der =  moment.utc($('#derogacion').val(), 'DD/MM/YYYY');
+     
     const formData = new FormData();
-    let publicacion =  moment($('#publicacion').val(),'DDMMYYYY').format();
-    let derogacion  = moment($('#derogacion').val(),'DDMMYYYY').format();
+    
     //formData.append('tipo', tipo.codigo);
     formData.append('nombre', $('input:text[name=nombre]').val());
     formData.append('descripcion',$('#Descrip').val());
     formData.append('procedencia',$('input:text[name=procedencia]').val() );
     formData.append('url', $('input:text[name=url]').val());
-    formData.append('publicacion', publicacion);
-    formData.append('derogacion', derogacion);
+    formData.append('publicacion', pub.isValid()? pub: "");
+    formData.append('derogacion', der.isValid()? der: "");
     
     var object = {};
     formData.forEach((value, key) => {object[key] = value});
     var json = JSON.stringify(object);
 
     
-    d3.json('http://localhost:3000/recurso/', {
-        method:"POST",
-        body: json,
-        headers: {
-          "Content-type": "application/json; charset=UTF-8"
-        
+    let url = 'http://localhost:3000/recurso/'+recursoId;
+    let method = 'POST';
+   
+
+    fetch(url, {
+      method: method,
+      body: json,
+      headers: {
+
+        Authorization: 'Bearer ' + "el token", //this.props.token,
+        'Content-Type': 'application/json'
+
+      }
+    })
+   
+   
+    .then(response => {
+        response.json()
+            .then(json => {
+                // validacion fallida
+                if (response.status === 299) {
+                    console.log(json);
+                    alert(json.data[0].msg)
+                } 
+                // recurso creado
+                else if (response.status === 200) {
+                    alert(json.message);
+                    $('#modalRecurso').modal('hide');
+                    leeListaRecursos();
+                }  
+                else {
+                    alert("Se ha producido el error: "+response.status);
+                }
+            })
+            
+            .catch(err => { 
+            alert("respuesta ok sin json")
+            })
+       
+    })  
+   .catch(err =>  {
+       console.log(err)
+        alert (err);
+     })
     
-    }})
-        .then(result => {
-             
-        if ( result.status !== 200 ) {
-            console.log(result);
-            throw new Error(result.message);
-          }
-          return result.json();
-         
-        })
-        .then(data => {
-            alert("recurso modificado");
-            $('#modalRecurso').modal('hide');
-            leeListaRecursos();
-           
-        })
-        .catch(err => {
-            console.log(err);
-        });
-  
-};
+ } ;
+ 
 
 
 
@@ -464,30 +487,48 @@ const deleteRecurso = (recursoId) => {
     //const csrf = btn.parentNode.querySelector('[name=_csrf]').value;
 
     //const productElement = btn.closest('article');
-    d3.json('http://localhost:3000/recurso/', {
-        method:"DELETE",
-        body: json,
-        headers: {
-          "Content-type": "application/json; charset=UTF-8"
-        
-    
-    }})
+    let url = 'http://localhost:3000/recurso/'+recursoId;
+    let method = 'DELETE';
    
-        .then(result => {
-             
-        if ( result.status !== 200) {
-            console.log(result);
-            throw new Error(result.message);
-          }
-          return result.json();
-           
-        })
-        .then(data => {
+
+    fetch(url, {
+      method: method,
+      body: "",
+      headers: {
+
+        Authorization: 'Bearer ' + "el token", //this.props.token,
+        'Content-Type': 'application/json'
+
+      }
+    })
+   
+   
+    .then(response => {
+        response.json()
+            .then(json => {
+              
+                // recurso creado
+                if (response.status === 200) {
+                  
+                    alert(json.message);
+                    $('#modalRecurso').modal('hide');
+                    leeListaRecursos();
+                }  
+                else {
+                    alert("respuesta no igual 200");
+                }
+            })
             
-            alert("recurso borrado");
-            leeListaRecursos();
-        })
-        .catch(err => {
-            console.log(err);
-        });
-};
+            .catch(err => { 
+            alert("respuesta ok sin json")
+            })
+       
+    })  
+   .catch(err =>  {
+       console.log(err)
+        alert (err);
+     })
+    
+ };
+ 
+  
