@@ -10,19 +10,13 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="email">email</label>
-                    <input type="text" onchange="buscaUsuario(this.value)" name="email" class="form-control" >
+                    <input type="text" name="email" class="form-control" value={{email}} >
                 </div>
                 <div class="form-group">
                     <label for="nombre">nombre</label>
-                    <input type="text" name="nombre" class="form-control" >
+                    <input type="text" name="nombre" class="form-control" value={{nombre}} >
                 </div>
-                 <div class="form-group">
-                    <label for="reset">Password</label>
-                    <input type="check" name="reset" class="form-control">
-               
-                    <label for="password">repite Password</label>
-                    <input type="text" name="password" class="form-control">
-                </div>
+                 
                 <div class="form-group">
                     <input type="checkbox" id="suspendido" name="suspendido">
                     <label for="suspendido">desactivado</label>
@@ -37,7 +31,10 @@
 
                 </div>
 
+               <div class="form-group">
+                   <a href="#" onclick()="muestraFormResetPassword()">reset password</a>
                
+                </div>
             
                 <button id="UsuarioOK" type="button" onclick="actualizaUsuario()" class="btn btn-primary">grabar</button>
                 <button type="button" class="btn btn-secondary">Cancelar</button>

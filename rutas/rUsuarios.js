@@ -10,8 +10,23 @@ const Auto = require("../middleware/Autorizacion");
 const usuariosRouter = express.Router();
 
 
+VALIDA = [
+    
+  body('nombre').trim().exists().not().isEmpty().withMessage("debe introducir el nombre"),
+  body('email').isEmail().withMessage("debe introducir un email válido"),
+ 
+];
 
 
+usuariosRouter.get('/:email', function (req, res, next) {
+  cUsuarios.getUsuario(req, res, next);
+});
+
+
+
+usuariosRouter.post('/:email', Auto.esAdmin, VALIDA, function (req, res, next) {
+  cUsuarios.updateUsuario(req, res, next);
+});
 
 
 
@@ -41,7 +56,7 @@ usuariosRouter.get('/login',
 );
 
 
-
+/*
 usuariosRouter.post( '/signup',
   [
     body('email')
@@ -79,7 +94,7 @@ usuariosRouter.post( '/signup',
   ],
   cUsuarios.signup
 );
-
+*/
 
 
 //usuariosRouter.post('/logout', cUsuarios.postLogout);

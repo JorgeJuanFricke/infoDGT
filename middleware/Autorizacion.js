@@ -56,3 +56,27 @@ exports.esAutorizadoEditar = async (req, res, next) => {
     */
 
 }
+
+exports.esAdmin = async (req, res, next) => {
+    next();
+    /*
+    try {
+        recurso = await Recurso.findById(req.recurso);
+        usuario = req.user;
+        if (recurso.autor = usuario.email || usuario.permiso === "ADMIN") {
+            next();
+        } else {
+            const error = new Error("No autorizado.");
+            error.statusCode = 422;
+            throw error;
+
+        }
+
+    } catch {
+        const error = new Error("error autorización.");
+        error.statusCode = 500;
+        throw error;
+    }
+    */
+
+}

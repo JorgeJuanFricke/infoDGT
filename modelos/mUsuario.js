@@ -19,7 +19,7 @@ const UsuarioSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    suspendido: Boolean,
+    
     admin: Boolean,
     oi: Boolean,
     oat: Boolean,

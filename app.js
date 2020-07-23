@@ -146,7 +146,11 @@ app.set('view engine', 'handlebars');
 
 /*** usuario actual para handlebars *************/
 app.use(function(req, res, next) {
-  res.locals.currentUser = req.user;
+  let usuario = {
+    email: 'jorge@gmail.com',
+    admin: true
+  }
+  res.locals.currentUser = usuario;   //req.user;
   next();
 });
 
@@ -166,11 +170,11 @@ ini.updateTipos();
 /****** routers *************************/
 const recursosRouter = require("./rutas/rRecursos.js");
 const indexRouter = require("./rutas/rIndex.js");
-const adminRouter = require("./rutas/rAdmin.js");
+
 const usuariosRouter = require("./rutas/rUsuarios");
+const { getMaxListeners } = require("gulp");
 
 app.use("/recurso", recursosRouter);
-app.use("/admin", adminRouter);
 app.use("/usuario", usuariosRouter);
 app.use("/", indexRouter);
 

@@ -72,9 +72,7 @@
                         </button>
                         </div>
                     </div>
-                    {{#if current.user}}
                     
-                    {{/if}}
                    <!-- incluir en el if de arriba -->
                    <a class="nav-item" onclick="nuevoRecurso()" href="#"><i class="fa fa-search"></i></a>
                  
@@ -82,31 +80,22 @@
                      <p class="nav-item">
 
                         {{#if currentUser}}
-                        {{currentUser.email}}
-                        <a id="logout" href="#" class="nav-link" onclick="logout()"><i class="fas fa-user"></i>logout</a>
+
+                            {{currentUser.email}}
+                            <a id="logout" href="#" class="nav-link" onclick="logout()"><i class="fas fa-user"></i>logout</a>
 
                         {{else}}
 
-                        <a id="login" href="#" class="nav-link" onclick="muestralogin()"><i class="fas fa-user"></i>login</a>
+                          <a id="login" href="#" class="nav-link" onclick="muestralogin()"><i class="fas fa-user"></i>login</a>
 
                         {{/if}}
+                        </p>
+                       
                         {{#if currentUser.admin}}
-                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                A
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                
-                                <a class="dropdown-item" onclick="muestraRegistraUsuario()" href="#">registra usuario</a>
-                                <a class="dropdown-item" onclick="muestraActualizaUsuario()" href="#">permisos usuario</a>
-                                <a class="dropdown-item" href="#">permiso usuarios</a>
-                                <a class="dropdown-item" href="#">Exportar datos</a>
-                                <a class="dropdown-item" href="#">Importar datos</a>
-                                <a id="usuario" class="dropdown-item" href="#">Permisos</a>
-
-                            </div>
-                         </div> 
+                         
+                        <a id="user" href="#" class="nav-link" onclick="creaFormUsuario()">usuario</a>
+                                   
+                        
                         {{/if}} 
 
                     </p>
@@ -133,9 +122,7 @@
 
 
 
-    <!--script src="/js/hbs/handlebars.runtime-v4.7.6.js"></script-->
-    <script src="/js/hbs/handlebars.js"></script>
-   
+  
     
     <script type="text/javascript" src="/js/vendor/jquery.min.js"></script>
     <script type="text/javascript" src="/js/vendor/popper/popper.js"></script>
@@ -143,18 +130,20 @@
     <script type="text/javascript" src="/js/vendor/d3.js"></script>
     <script type="text/javascript" src="/js/vendor/moment.js"></script>
 
-    <!--script type="text/javascript" src="/js/vendor/all.min.js"></script-->
-    <!-- include summernote css/js -->
    
-    <script type="text/javascript" src="/js/vendor/summernote-bs4.min.js"></script
+    <script src="/js/hbs/handlebars.runtime-v4.7.6.js"></script>
+    <script type="text/x-handlebars-template" src="/js/hbs/vActualizaUsuario.tmpl.js"></script>
+ 
+    <script type="text/javascript" src="/js/vendor/summernote-bs4.min.js"></script>
 
     <!--load all styles -->
     <script src="/js/vendor/select2.min.js"></script>
 
     <script src="/js/main.js"></script>
-    <script src="/js/recursos.js"></script>
-    <script src="/js/enlaza.js"></script>
-    <script src="/js/admin.js"></script>
+       
+     <script src="/js/recursos.js"></script>
+   
+     <script src="/js/usuarios.js"></script>
     
     <script src="/js/vendor/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
     <script src="/js/vendor/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
