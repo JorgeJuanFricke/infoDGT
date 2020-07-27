@@ -1,3 +1,4 @@
+//const { JsonWebTokenError } = require("jsonwebtoken");
 
 
 
@@ -61,7 +62,7 @@ let formulario = d3.select("body").append("div")
     permisos.append("input")
     .attr("type", "checkbox")
     .attr("name", "admin")
-    .attr("value", true)
+    .attr("id", "admin")
     .text("administrador");
     permisos.append("label")
     .attr("for", "admin")
@@ -72,6 +73,7 @@ let formulario = d3.select("body").append("div")
     permisos.append("input")
     .attr("type", "checkbox" )
     .attr("name", "OI")
+    .attr("id", "oi")
     .attr("value", true)
     .text("OI");
     permisos.append("label")
@@ -86,6 +88,7 @@ let formulario = d3.select("body").append("div")
     .attr("type", "checkbox")
     .attr("name", "OAT")
     .attr("value", true)
+    .attr("id", "oat")
     .text("OAT");
     permisos.append("label")
     .attr("for", "OAT")
@@ -191,9 +194,9 @@ let formulario = d3.select("body").append("div")
 
     email.append("input")
     .attr("type", "text")
-    .attr("id", "email")
+    .attr("id", "emailReset")
     .attr("class", "form-control")
-    .attr("name", "email");
+    .attr("name", "emailReset");
    
     
         
@@ -298,22 +301,22 @@ const getUsuario = (email) => {
 
 
 
-const postUsuario = (email) => {
+const postUsuario = () => {
 
  
     const formData = new FormData();
-    
+    formData.append('email',$('input:text[name=email]').val());
     formData.append('nombre',$('input:text[name=nombre]').val());
-    formData.append('admin', $('input:text[name=admin]').val());;
-    formData.append('OAT', $('input:text[name=OAT]').val());
-    formData.append('OI', $('input:text[name=OI]').val());
+    formData.append('admin', $('#admin').is(':checked')); 
+    formData.append('oat', $('#oat').is(':checked')); 
+    formData.append('oi', $('#oi').is(':checked')); 
     
     var object = {};
     formData.forEach((value, key) => {object[key] = value});
     var json = JSON.stringify(object);
 
     
-    let url = 'http://localhost:3000/usuario/'+ email;
+    let url = 'http://localhost:3000/usuario/';
     let method = 'POST';
 
 
@@ -358,23 +361,26 @@ const postUsuario = (email) => {
 
 
 
-const resetPassword = (email) => {
 
- 
+
+
+const login = () => {
+
+    let email = $("#emailLogin").val();
+    let Password = $('#passwordLogin]').val();
+    
+
     const formData = new FormData();
-    
-   
-    formData.append('email', $('input:text[name=email]').val());
-    formData.append('password',$('input:text[name=password]').val());
+    formData.append('email', email);
+    formData.append('password', Password);
   
-    
     
     var object = {};
     formData.forEach((value, key) => {object[key] = value});
     var json = JSON.stringify(object);
    
     
-    let url = 'http://localhost:3000/usuario/reset/'+email;
+    let url = 'http://localhost:3000/usuario/login';
     let method = 'POST';
    
    
@@ -387,16 +393,76 @@ const resetPassword = (email) => {
         'Content-Type': 'application/json'
    
       }
+    })
+    .then(response => {
+        response.json()
+        .then(json => {
+       
+            // validacion fallida
+            if (response.status === 299) {
+                console.log(json);
+                alert(json.data[0].msg)
+            } 
+            // usuario logeado
+            else if (response.status === 200) {
+                alert(json.message);
+                localStorage.setItem("token", json.token);
+            
+                
+            }  
+            else {
+                alert("Se ha producido el error: "+response.status);
+            }
+        })   
+     
+
+    }).catch(err =>  {
+       console.log(err)
+        alert (err);
+     })
+    
+   } ;
+
+
+
+const resetPassword = () => {
+
+    let email = $('input:text[name=emailReset]').val();
+    let Password = $('input:text[name=password]').val();
+    let Password2 = $('input:text[name=password2]').val();
+
+    if(Password !== Password2) {
+        alert("contraseña no coincide");
+        return
+    }
+
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('password', Password);
+  
+    
+    var object = {};
+    formData.forEach((value, key) => {object[key] = value});
+    var json = JSON.stringify(object);
+   
+    
+    let url = 'http://localhost:3000/usuario/reset';
+    let method = 'POST';
+    token = localStorage.getItem("token");
+   
+    fetch(url, {
+      method: method,
+      body: json,
+      headers: {
+   
+        Authorization: 'Bearer ' + token
+       
+   
+      }
     }).then(response => {
         response.json()
             .then(json => {
-                // validacion fallida
-                if (response.status === 299) {
-                    console.log(json);
-                    alert(json.data[0].msg)
-                } 
-                // usuario actualizado
-                else if (response.status === 200) {
+             if (response.status === 200) {
                     alert(json.message);
                     $('#modalResetPassword').modal('hide');
                     

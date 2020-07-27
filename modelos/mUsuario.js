@@ -12,17 +12,17 @@ const UsuarioSchema = mongoose.Schema({
         }
     },
     password: {
-        type: String,
-        required: true
+        type: String
+       
     },
     nombre: {
         type: String,
         required: true
     },
     
-    admin: Boolean,
-    oi: Boolean,
-    oat: Boolean,
+    admin: { type:Boolean, default: false},
+    oi: {type:Boolean, default:false},
+    oat:{ype: Boolean, default:false},
     createdAt: {
         type: Date,
         default: Date.now
@@ -45,7 +45,7 @@ UsuarioSchema.pre('insertMany', function (next) {
     }
     next();
 });
-*/
+
 
 UsuarioSchema.pre("update", {query:true}, function(done) {
      let Usuario = this;
@@ -62,6 +62,7 @@ UsuarioSchema.pre("update", {query:true}, function(done) {
     });
 });
 
+*/
 
 UsuarioSchema.methods.checkPassword = function (guess, done) {
     bcryptjs.compare(guess, this.password, function (err, isMatch) {

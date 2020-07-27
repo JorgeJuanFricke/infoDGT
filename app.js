@@ -77,7 +77,7 @@ switch (process.env.NODE_ENV) {
   case "desarrollo":
     try {
       db = mongoose.connect(config.desarrollo, {
-        useNewUrlParser: true
+        useNewUrlParser: true,  useFindAndModify: false 
       });
     } catch (error) {
       console.log(error);
@@ -144,17 +144,30 @@ app.set('view engine', 'handlebars');
 
 
 
-/*** usuario actual para handlebars *************/
-app.use(function(req, res, next) {
-  let usuario = {
-    email: 'jorge@gmail.com',
-    admin: true
+
+/* usuario actual *******/
+app.use(function (req, res, next) {
+  const authHeader = req.get('Authorization');
+  if (!authHeader) {
+    app.currentUser = null;
+    return next();
   }
-  res.locals.currentUser = usuario;   //req.user;
-  next();
+  const token = authHeader.split(' ')[1];
+  let decodedToken;
+  try {
+    decodedToken = jwt.verify(token, 'somesupersecretsecret');
+  } catch (err) {
+    app.currentUser = null;
+    return next();
+  }
+  if (!decodedToken) {
+    app.currentUser = null;
+    return next();
+  }
+  app.currentUser = decodedToken.email;
+   next();
+  
 });
-
-
 
 
 

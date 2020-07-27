@@ -25,4 +25,11 @@ article {
   margin: 2rem auto;
 }
 
+button:focus {
+  outline: 0;
+}
+
+.navbar .dropdown-menu .form-control {
+  width: 200px;
+}
 .modal-backdrop { opacity: 0 !important; }

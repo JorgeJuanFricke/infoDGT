@@ -43,20 +43,29 @@ exports.getUsuario = async(req, res, next) => {
 
 
 exports.resetPassword = async(req, res, next) => {
-  bcrypt
-  .hash(req.body.password, 12)
-  .then(hashedPassword => {
-     usuario.password = hashedPassword;
-     usuario.save();
-  }) 
-  .then(result => {   
-    return res.status(200).json({ message: 'usuario modificado!', recurso: result });
-  })  
-  .catch(err => {if (!err.statusCode) {
+
+  let email = req.body.email;
+  let Password = req.body.password;
+
+
+  try {
+ 
+    const hashedPassword = await bcrypt.hash(Password, 12);
+  
+      
+    let result = await Usuario.updateOne({email:email}, {$set:{password: hashedPassword}});
+  
+    return res.status(200).json({ message: 'contraseña modificada!', usuario: result });
+  
+
+ } catch(err) {
+    if (!err.statusCode) {
     err.statusCode = 500;
-  }
-  next(err);
-  })
+    }
+    next(err);
+  
+ }
+  
 };
 
 
@@ -66,7 +75,7 @@ exports.resetPassword = async(req, res, next) => {
 exports.updateUsuario = async (req, res, next) => {
 
 
-  const email = req.params.email;
+  
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -86,20 +95,17 @@ exports.updateUsuario = async (req, res, next) => {
     const oi = req.body.oi;
     const oat = req.body.oat;
 
-    let usuario = new Usuario({
-      email: email,
-      nombre: nombre,
-      admin: admin,
-      oi: oi,
-      oat: oat
+    let usuario = {};
+      //email: email,
+      usuario.nombre = nombre;
+      usuario.admin = admin;
+      usuario.oi =  oi;
+      usuario.oat =  oat;
       
-    });
-   
-    
   
-    let result = await usuario.findOneAndUpdate({email:email}, {upsert:true})
+    let result = await Usuario.findOneAndUpdate({email:email}, usuario, {upsert:true})
   
-    return res.status(200).json({ message: 'usuario modificado!', recurso: result });
+    return res.status(200).json({ message: 'usuario modificado!', usuario: result });
     
   }
   catch (err) {
@@ -121,10 +127,21 @@ exports.updateUsuario = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   // JWT
+  
+   
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const error = new Error('validación fallida.');
+    error.message ='validación fallida';
+    error.data = errors.array();
+    return res.status(299).json(error);
+  };
+  
   const email = req.body.email;
   const password = req.body.password;
   try {
-    const usuario = await usuario.findOne({
+    const usuario = await Usuario.findOne({
       email: email
     });
     if (!usuario) {

@@ -10,10 +10,10 @@ const Auto = require("../middleware/Autorizacion");
 const usuariosRouter = express.Router();
 
 
-VALIDA = [
+VALIDAUSUARIO = [
     
   body('nombre').trim().exists().not().isEmpty().withMessage("debe introducir el nombre"),
-  body('email').isEmail().withMessage("debe introducir un email válido"),
+  body('email').trim().isEmail().withMessage("debe introducir un email válido"),
  
 ];
 
@@ -24,12 +24,12 @@ usuariosRouter.get('/:email', function (req, res, next) {
 
 
 
-usuariosRouter.post('/:email', Auto.esAdmin, VALIDA, function (req, res, next) {
+usuariosRouter.post('/', Auto.esAdmin, VALIDAUSUARIO, function (req, res, next) {
   cUsuarios.updateUsuario(req, res, next);
 });
 
 
-
+usuariosRouter.post('/reset', cUsuarios.resetPassword);
 
 
 usuariosRouter.get("/logout", function (req, res) {
@@ -41,13 +41,13 @@ usuariosRouter.get("/logout", function (req, res) {
 
 //usuariosRouter.get('/signup', cUsuarios.getSignup);
 
-usuariosRouter.get('/login',
+usuariosRouter.post('/login',
   [
     body('email')
       .isEmail()
-      .withMessage('Please enter a valid email address.')
+      .withMessage('no es un email válido.')
       .normalizeEmail(),
-    body('password', 'Password has to be valid.')
+    body('password', 'La contraseña ha de ser de 5 caracteres mínimo y alfanumérica.')
       .isLength({ min: 5 })
       .isAlphanumeric()
       .trim()

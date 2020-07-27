@@ -316,16 +316,14 @@ const putRecurso = () => {
 
     let url = 'http://localhost:3000/recurso/';
     let method = 'PUT';
-   
+    token = localStorage.getItem("token");
 
     fetch(url, {
       method: method,
       body: json,
       headers: {
 
-        Authorization: 'Bearer ' + "el token", //this.props.token,
-        'Content-Type': 'application/json'
-
+        Authorization: 'Bearer ' + token
       }
     })
    
@@ -366,15 +364,20 @@ const putRecurso = () => {
 
 
 const editaRecurso = (recursoId) => {
-        
-       fetch('http://localhost:3000/recurso/' + recursoId, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-           
-            
-        })
+
+    let url = 'http://localhost:3000/recurso/' + recursoId;
+    let method = 'GET';
+    token = localStorage.getItem("token");
+
+    fetch(url, {
+      method: method,
+      body: json,
+      headers: {
+
+        Authorization: 'Bearer ' + token
+      }
+    })  
+       
         .then(res => {
                 
             if ( res.status !== 200) {
@@ -425,20 +428,20 @@ const postRecurso = (recursoId) => {
     var json = JSON.stringify(object);
 
     
-    let url = 'http://localhost:3000/recurso/'+recursoId;
+    let url = 'http://localhost:3000/recurso/' + recursoId;
     let method = 'POST';
    
+    token = localStorage.getItem("token");
 
     fetch(url, {
       method: method,
       body: json,
       headers: {
 
-        Authorization: 'Bearer ' + "el token", //this.props.token,
-        'Content-Type': 'application/json'
-
+        Authorization: 'Bearer ' + token
       }
     })
+
    
    
     .then(response => {
@@ -490,18 +493,17 @@ const deleteRecurso = (recursoId) => {
     let url = 'http://localhost:3000/recurso/'+recursoId;
     let method = 'DELETE';
    
+    token = localStorage.getItem("token");
 
     fetch(url, {
       method: method,
-      body: "",
+      body: json,
       headers: {
 
-        Authorization: 'Bearer ' + "el token", //this.props.token,
-        'Content-Type': 'application/json'
-
+        Authorization: 'Bearer ' + token
       }
     })
-   
+    
    
     .then(response => {
         response.json()
