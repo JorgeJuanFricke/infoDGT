@@ -165,6 +165,7 @@ app.use(function (req, res, next) {
     return next();
   }
   app.currentUser = decodedToken.email;
+  app.permiso = decodedToken.permiso;
    next();
   
 });
