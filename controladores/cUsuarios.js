@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 //const nodemailer = require('nodemailer');
 //const sendgridTransport = require('nodemailer-sendgrid-transport');
@@ -45,26 +45,34 @@ exports.getUsuario = async(req, res, next) => {
 exports.resetPassword = async(req, res, next) => {
 
   let email = req.body.email;
-  let Password = req.body.password;
-
-
-  try {
- 
-    const hashedPassword = await bcrypt.hash(Password, 12);
-  
-      
-    let result = await Usuario.updateOne({email:email}, {$set:{password: hashedPassword}});
-  
-    return res.status(200).json({ message: 'contraseña modificada!', usuario: result });
   
 
- } catch(err) {
-    if (!err.statusCode) {
-    err.statusCode = 500;
-    }
-    next(err);
+  const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const error = new Error('validación fallida.');
+      error.message ='validación fallida';
+      error.data = errors.array();
+      return res.status(299).json(error);
+    };
+
+    try {
   
- }
+      const hashedPassword = await bcrypt.hash(req.body.password, 12);
+    
+        
+      let result = await Usuario.updateOne({email:email}, {$set:{password: hashedPassword}});
+    
+      return res.status(200).json({ message: 'contraseña modificada!', usuario: result });
+    
+
+  } catch(err) {
+      if (!err.statusCode) {
+      err.statusCode = 500;
+      }
+      next(err);
+    
+  }
   
 };
 
@@ -126,7 +134,7 @@ exports.updateUsuario = async (req, res, next) => {
 
 
 exports.login = async (req, res, next) => {
-  // JWT
+  
   
    
   const errors = validationResult(req);
@@ -156,19 +164,19 @@ exports.login = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
+   
     const token = jwt.sign({
         email: usuario.email,
-        usuarioId: usuario._id.toString()
+        usuarioId: usuario._id.toString(),
+        permiso: usuario.admin ? "ADMIN": "USUARIO"
       },
       "primersabadocuarentena", {
         expiresIn: "1h"
       }
     );
-    res
-      .status(200)
-      .json({
+    return res.status(200).json({
         token: token,
-        usuarioId: loadedUser._id.toString()
+        usuarioId: usuario._id.toString()
       });
       
   } 

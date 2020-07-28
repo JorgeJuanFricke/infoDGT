@@ -30,6 +30,6 @@ button:focus {
 }
 
 .navbar .dropdown-menu .form-control {
-  width: 200px;
+  width: 400px;
 }
 .modal-backdrop { opacity: 0 !important; }

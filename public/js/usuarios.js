@@ -136,30 +136,11 @@ let formulario = d3.select("body").append("div")
 }  
 
 
+const updateUsuario = () => {
+    postUsuario();
+    resetPassword();
+}
 
-
-
-/*
-muestraFormUsuario = () => {
-    let template = Handlebars.templates.vActualizaUsuario;
-    $('body').append(template({}));
-    
-    $('#modalActualizaUsuario').modal('show');
-   
-
-};
-
-
-
-muestraFormResetPassword = () => {
-    let template = Handlebars.templates.vResetPassword;
-    $('body').append(template({}));
-    
-    $('#modalResetPassword').modal('show');
-   
-
-};
-*/
 
 
 
@@ -318,13 +299,14 @@ const postUsuario = () => {
     
     let url = 'http://localhost:3000/usuario/';
     let method = 'POST';
+    token = localStorage.getItem("token");
 
 
     fetch(url, {
     method: method,
     body: json,
     headers: {
-        Authorization: 'Bearer ' + "el token", //this.props.token,
+        Authorization: 'Bearer ' + token,
         'Content-Type': 'application/json'
     }
     }).then(response => {
@@ -361,13 +343,15 @@ const postUsuario = () => {
 
 
 
-
+const logout = () => {
+    localStorage.removeItem("token");
+}
 
 
 const login = () => {
 
     let email = $("#emailLogin").val();
-    let Password = $('#passwordLogin]').val();
+    let Password = $("#passwordLogin").val();
     
 
     const formData = new FormData();
@@ -382,16 +366,15 @@ const login = () => {
     
     let url = 'http://localhost:3000/usuario/login';
     let method = 'POST';
+    let token = "";
    
    
     fetch(url, {
       method: method,
       body: json,
       headers: {
-   
-        Authorization: 'Bearer ' + "el token", //this.props.token,
+       
         'Content-Type': 'application/json'
-   
       }
     })
     .then(response => {
@@ -405,7 +388,7 @@ const login = () => {
             } 
             // usuario logeado
             else if (response.status === 200) {
-                alert(json.message);
+                
                 localStorage.setItem("token", json.token);
             
                 
@@ -455,8 +438,8 @@ const resetPassword = () => {
       body: json,
       headers: {
    
-        Authorization: 'Bearer ' + token
-       
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json'
    
       }
     }).then(response => {

@@ -6,6 +6,7 @@ const {
 const Usuario = require("../modelos/mUsuario");
 const cUsuarios = require("../controladores/cUsuarios");
 const Auto = require("../middleware/Autorizacion");
+const { trim } = require("jquery");
 
 const usuariosRouter = express.Router();
 
@@ -13,11 +14,16 @@ const usuariosRouter = express.Router();
 VALIDAUSUARIO = [
     
   body('nombre').trim().exists().not().isEmpty().withMessage("debe introducir el nombre"),
-  body('email').trim().isEmail().withMessage("debe introducir un email válido"),
+  body('email').trim().isEmail().withMessage("debe introducir un email válido")
  
 ];
 
+VALIDALOGIN = [
+  body('email').trim().isEmail().withMessage("debe introducir un email válido"), 
+  body('password').trim().exists().not().isEmpty().withMessage("debe introducir la password")
 
+ 
+];
 usuariosRouter.get('/:email', function (req, res, next) {
   cUsuarios.getUsuario(req, res, next);
 });
@@ -29,7 +35,9 @@ usuariosRouter.post('/', Auto.esAdmin, VALIDAUSUARIO, function (req, res, next) 
 });
 
 
-usuariosRouter.post('/reset', cUsuarios.resetPassword);
+usuariosRouter.post('/reset', VALIDALOGIN, function (req, res, next) {
+  cUsuarios.resetPassword(req, res, next);
+});
 
 
 usuariosRouter.get("/logout", function (req, res) {
@@ -37,24 +45,11 @@ usuariosRouter.get("/logout", function (req, res) {
 });
 
 
-//usuariosRouter.get('/login', cUsuarios.getLogin);
 
-//usuariosRouter.get('/signup', cUsuarios.getSignup);
-
-usuariosRouter.post('/login',
-  [
-    body('email')
-      .isEmail()
-      .withMessage('no es un email válido.')
-      .normalizeEmail(),
-    body('password', 'La contraseña ha de ser de 5 caracteres mínimo y alfanumérica.')
-      .isLength({ min: 5 })
-      .isAlphanumeric()
-      .trim()
-  ],
-  cUsuarios.login
-);
-
+usuariosRouter.post('/login', VALIDALOGIN, function (req, res, next) {
+  cUsuarios.login(req, res, next);
+  });
+  
 
 /*
 usuariosRouter.post( '/signup',
@@ -96,16 +91,6 @@ usuariosRouter.post( '/signup',
 );
 */
 
-
-//usuariosRouter.post('/logout', cUsuarios.postLogout);
-
-//usuariosRouter.get('/reset', cUsuarios.getReset);
-
-//usuariosRouter.post('/reset', cUsuarios.postReset);
-
-//usuariosRouter.get('/reset/:token', cUsuarios.getNewPassword);
-
-//usuariosRouter.post('/new-password', cUsuarios.postNewPassword);
 
 
 
