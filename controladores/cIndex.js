@@ -72,24 +72,12 @@ exports.getRecursos = async (req, res, next) => {
 
 
 exports.renderPagina = async (req, res, next) => {
-    //updateTipos();
    
-    try {
-        //let tipos = JSON.parse(fs.readFileSync('./tipos.json'));
-        //let categorias = JSON.parse(fs.readFileSync('./categorias.json'));
-       
-        return res.render('vIndex', {
-           
-            layout: null
-        });
+     
+        return res.sendFile(__dirname + '/public/index.html');
 
 
-    } catch (err) {
-        if (!err.statusCode) {
-            err.statusCode = 500;
-        }
-        next(err);
-    }
+    
 };
 
 

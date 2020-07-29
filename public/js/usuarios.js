@@ -1,249 +1,3 @@
-//const { JsonWebTokenError } = require("jsonwebtoken");
-
-
-
-
-const creaFormUsuario = () => {
-
-    $("#modalUsuario").remove();
- 
-    
-let formulario = d3.select("body").append("div")
-    .attr("class", "modal")
-    .attr("id", "modalUsuario")
-    .append("div")
-    .attr("class","modal-dialog modal-dialog-centered")
-    .append("div")
-    .attr("class", "modal-content")
-    .append("div")
-    .attr("class", "modal-body")
-    .append("form")
-    .attr("id","formUsuario")
-    .attr("action", "/usuario")
-    .attr("method", "post")
-    .attr("class","form");
-
-  
-    let email = formulario.append("div")
-    .attr("class","form-group");
-
-    email.append("label")
-    .attr("for", "email")
-    .attr("class","control-label")
-    .text("email:");
-
-    email.append("div")
-    .append("input")
-    .attr("type", "text")
-    .attr("class", "form-control")
-    .attr("id", "email")
-    .attr("name", "email");
-   
-    
-        
-   
-    let nombre = formulario.append("div")
-    .attr("class", "form-group");
-
-    nombre.append("label")
-    .attr("for", "nombre")
-    .attr("class","control-label")
-    .text("nombre:");
-
-    nombre.append("input")
-    .attr("type", "text")
-    .attr("class", "form-control")
-    .attr("name", "nombre");
-  
-
-    let permisos = formulario.append("div")
-    .attr("class","form-group")
-
-    permisos.append("input")
-    .attr("type", "checkbox")
-    .attr("name", "admin")
-    .attr("id", "admin")
-    .text("administrador");
-    permisos.append("label")
-    .attr("for", "admin")
-    .text("Admin");
-    permisos.append("br");
-   
-
-    permisos.append("input")
-    .attr("type", "checkbox" )
-    .attr("name", "OI")
-    .attr("id", "oi")
-    .attr("value", true)
-    .text("OI");
-    permisos.append("label")
-    .attr("for", "OI")
-    .text("OI");
-    permisos.append("br");
-    
-    
-    
-    
-    permisos.append("input")
-    .attr("type", "checkbox")
-    .attr("name", "OAT")
-    .attr("value", true)
-    .attr("id", "oat")
-    .text("OAT");
-    permisos.append("label")
-    .attr("for", "OAT")
-    .text("OAT");
-   
-    permisos.append("br");
-    
-  
-
-    let reset = formulario.append("div").append("a")
-    .attr("href", "#")
-    .text("resetear contraseña")
-    .on("click", function() {
-        creaFormResetPassword();
-    });  
-    
-    
-
-    let botones= formulario.append("div")
-    .attr("class","form-group");
-
-   
-    Aceptar = botones.append("div")
-    .append("button")
-    .attr("id", "GrabarUsuario")
-    .attr("type","button")
-    .attr("class","btn btn-primary")
-    .text("Aceptar")
-    .on("click", function() {
-        postUsuario($("#email").val())});
-    
-  
-    
-    botones.append("button")
-    .attr("id", "Salir")
-    .attr("type","button")
-    .attr("class","btn btn-secondary close btn")
-    .attr("data-dismiss", "modal")
-    .text("Salir");
-  
-
-    $('#modalUsuario').modal({
-        show: true
-    });
-}  
-
-
-const updateUsuario = () => {
-    postUsuario();
-    resetPassword();
-}
-
-
-
-
-const creaFormResetPassword = () => {
-
-    $("#modalResetPassword").remove();
- 
-    
-let formulario = d3.select("body").append("div")
-    .attr("class", "modal")
-    .attr("id", "modalResetPassword")
-    .append("div")
-    .attr("class","modal-dialog modal-dialog-centered")
-    .append("div")
-    .attr("class", "modal-content")
-    .append("div")
-    .attr("class", "modal-body")
-    .append("form")
-    .attr("id","formReset")
-    .attr("action", "/reset")
-    .attr("method", "post")
-    .attr("class","form");
-
-  
-    let email = formulario.append("div")
-    .attr("class","form-group");
-
-    email.append("label")
-    .attr("for", "email")
-    .attr("class","control-label")
-    .text("email:");
-
-    email.append("input")
-    .attr("type", "text")
-    .attr("id", "emailReset")
-    .attr("class", "form-control")
-    .attr("name", "emailReset");
-   
-    
-        
-   
-    let password = formulario.append("div")
-    .attr("class", "form-group");
-
-    password.append("label")
-    .attr("for", "password")
-    .attr("class","control-label")
-    .text("password:");
-
-    password.append("input")
-    .attr("type", "text")
-    .attr("class", "form-control")
-    .attr("name", "password");
-
-
-
-    let password2 = formulario.append("div")
-    .attr("class", "form-group");
-
-    password2.append("label")
-    .attr("for", "password2")
-    .attr("class","control-label")
-    .text("repite password:");
-
-    password2.append("input")
-    .attr("type", "text")
-    .attr("class", "form-control")
-    .attr("name", "password2");
-
-  
-
-    
-    
-
-    let botones= formulario.append("div")
-    .attr("class","form-group");
-
-   
-    Aceptar = botones.append("div")
-    .append("button")
-    .attr("id", "reset")
-    .attr("type","button")
-    .attr("class","btn btn-primary")
-    .text("Reset")
-    .on("click", function() {
-        resetPassword($("#email").val())});
-    
-  
-    
-    botones.append("button")
-    .attr("id", "Salir")
-    .attr("type","button")
-    .attr("class","btn btn-secondary close btn")
-    .attr("data-dismiss", "modal")
-    .text("Salir");
-  
-
-    $('#modalResetPassword').modal({
-        show: true
-    });
-}  
-
-
 
 
 
@@ -311,26 +65,24 @@ const postUsuario = () => {
     }
     }).then(response => {
         response.json()
-            .then(json => {
-                // validacion fallida
-                if (response.status === 299) {
-                    console.log(json);
-                    alert(json.data[0].msg)
-                } 
-                // usuario actualizado
-                else if (response.status === 200) {
-                    alert(json.message);
-                    $('#modalUsuario').modal('hide');
-                    
-                }  
-                else {
-                    alert("Se ha producido el error: "+response.status);
-                }
-            })
+        .then(json => {
+            
+            // usuario actualizado
+            if (response.status === 200) {
+                alert(json.message);
+               
+                
+            }  
+            else if (response.status === 299) {
+                console.log(json);
+                alert(json.data[0].msg)
+            } 
+            else {
+                alert("Se ha producido el error: "+response.status);
+            }
+        })
          
-         .catch(err => { 
-         alert("respuesta ok sin json")
-         })
+      
     
     }).catch(err =>  {
         console.log(err)
@@ -346,6 +98,9 @@ const postUsuario = () => {
 const logout = () => {
     localStorage.removeItem("token");
 }
+
+
+
 
 
 const login = () => {
@@ -381,20 +136,28 @@ const login = () => {
         response.json()
         .then(json => {
        
-            // validacion fallida
-            if (response.status === 299) {
-                console.log(json);
-                alert(json.data[0].msg)
-            } 
+            
             // usuario logeado
-            else if (response.status === 200) {
+            if (response.status === 200) {
                 
                 localStorage.setItem("token", json.token);
+                // recargar
+                $('#usuarioLogeado').val(json.usuario.email);
+                if (json.usuario.admin) {
+                    $('#adminMenu').removeClass('d.none');
+                };       
+               
+                
             
                 
             }  
-            else {
-                alert("Se ha producido el error: "+response.status);
+            else if (response.status === 299) {
+                console.log(json);
+                alert(json.data[0].msg)
+            } 
+            else if (response.status === 401) {
+               
+                alert("email y/o password incorrecto");
             }
         })   
      
@@ -407,16 +170,27 @@ const login = () => {
    } ;
 
 
-
-const resetPassword = () => {
-
+const resetPasswordUsuario = () => {
     let email = $('input:text[name=emailReset]').val();
-    let Password = $('input:text[name=password]').val();
-    let Password2 = $('input:text[name=password2]').val();
+    let Password = $('input:text[name=passwordResetUsuario]').val();
+    let Password2 = $('input:text[name=passwordResetUsuario2]').val();
+    resetPassword(email, Password, Password2);
+}
 
-    if(Password !== Password2) {
+
+const resetPasswordAdmin = () => {
+    let email = $('input:text[name=emailReset]').val();
+    let Password = $('input:text[name=passwordResetAdmin]').val();
+    let Password2 = $('input:text[name=passwordResetAdmin]').val();
+    resetPassword(email, Password, Password2);
+}
+
+
+const resetPassword = (email, password, password2) => {
+
+    if(password !== password2) {
         alert("contraseña no coincide");
-        return
+        return;
     }
 
     const formData = new FormData();

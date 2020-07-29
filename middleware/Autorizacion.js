@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const app = require("../app");
+const { findOne } = require("../modelos/mTipo");
 
 exports.esAutenticado = (req, res, next) => {
   const authHeader = req.get('Authorization');
@@ -22,27 +23,37 @@ exports.esAutenticado = (req, res, next) => {
     throw error;
   }
   app.currentUser = decodedToken.email;
+ 
   next();
     
 };
 
-exports.esAutorizadoAñadir = (req, res, next) => {
-   
-    if (req.usuario.admin) {
-        next();
-    } 
-    else if (req.usuario.oi && req.body.tipo.permiso == "OI") {
-        next();
+
+
+
+exports.esAutorizadoAñadir = async (req, res, next) => {
+   try {
+      usuario = await findOne({email:app.currentuser});
+    
+      if (usuario.admin) {
+          next();
+      } 
+      else if (usuario.oi && req.body.tipo.permiso == "OI") {
+          next();
+      }
+      else if (usuario.oat && req.body.tipo.permiso == "OAT") {
+          next();
+      }    
+      else {
+          const error = new Error('No autorizado.');
+          error.statusCode = 403;
+          throw error;
+        
+      }  
     }
-    else if (req.usuario.oat && req.body.tipo.permiso == "OAT") {
-        next();
-    }    
-    else {
-        const error = new Error('No autorizado.');
-        error.statusCode = 403;
-        throw error;
-       
-    }    
+    catch (error) {
+      next(error);
+    } 
    
 };
 
@@ -50,28 +61,49 @@ exports.esAutorizadoAñadir = (req, res, next) => {
 
 
 exports.esAutorizadoEditar = async (req, res, next) => {
-   if (req.body.autor == req.usuario.email || req.usuario.admin) {
+  try {
+    usuario = await findOne({email :app.currentuser});
+  
+    if (usuario.admin) {
         next();
-    } else {
-        const error = new Error("No autorizado.");
-        error.statusCode = 422;
-        throw error;
-
+    } 
+    else if (usuario.email === req.body.autor) {
+        next();
     }
-
+   
+    else {
+        const error = new Error('No autorizado.');
+        error.statusCode = 403;
+        throw error;
+      
+    }  
+  }
+  catch (error) {
+    next(error);
+  } 
+ 
 };
 
 
 
+
 exports.esAdmin = async (req, res, next) => {
-   
-    if (req.usuario.admin) {
+  try {
+    usuario = await findOne({email :app.currentuser});
+  
+    if (usuario.admin) {
         next();
-    } else {
-        const error = new Error("No autorizado.");
-        error.statusCode = 422;
-        throw error;
-
     }
-
+   
+    else {
+        const error = new Error('No autorizado.');
+        error.statusCode = 403;
+        throw error;
+      
+    }  
+  }
+  catch (error) {
+    next(error);
+  } 
+ 
 };

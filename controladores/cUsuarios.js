@@ -7,6 +7,7 @@ const {
 } = require('express-validator/check');
 
 const Usuario = require('../modelos/mUsuario');
+const app = require('../app');
 
 /*
 const transporter = nodemailer.createTransport(
@@ -57,6 +58,17 @@ exports.resetPassword = async(req, res, next) => {
     };
 
     try {
+      
+        const usuario = await Usuario.findOne({
+          email: email
+        });
+        
+        if (!usuario) {
+          const error = new Error(`el usuario con email:${email} no existe`);
+          error.statusCode = 401;
+          throw error;
+        }
+      
   
       const hashedPassword = await bcrypt.hash(req.body.password, 12);
     
@@ -117,9 +129,7 @@ exports.updateUsuario = async (req, res, next) => {
     
   }
   catch (err) {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
+     
       next(err);
   
   } 
@@ -169,21 +179,22 @@ exports.login = async (req, res, next) => {
         email: usuario.email,
         usuarioId: usuario._id.toString(),
         permiso: usuario.admin ? "ADMIN": "USUARIO"
+        
       },
       "primersabadocuarentena", {
         expiresIn: "1h"
       }
     );
+   
     return res.status(200).json({
         token: token,
-        usuarioId: usuario._id.toString()
+        usuario: usuario
+       
       });
       
   } 
   catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
+    
     next(err);
   }
 };

@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 const ini = require("./controladores/cIni");
 const env = require("dotenv").config();
 const moment = require('moment');
-const exphbs = require('express-handlebars');
+
 
 const morgan = require("morgan");
 
@@ -96,79 +96,13 @@ switch (process.env.NODE_ENV) {
 
   default:
     throw new Error("entorno de ejecución desconocido: " + app.get("env"));
-}
-
-
-
-
-/********  handlebars ***********************/
-
-var hbs = exphbs.create({
-
-  extname: "hbs",
-  defaultLayout: "main",
-  partialsDir: __dirname + "/views/partials/",
-  layoutsDir: __dirname + "/views/layouts/",
-  // Specify helpers which are only registered on this instance.
-  helpers: {
-    formatDate: function (datetime, format) {
-      return moment(datetime).format(format);
-    },
-    if_eq: function(a, b, opts) {
-      if (a == b) {
-        return opts.fn(this);
-      } else {
-        return opts.inverse(this);
-        
-      }
-    },
-    margen: function(depth, options) {
-      return "_".repeat(parseInt(depth));
-    },
-    espacio2Guion: function(frase, options) {
-      return (frase = frase.replace(" ", "-"));
-    }
-  }
-});
-
-
-
-hbs.getPartials().then(function(partials) {
-  console.log(partials);
-  
-});
-app.engine('handlebars', hbs.engine);
-app.set('view engine', 'handlebars');
+};
 
 
 
 
 
 
-/* usuario actual *******/
-app.use(function (req, res, next) {
-  const authHeader = req.get('Authorization');
-  if (!authHeader) {
-    app.currentUser = null;
-    return next();
-  }
-  const token = authHeader.split(' ')[1];
-  let decodedToken;
-  try {
-    decodedToken = jwt.verify(token, 'somesupersecretsecret');
-  } catch (err) {
-    app.currentUser = null;
-    return next();
-  }
-  if (!decodedToken) {
-    app.currentUser = null;
-    return next();
-  }
-  app.currentUser = decodedToken.email;
-  app.permiso = decodedToken.permiso;
-   next();
-  
-});
 
 
 
@@ -206,7 +140,7 @@ app.use((error, req, res, next) => {
  
   const status = error.statusCode || 500;
   
-  res.status(status).json(error);
+  res.status(status).json({error: error});
 });
 
 

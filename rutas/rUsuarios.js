@@ -30,7 +30,7 @@ usuariosRouter.get('/:email', function (req, res, next) {
 
 
 
-usuariosRouter.post('/', Auto.esAdmin, VALIDAUSUARIO, function (req, res, next) {
+usuariosRouter.post('/', Auto.esAutenticado, Auto.esAdmin, VALIDAUSUARIO, function (req, res, next) {
   cUsuarios.updateUsuario(req, res, next);
 });
 

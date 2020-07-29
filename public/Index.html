@@ -79,12 +79,12 @@
                     
                      <p class="nav-item">
 
-                        {{#if currentUser}}
+                      
  
-                        <ul class="nav navbar-nav flex-row justify-content-between ml-auto">
+                        <ul id="logeado" class="nav navbar-nav flex-row justify-content-between ml-auto d-none">
                             <li class="nav-item order-2 order-md-1"><a href="#" class="nav-link" title="settings"><i class="fa fa-cog fa-fw fa-lg"></i></a></li>
                             <li class="dropdown order-1">
-                                <button type="button" id="dropdownMenu1" data-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle">{{currentUser}} <span class="caret"></span></button>
+                                <button type="button" id="emailLogeado" data-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle"> <span class="caret"></span></button>
                                 <ul class="dropdown-menu dropdown-menu-right mt-2">
                                     <li class="px-3 py-2">
                             
@@ -94,16 +94,16 @@
                                         <a href="#" onclick="showReset()">Reset constraseña</a>
                                      
                                     
-                                            <div id="showReset" class="option-target hidden">
+                                            <div id="showReset" class="option-target d-none">
                                             <div class="form-group">
                                                 <label for="reset">contraseña:</label>
-                                                <input type="check" name="password" class="form-control">
+                                                <input type="check" name="passwordResetUsuario" class="form-control">
                                         
                                                 <label for="password">repite contraseña</label>
-                                                <input type="text" name="password2" class="form-control">
+                                                <input type="text" name="passwordResetUsuario2" class="form-control">
                                             </div>
                                     
-                                            <button id="ResetPassword" type="button" onclick="resetPassword()" class="btn btn-primary">grabar</button>
+                                            <button id="ResetPassword" type="button" onclick="resetPasswordUsuario()" class="btn btn-primary">grabar</button>
                                         </div>
                                        
                                     </li>
@@ -111,11 +111,11 @@
                             </li>
                         </ul>
                    
-                        {{else}}
+                      
 
 
                
-                        <ul class="nav navbar-nav flex-row justify-content-between ml-auto">
+                        <ul id="nologeado" class="nav navbar-nav flex-row justify-content-between ml-auto">
                             <li class="nav-item order-2 order-md-1"><a href="#" class="nav-link" title="settings"><i class="fa fa-cog fa-fw fa-lg"></i></a></li>
                             <li class="dropdown order-1">
                                 <button type="button" id="dropdownMenu1" data-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle">Login <span class="caret"></span></button>
@@ -143,11 +143,7 @@
 
 
 
-                        {{/if}}
-                        
-                       
-                        {{#if_eq permiso "ADMIN"}}
-                        <ul class="nav navbar-nav flex-row justify-content-between ml-auto">
+                        <ul id="adminMenu" class="nav navbar-nav flex-row justify-content-between ml-auto d-none">
                             
                             <li class="dropdown order-1">
                                 <button type="button" id="dropdownMenu2" data-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle">Admin <span class="caret"></span></button>
@@ -165,7 +161,7 @@
                                                </select>
                                             </div>
                                             
-                                            <div id="permisos" class="option-target hidden">
+                                            <div id="permisos" class="option-target d-none">
                                                 <p>cambie los permisos.</p>
                                                 <div class="form-group">
                                                     <label for="email">email</label>
@@ -183,23 +179,23 @@
                                                     <input type="checkbox" id="oat" name="OAT">
                                                     <label for="OAT">OAT</label>
                                                 </div>    
-                                                <button type="button" onclick="updateUsuario()" class="btn btn-default">Submit</button>   
+                                                <button type="button" onclick="postUsuario()" class="btn btn-default">Modificar</button>   
                                         
                                             </div>    
-                                            <div id="reset" class="option-target hidden">
+                                            <div id="reset" class="option-target d-none">
                                                 <p>resete la contraseña.</p>               
                                                 <div class="form-group">
-                                                    <input id="emailLogin" placeholder="Email" class="form-control form-control-sm" type="text" required="">
+                                                    <input id="emailReset" name="emailReset" placeholder="Email" class="form-control form-control-sm" type="text" required="">
                                                 </div>
                                                  <div class="form-group">
                                                     <label for="reset">contraseña:</label>
-                                                    <input type="check" name="password" class="form-control">
+                                                    <input type="text" name="passwordResetAdmin" class="form-control">
                                             
                                                     <label for="password">repite contraseña</label>
-                                                    <input type="text" name="password2" class="form-control">
+                                                    <input type="text" name="passwordResetAdmin2" class="form-control">
                                                 </div>
                                             </div>
-                                            <button type="button" onclick="resetPassword()" class="btn btn-default">Submit</button>   
+                                            <button type="button" onclick="resetPasswordAdmin()" class="btn btn-default">Reset</button>   
                                       
                                         </form>
                                     </div>
@@ -211,8 +207,6 @@
                                
 
 
-                        
-                        {{/if_eq}} 
 
                     </p>
                 </form>
@@ -231,7 +225,7 @@
     <section id="paginacion"></section>
     <div class="row">
         <footer>
-            <p>{{nombreOficina}}.{{usuario}}</p>
+            <p>"nombreOficina".usuario"</p>
         </footer>
     </div>
 </article>
@@ -282,11 +276,7 @@
         })
     </script>
 
-    <script>
-        function showReset() {
-           $("#showReset").remove('hidden');
-         }
-    </script>
+    
     <script>
         (function(){
             
@@ -298,11 +288,11 @@
             
             function hideShowTargets(){
                 allTargets.each(function(){
-                    this.classList.add('hidden');
+                    this.classList.add('d-none');
                 });
                 opcionActual = $("#opciones-admin").children("option selected").val();
                 if(opcionActual){
-                    opcionActual.classList.remove('hidden');
+                    opcionActual.classList.remove('d.none');
                 }
             }
             // Add event listener
