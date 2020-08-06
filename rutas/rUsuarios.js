@@ -35,7 +35,7 @@ usuariosRouter.post('/', Auto.esAutenticado, Auto.esAdmin, VALIDAUSUARIO, functi
 });
 
 
-usuariosRouter.post('/reset', VALIDALOGIN, function (req, res, next) {
+usuariosRouter.post('/reset', Auto.esAutenticado, Auto.esUsuario, VALIDALOGIN, function (req, res, next) {
   cUsuarios.resetPassword(req, res, next);
 });
 

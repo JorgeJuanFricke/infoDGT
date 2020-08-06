@@ -53,7 +53,7 @@ const postUsuario = () => {
     
     let url = 'http://localhost:3000/usuario/';
     let method = 'POST';
-    token = localStorage.getItem("token");
+    let token = localStorage.getItem("token");
 
 
     fetch(url, {
@@ -70,23 +70,14 @@ const postUsuario = () => {
             // usuario actualizado
             if (response.status === 200) {
                 alert(json.message);
-               
-                
             }  
-            else if (response.status === 299) {
-                console.log(json);
-                alert(json.data[0].msg)
-            } 
             else {
-                alert("Se ha producido el error: "+response.status);
+                alert(json.Error.message);
             }
-        })
-         
-      
-    
-    }).catch(err =>  {
-        console.log(err)
-        alert (err);
+         })
+  
+    }).catch(error =>  {
+       alert (error);
     })
  
 } ;
@@ -97,6 +88,15 @@ const postUsuario = () => {
 
 const logout = () => {
     localStorage.removeItem("token");
+     // recargar
+     $('#nologeado').removeClass('d-none');
+     $('#logeado').addClass('d-none');
+     
+     $('#noLogeado').html("Login");
+     if ($("adminMenu:visible")) {
+         $('#adminMenu').addClass('d-none');
+     }
+    
 }
 
 
@@ -117,11 +117,12 @@ const login = () => {
     var object = {};
     formData.forEach((value, key) => {object[key] = value});
     var json = JSON.stringify(object);
-   
+
+    localStorage.removeItem("token");
     
     let url = 'http://localhost:3000/usuario/login';
     let method = 'POST';
-    let token = "";
+    
    
    
     fetch(url, {
@@ -142,18 +143,21 @@ const login = () => {
                 
                 localStorage.setItem("token", json.token);
                 // recargar
-                $('#usuarioLogeado').val(json.usuario.email);
+                $('#nologeado').addClass('d-none');
+                $('#logeado').removeClass('d-none');
+                $('#emailLogeado').html(json.usuario.email);
                 if (json.usuario.admin) {
-                    $('#adminMenu').removeClass('d.none');
-                };       
+                    $('#adminMenu').removeClass('d-none');
+                }
+                else {
+                    $('#adminMenu').addClass('d-none');
+                }
                
-                
-            
-                
+              
             }  
             else if (response.status === 299) {
                 console.log(json);
-                alert(json.data[0].msg)
+                alert(json.Error.message);
             } 
             else if (response.status === 401) {
                
@@ -162,28 +166,32 @@ const login = () => {
         })   
      
 
-    }).catch(err =>  {
-       console.log(err)
-        alert (err);
+    }).catch(error =>  {
+       console.log(error)
+        alert (error);
      })
     
    } ;
 
 
-const resetPasswordUsuario = () => {
-    let email = $('input:text[name=emailReset]').val();
-    let Password = $('input:text[name=passwordResetUsuario]').val();
-    let Password2 = $('input:text[name=passwordResetUsuario2]').val();
+const resetUsuario = () => {
+    let email = $('#emailLogeado').html();
+    let Password = $('input:text[name=resetPasswordUsuario1]').val();
+    let Password2 = $('input:text[name=resetPasswordUsuario2]').val();
     resetPassword(email, Password, Password2);
 }
 
 
-const resetPasswordAdmin = () => {
-    let email = $('input:text[name=emailReset]').val();
-    let Password = $('input:text[name=passwordResetAdmin]').val();
-    let Password2 = $('input:text[name=passwordResetAdmin]').val();
+const resetAdmin = () => {
+    let email = $('input:text[name=emailResetAdmin]').val();
+    let Password = $('input:text[name=resetPasswordAdmin1]').val();
+    let Password2 = $('input:text[name=resetPasswordAdmin2]').val();
     resetPassword(email, Password, Password2);
 }
+
+
+
+
 
 
 const resetPassword = (email, password, password2) => {
@@ -195,7 +203,7 @@ const resetPassword = (email, password, password2) => {
 
     const formData = new FormData();
     formData.append('email', email);
-    formData.append('password', Password);
+    formData.append('password', password);
   
     
     var object = {};
@@ -221,22 +229,20 @@ const resetPassword = (email, password, password2) => {
             .then(json => {
              if (response.status === 200) {
                     alert(json.message);
-                    $('#modalResetPassword').modal('hide');
+                 
                     
                 }  
                 else {
-                    alert("Se ha producido el error: "+response.status);
+                    alert(json.Error.message);
                 }
             })
             
-            .catch(err => { 
-            alert("respuesta ok sin json")
-            })
+          
        
     })  
-   .catch(err =>  {
-       console.log(err)
-        alert (err);
+   .catch(error =>  {
+       console.log(error)
+        alert (error);
      })
     
    } ;

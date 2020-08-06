@@ -3,7 +3,9 @@ const fs = require("fs");
 const Tipo = require('../modelos/mTipo.js');
 const Recurso = require('../modelos/mRecurso.js');
 const async = require("async");
-const d3 = require("d3");
+const app = require("../app");
+const Usuario = require('../modelos/mUsuario');
+
 
 const {
     validationResult
@@ -11,21 +13,43 @@ const {
 const R = require('ramda');
 
 
-exports.getTipos = async (req,res,next) => {
-    try {
 
-        let tipos = await Tipo.find({}, {codigo: 1  })
-        .sort('codigo').lean();
-        let results = tipos.map(function (tipo) {
-            return {id: tipo._id, text:tipo.codigo}
-        });
-        return res.json({results: results});
-    }
-    catch (err) {
-        if (!err.statusCode) {
-         err.statusCode = 500;
+
+
+exports.getListaTipos = async (req,res,next) => {
+    // dar los tipos a los que puede añadir 
+    let permisos = [];
+    try {
+        let usuario = await Usuario.findOne({email: app.currentUser});
+  
+        if (usuario._doc.admin) {
+            permisos.push('ADMIN');
+        } 
+        if (usuario._doc.oat) {
+            permisos.push('OAT');
         }
-        next(err);
+        if (usuario._doc.oi) {
+            permisos.push('OI');
+        } 
+       if(permisos.length > 0) {
+            let tipos = await Tipo.find({permisos: {$all: permisos }}, {codigo: 1  })
+            .sort('codigo').lean();
+            let listaTipos = tipos.map(function (tipo) {
+                return {id: tipo._id, text:tipo.codigo}
+            });
+            return res.json(listaTipos);
+       } else {
+            const error = new Error('El usuario no tiene ningún permiso');
+            error.statusCode = 401;
+            throw error;
+           
+       }
+
+       
+    }
+    catch (error) {
+       
+        next(error);
     }   
 
 }
@@ -61,11 +85,9 @@ exports.getRecursos = async (req, res, next) => {
          recursos: recursos,
          totalRecursos: totalRecursos
        });
-   } catch (err) {
-     if (!err.statusCode) {
-       err.statusCode = 500;
-     }
-     next(err);
+   } catch (error) {
+    
+     next(error);
    }
  };
 

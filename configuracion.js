@@ -8,7 +8,7 @@ const upLoadUrl = '/upload';
 // 
 
 module.exports = {
-    nombreOficina: nombreOficina,
+    
     oficina: oficina,
     nuevo: nuevo,
     desarrollo: desarrollo,

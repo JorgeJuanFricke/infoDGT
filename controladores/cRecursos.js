@@ -16,6 +16,7 @@ const {
 
 const R = require('ramda');
 const recursosRouter = require('../rutas/rRecursos.js');
+const app = require('../app.js');
 
 
 
@@ -55,12 +56,12 @@ exports.putRecurso = async (req, res, next) => {
      
     const errors = validationResult(req);
     
+   
     if (!errors.isEmpty()) {
-      const error = new Error('validación fallida.');
-      error.message ='validación fallida';
-      error.data = errors.array();
-      return res.status(299).json(error);
-    }
+      const error = new Error(errors.array().joint(","));
+      error.statusCode = 422;
+      throw error;
+    };
     
   try {
     const tipo = req.body.tipo;
@@ -79,25 +80,25 @@ exports.putRecurso = async (req, res, next) => {
       procedencia:procedencia,
       publicacion:publicacion,
       derogacion:derogacion,
-      oficina: '3502',
-      autor: 'jjuan@dgt.es'
+      oficina: config.oficina,
+      autor: app.currentUser.email
 
      
     });
      // oficina: config.Oficina
      //autor: req.user.email,
     
-      await recurso.save()
+      let resultado = await recurso.save()
   
          return res.status(201).json({
           message: 'recurso creado!',
-          recurso: recurso,
+          recurso: resultado,
           
         });
        
       
-    } catch (err) {
-      next(err);
+    } catch (error) {
+      next(error);
     }
      
     
@@ -112,11 +113,12 @@ exports.postRecurso = async (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      const error = new Error('validación fallida.');
-      error.message ='validación fallida';
-      error.data = errors.array();
-      return res.status(299).json(error);
+      const error = new Error(errors.array().joint(","));
+      error.statusCode = 422;
+      throw error;
     };
+
+    
      
    try {
       const recurso = await Recurso.findById(recursoId);
@@ -141,11 +143,9 @@ exports.postRecurso = async (req, res, next) => {
       let result = await recurso.save();
       return res.status(200).json({ message: 'recurso modificado!', recurso: result });
 
-    } catch (err) {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
+    } catch (error) {
+     
+      next(error);
     }
   };
 
@@ -168,11 +168,9 @@ exports.postRecurso = async (req, res, next) => {
   
       
       return res.status(200).json({ message: 'recurso borrado.' });
-    } catch (err) {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
+    } catch (error) {
+      
+      next(error);
     }
   };
   

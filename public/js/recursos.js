@@ -1,9 +1,11 @@
 
 
 
-creaFormRecurso = (recurso) => {
+
+creaFormRecurso = (recurso, tipos) => {
 
     $("#modalRecurso").remove();
+ 
     
 
 let formulario = d3.select("body").append("div")
@@ -43,13 +45,8 @@ let formulario = d3.select("body").append("div")
          .attr("id", "tiposRecurso")
          .attr("class","form-control");
          
-        $('#tiposRecurso').select2({
-            width: '150px',
-            ajax: {
-                url: "http://localhost:3000/tipos",
-                dataType: 'json'
-            }
-        });
+        $('#tiposRecurso').select2({data: tipos, width:'100%'});
+        
     }
 
      nombre = linea1.append("div")
@@ -267,22 +264,87 @@ const nuevaCategoria = () => {
 */
 
 
+
+
+const getTipos = () => {
+    let url = 'http://localhost:3000/tipos';
+    let method = 'GET';
+    token = localStorage.getItem("token");
+
+    fetch(url, {
+      method: method,
+      headers: {
+        Authorization: 'Bearer ' + token
+      }
+    })
+   
+    
+    .then(response => {
+        response.json()
+        .then(json => {
+            
+            // tipos 
+            if (response.status === 200) {
+                return json;
+               
+            }  
+            else {
+                alert(json.Error.message);
+                return 
+            }
+         })
+      
+       
+    })  
+   .catch(error =>  {
+       alert (error);
+     })
+    
+ } ;
+
+
+
+
+
 const nuevoRecurso = (btn) => {
     let recurso = {};
-    try {
-                  
-        creaFormRecurso(recurso);
-      
-      
-        $('#modalRecurso').modal({
-            show: true
-        });
-        
- 
-       
-    } catch (err) {
-        console.log(err);
+    let logeado = $('#emailLogeado').text().trim();
+    if (!logeado)  {
+        alert("Debe estar autenticado para añadir recursos");
+        return;
     }
+    let url = 'http://localhost:3000/tipos';
+    let method = 'GET';
+    token = localStorage.getItem("token");
+
+    fetch(url, {
+        method: method,
+        headers: {
+        Authorization: 'Bearer ' + token
+        }
+    })
+
+    .then(response => {
+        response.json()
+        .then(json => {
+            if (response.status === 200) {
+                creaFormRecurso(recurso, json);
+                $('#modalRecurso').modal({
+                    show: true
+                });
+     
+            }  
+            else {
+                alert(json.Error.message);
+                return 
+            }
+        })
+    }) 
+    .catch (error => { 
+        alert(error)
+    })        
+    
+
 };
 
 
@@ -322,44 +384,36 @@ const putRecurso = () => {
       method: method,
       body: json,
       headers: {
-
         Authorization: 'Bearer ' + token
       }
     })
    
-   
+    
     .then(response => {
         response.json()
-            .then(json => {
-                // validacion fallida
-                if (response.status === 299) {
-                    console.log(json);
-                    alert(json.data[0].msg)
-                } 
-                // recurso creado
-                else if (response.status === 201) {
-                    alert(json.message);
-                    $('#modalRecurso').modal('hide');
-                    leeListaRecursos();
-                }  
-                else {
-                    alert("Se ha producido el error: "+response.status);
-                   
-                }
-            })
+        .then(json => {
             
-            .catch(err => { 
-            alert("respuesta ok sin json")
-            })
+            // recurso creado
+            if (response.status === 200) {
+                alert(json.message);
+                $('#modalRecurso').modal('hide');
+                leeListaRecursos();
+            }  
+            else {
+                alert(json.Error.message);
+            }
+         })
+      
        
     })  
-   .catch(err =>  {
-       console.log(err)
-        alert (err);
+   .catch(error =>  {
+       console.log(error)
+        alert (error);
      })
     
  } ;
-         
+ 
+
 
 
 
@@ -400,7 +454,7 @@ const editaRecurso = (recursoId) => {
                     show: true
                 });
             
-        }).catch(err => console.log(err));
+        }).catch(error => alert(error));
 
 };
 
@@ -446,31 +500,24 @@ const postRecurso = (recursoId) => {
    
     .then(response => {
         response.json()
-            .then(json => {
-                // validacion fallida
-                if (response.status === 299) {
-                    console.log(json);
-                    alert(json.data[0].msg)
-                } 
-                // recurso creado
-                else if (response.status === 200) {
-                    alert(json.message);
-                    $('#modalRecurso').modal('hide');
-                    leeListaRecursos();
-                }  
-                else {
-                    alert("Se ha producido el error: "+response.status);
-                }
-            })
+        .then(json => {
             
-            .catch(err => { 
-            alert("respuesta ok sin json")
-            })
+            // recurso modificado
+            if (response.status === 201) {
+                alert(json.message);
+                $('#modalRecurso').modal('hide');
+                leeListaRecursos();
+            }  
+            else {
+                alert(json.error.message);
+            }
+         })
+      
        
     })  
-   .catch(err =>  {
-       console.log(err)
-        alert (err);
+   .catch(error =>  {
+       console.log(error)
+        alert (error);
      })
     
  } ;
@@ -503,34 +550,32 @@ const deleteRecurso = (recursoId) => {
         Authorization: 'Bearer ' + token
       }
     })
-    
-   
+     
     .then(response => {
         response.json()
-            .then(json => {
-              
-                // recurso creado
-                if (response.status === 200) {
-                  
-                    alert(json.message);
-                    $('#modalRecurso').modal('hide');
-                    leeListaRecursos();
-                }  
-                else {
-                    alert("respuesta no igual 200");
-                }
-            })
+        .then(json => {
             
-            .catch(err => { 
-            alert("respuesta ok sin json")
-            })
+            // recurso borrado
+            if (response.status === 200) {
+                alert(json.message);
+                $('#modalRecurso').modal('hide');
+                leeListaRecursos();
+            }  
+            else {
+                alert(json.error.message);
+            }
+         })
+      
        
     })  
-   .catch(err =>  {
-       console.log(err)
-        alert (err);
+   .catch(error =>  {
+       console.log(error)
+        alert (error);
      })
     
- };
+ } ;
  
+
+   
+  
   

@@ -33,3 +33,9 @@ button:focus {
   width: 400px;
 }
 .modal-backdrop { opacity: 0 !important; }
+
+.proto {
+  max-width:768px;
+  padding-top: 4em;
+  
+}

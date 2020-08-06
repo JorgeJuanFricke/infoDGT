@@ -94,15 +94,14 @@ exports.resetPassword = async(req, res, next) => {
 
 exports.updateUsuario = async (req, res, next) => {
 
-
-  
+ 
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    const error = new Error('validación fallida.');
-    error.message ='validación fallida';
-    error.data = errors.array();
-    return res.status(299).json(error);
+    const error = {};
+    error.message = errors.array().joint(",");
+    error.statusCode = 422;
+    throw error;
   };
 
   
@@ -115,22 +114,22 @@ exports.updateUsuario = async (req, res, next) => {
     const oi = req.body.oi;
     const oat = req.body.oat;
 
-    let usuario = {};
-      //email: email,
-      usuario.nombre = nombre;
-      usuario.admin = admin;
-      usuario.oi =  oi;
-      usuario.oat =  oat;
-      
+    let update = {
+     
+      nombre: nombre,
+      admin: admin,
+      oi: oi,
+      oat: oat
+    };
   
-    let result = await Usuario.findOneAndUpdate({email:email}, usuario, {upsert:true})
+    let resultado = await Usuario.findOneAndUpdate({email:email}, update, {upsert:true, new: true})
   
-    return res.status(200).json({ message: 'usuario modificado!', usuario: result });
+    return res.status(200).json({ message: 'usuario modificado!', usuario: resultado });
     
   }
-  catch (err) {
+  catch (error) {
      
-      next(err);
+      next(error);
   
   } 
 
@@ -148,13 +147,14 @@ exports.login = async (req, res, next) => {
   
    
   const errors = validationResult(req);
-
   if (!errors.isEmpty()) {
-    const error = new Error('validación fallida.');
-    error.message ='validación fallida';
-    error.data = errors.array();
-    return res.status(299).json(error);
+    const error = {};
+    error.message = errors.array().joint(",");
+    error.statusCode = 422;
+    throw error;
   };
+
+  
   
   const email = req.body.email;
   const password = req.body.password;
@@ -177,12 +177,12 @@ exports.login = async (req, res, next) => {
    
     const token = jwt.sign({
         email: usuario.email,
-        usuarioId: usuario._id.toString(),
-        permiso: usuario.admin ? "ADMIN": "USUARIO"
+        usuarioId: usuario._id.toString()
+       
         
       },
       "primersabadocuarentena", {
-        expiresIn: "1h"
+        expiresIn: "5h"
       }
     );
    
@@ -193,9 +193,9 @@ exports.login = async (req, res, next) => {
       });
       
   } 
-  catch (err) {
+  catch (error) {
     
-    next(err);
+    next(error);
   }
 };
 

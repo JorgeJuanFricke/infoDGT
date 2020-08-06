@@ -33,18 +33,18 @@ VALIDAPOST = [
 
 /*** RECURSO general **************************************/
 
-recursosRouter.get('/', Auto.esAutenticado, function (req, res, next) {
+recursosRouter.get('/',  function (req, res, next) {
     cRecursos.getRecurso(req, res, next);
 });
 
 
-recursosRouter.get('/:Id', Auto.esAutenticado, function (req, res, next) {
+recursosRouter.get('/:Id', function (req, res, next) {
     cRecursos.getRecurso(req, res, next);
 });
 
 
 recursosRouter.put(
-    '/', Auto.esAutenticado, Auto.esAutorizadoEditar, VALIDAPUT,
+    '/', Auto.esAutenticado, Auto.esAutorizadoAñadir, VALIDAPUT,
         function (req, res, next) {
     cRecursos.putRecurso(req, res, next);
 });
