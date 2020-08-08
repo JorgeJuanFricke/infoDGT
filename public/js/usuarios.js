@@ -41,7 +41,7 @@ const postUsuario = () => {
  
     const formData = new FormData();
     formData.append('email',$('input:text[name=email]').val());
-    formData.append('nombre',$('input:text[name=nombre]').val());
+    formData.append('nombre',$('input:text[name=nombreUsuario]').val());
     formData.append('admin', $('#admin').is(':checked')); 
     formData.append('oat', $('#oat').is(':checked')); 
     formData.append('oi', $('#oi').is(':checked')); 

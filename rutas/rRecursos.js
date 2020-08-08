@@ -14,7 +14,6 @@ const {body, validationResult} = require('express-validator');
 VALIDAPUT = [
     body('tipo').trim().exists().not().isEmpty().withMessage("debe seleccionar el tipo"),
     body('nombre').trim().exists().not().isEmpty().withMessage("debe introducir el nombre"),
-    body('url').isURL({require_protocol:false, require_host:false}).withMessage("debe introducir la url válida para el documento"),
     body('procedencia').optional().not().isEmpty().withMessage("debe introducir la procedencia"),
     body('publicacion').exists().not().isEmpty().withMessage("debe introducir fecha publicación")
   
@@ -23,7 +22,6 @@ VALIDAPUT = [
 VALIDAPOST = [
     
     body('nombre').trim().exists().not().isEmpty().withMessage("debe introducir el nombre"),
-    body('url').isURL({require_protocol: false, require_host:false}).withMessage("debe introducir la url válida para el documento"),
     body('procedencia').optional().not().isEmpty().withMessage("debe introducir la procedencia"),
     body('publicacion').exists().not().isEmpty().withMessage("debe introducir fecha publicación")
   

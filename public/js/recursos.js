@@ -384,7 +384,9 @@ const putRecurso = () => {
       method: method,
       body: json,
       headers: {
-        Authorization: 'Bearer ' + token
+        Authorization: 'Bearer ' + token,
+       'Content-Type': 'application/json'
+       
       }
     })
    
@@ -394,7 +396,7 @@ const putRecurso = () => {
         .then(json => {
             
             // recurso creado
-            if (response.status === 200) {
+            if (response.status === 201) {
                 alert(json.message);
                 $('#modalRecurso').modal('hide');
                 leeListaRecursos();
@@ -429,6 +431,7 @@ const editaRecurso = (recursoId) => {
       headers: {
 
         Authorization: 'Bearer ' + token
+       
       }
     })  
        
@@ -492,7 +495,8 @@ const postRecurso = (recursoId) => {
       body: json,
       headers: {
 
-        Authorization: 'Bearer ' + token
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json'
       }
     })
 
@@ -544,10 +548,10 @@ const deleteRecurso = (recursoId) => {
 
     fetch(url, {
       method: method,
-      body: json,
       headers: {
 
-        Authorization: 'Bearer ' + token
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json'
       }
     })
      

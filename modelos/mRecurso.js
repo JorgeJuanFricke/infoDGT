@@ -6,7 +6,7 @@ const Tipo = require('../modelos/mTipo.js');
 let RecursoSchema = mongoose.Schema({
     url: {
         type: String,
-        required: true
+        
     },
 
     tipo: { type: mongoose.Schema.Types.ObjectId, ref: 'Tipo', required: true, index:true },
@@ -26,12 +26,12 @@ let RecursoSchema = mongoose.Schema({
 
     oficina: {
         type: String,
-        //required: true
+        required: true
     },
 
     autor: {
         type: String,
-        //required: true
+        required: true
     },
 
 
@@ -40,9 +40,15 @@ let RecursoSchema = mongoose.Schema({
         
     },
 
-    procedencia: {type: String},
+    procedencia: {
+        type: String,
+        required: true 
+    },
 
-    publicacion: {type:Date},
+    publicacion: {
+        type:Date,
+        required: true
+    },
   
     derogacion: {type:Date},
 

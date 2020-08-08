@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const app = require("../app");
 const Usuario = require("../modelos/mUsuario");
+const Tipo = require("../modelos/mTipo");
 
 
 
@@ -65,15 +66,17 @@ exports.esUsuario = async (req, res, next) => {
 
 exports.esAutorizadoAñadir = async (req, res, next) => {
    try {
-      usuario = await Usuario.findOne({email: app.currentUser});
+      let usuario = await Usuario.findOne({email: app.currentUser});
+      let tipo = await Tipo.findById(req.body.tipo); 
+     
     
-      if (usuario.admin) {
+      if (usuario._doc.admin) {
           next();
       } 
-      else if (usuario.oi && req.body.tipo.permiso == "OI") {
+      else if (usuario._doc.oi && tipo.permisos.indexOf("OI")) {
           next();
       }
-      else if (usuario.oat && req.body.tipo.permiso == "OAT") {
+      else if (usuario._doc.oat && tipo.permisos.indexOf("OAT")) {
           next();
       }    
       else {

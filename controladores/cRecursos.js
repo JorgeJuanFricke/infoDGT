@@ -9,6 +9,10 @@ const $ = require('cheerio');
 const xml2js = require('xml2js');
 const parseString = require('xml2js').parseString;
 const moment = require('moment');
+const app = require('../app');
+
+
+
 
 const {
     validationResult
@@ -16,7 +20,7 @@ const {
 
 const R = require('ramda');
 const recursosRouter = require('../rutas/rRecursos.js');
-const app = require('../app.js');
+
 
 
 
@@ -55,15 +59,18 @@ exports.putRecurso = async (req, res, next) => {
   
      
     const errors = validationResult(req);
+    const listaErrores = errors.errors;
     
-   
+    try {
+
     if (!errors.isEmpty()) {
-      const error = new Error(errors.array().joint(","));
+      let msgErrores = listaErrores.map(e => {return e.msg});
+      const error = new Error(msgErrores.join(","));
       error.statusCode = 422;
       throw error;
     };
     
-  try {
+  
     const tipo = req.body.tipo;
     const nombre = req.body.nombre;
     const descripcion = req.body.descripcion;
@@ -81,7 +88,7 @@ exports.putRecurso = async (req, res, next) => {
       publicacion:publicacion,
       derogacion:derogacion,
       oficina: config.oficina,
-      autor: app.currentUser.email
+      autor: app.currentUser
 
      
     });
@@ -111,39 +118,36 @@ exports.putRecurso = async (req, res, next) => {
 exports.postRecurso = async (req, res, next) => {
     const recursoId = req.params.Id;
     const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      const error = new Error(errors.array().joint(","));
-      error.statusCode = 422;
-      throw error;
-    };
-
+    try {
+          
+        if (!errors.isEmpty()) {
+          let msgErrores = listaErrores.map(e => {return e.msg});
+          const error = new Error(msgErrores.join(","));
+          error.statusCode = 422;
+          throw error;
+        };
     
-     
-   try {
-      const recurso = await Recurso.findById(recursoId);
+        const recurso = await Recurso.findById(recursoId);
 
-      if (!recurso) {
-        const error = new Error('El recurso no existe');
-        error.statusCode = 404;
-        throw error;
-      }
-      recurso.nombre = req.body.nombre;
-      recurso.descripcion = req.body.descripcion;
-      recurso.url = req.body.url;
-      recurso.procedencia = req.body.procedencia;
-      recurso.publicacion = req.body.publicacion;
-      recurso.derogacion = req.body.derogacion;
-      /*
-      if (req.body.derogacion) {
-         recurso.derogacion = new Date(req.body.derogacion);}
-         */
-      recurso.actualizadoPor = 'jjuan@dgt.es';  // cambiar!!!!!!
-      
-      let result = await recurso.save();
-      return res.status(200).json({ message: 'recurso modificado!', recurso: result });
+        if (!recurso) {
+          const error = new Error('El recurso no existe');
+          error.statusCode = 404;
+          throw error;
+        }
+        recurso.nombre = req.body.nombre;
+        recurso.descripcion = req.body.descripcion;
+        recurso.url = req.body.url;
+        recurso.procedencia = req.body.procedencia;
+        recurso.publicacion = req.body.publicacion;
+        recurso.derogacion = req.body.derogacion;
+        
+               
+        recurso.actualizadoPor = app.currentUser.email;  
+        
+        let result = await recurso.save();
+        return res.status(200).json({ message: 'recurso modificado!', recurso: result });
 
-    } catch (error) {
+      } catch (error) {
      
       next(error);
     }
