@@ -140,7 +140,7 @@ app.use((error, req, res, next) => {
  
   const status = error.statusCode || 500;
   
-  res.status(status).json({Error: {message: error}});
+  res.status(status).json({message: error.message});
 });
 
 

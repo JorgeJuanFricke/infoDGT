@@ -15,7 +15,7 @@
     <link href="/css/vendor/select2.min.css" rel="stylesheet" />
     <!--link href="/css/bootstrap-wysihtml5-0.0.02.css" rel="stylesheet" /-->
      <link href="/css/summernote-bs4.min.css" rel="stylesheet">
-    <link href="/css/jumbotron.css" rel="stylesheet" />
+    <!--link href="/css/jumbotron.css" rel="stylesheet" /-->
     <link href="/css/vendor/select2-bootstrap.min.css" type="text/css" rel="stylesheet" />
 <style>
 
@@ -72,9 +72,14 @@
                         </button>
                         </div>
                     </div>
-                    
+
+   
+
                    <!-- incluir en el if de arriba -->
-                   <a class="nav-item" onclick="nuevoRecurso()" href="#"><i class="fa fa-search"></i></a>
+                   <a class="nav-item" onclick="nuevoRecurso()" href="#"><svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8 3.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H4a.5.5 0 0 1 0-1h3.5V4a.5.5 0 0 1 .5-.5z"/>
+                    <path fill-rule="evenodd" d="M7.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0V8z"/>
+                  </svg></a>
                  
                     
                      <p class="nav-item">
@@ -116,7 +121,7 @@
 
                
                         <ul id="nologeado" class="nav navbar-nav flex-row justify-content-between ml-auto">
-                            <li class="nav-item order-2 order-md-1"><a href="#" class="nav-link" title="settings"><i class="fa fa-cog fa-fw fa-lg"></i></a></li>
+
                             <li class="dropdown order-1">
                                 <button type="button" id="login-email" data-toggle="dropdown" class="btn btn-outline-secondary dropdown-toggle">Login <span class="caret"></span></button>
                                 <ul class="dropdown-menu dropdown-menu-right mt-2">
@@ -218,19 +223,18 @@
 </nav>
 
 
-<article  class="container">
-    <section class="row">
-        <ul id="listaRecursos" class="list-group"></ul>
-        <div id="recurso"></div>
+
+    <section id="Recursos" class="row">
+       
     </section>
     
-    <section id="paginacion"></section>
-    <div class="row">
-        <footer>
-            <p>"nombreOficina".usuario"</p>
-        </footer>
-    </div>
-</article>
+    
+    <nav id="paginacion" aria-label="Page navigation">
+    
+    </nav>
+    
+    
+
 
 
 
@@ -238,7 +242,7 @@
     
     <script type="text/javascript" src="/js/vendor/jquery.min.js"></script>
     <script type="text/javascript" src="/js/vendor/popper/popper.js"></script>
-    <script type="text/javascript" src="/js/vendor/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/vendor/bootstrap.min.js"></script>
     <script type="text/javascript" src="/js/vendor/d3.js"></script>
     <script type="text/javascript" src="/js/vendor/moment.js"></script>
 

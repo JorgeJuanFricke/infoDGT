@@ -223,6 +223,8 @@ let formulario = d3.select("body").append("div")
 
 
 
+
+
            
 function isEmpty(obj) {
     for(var key in obj) {
@@ -230,28 +232,8 @@ function isEmpty(obj) {
             return false;
     }
     return true;
-}  
+};
 
-muestraPaginas = () => {
-    /*
-    $("#pagination").remove
-    if (currentPage !== 1 && previousPage !== 1) {
-        <a href="#" onclick="getRecursos(1)">1</a>
-    }
-    if (hasPreviousPage) { 
-        <a href = "#" onclick="getRecursos(previousPage)">previousPage</a>
-    }
-    <a href="?page=<%= currentPage %>" class="active"><%= currentPage %></a>
-           
-    if (hasNextPage) {
-        <a href="#" onclick="getRecursos(nextPage)">nextPage</a>
-    }
-           
-    if (lastPage !== currentPage && nextPage !== lastPage) { 
-        <a href="#" onclick="getRecursos(lastPage)">lastPage</a>
-    }
-*/
-}
 
 
 /*
@@ -301,6 +283,43 @@ const getTipos = () => {
      })
     
  } ;
+
+
+
+
+ const verRecurso = (recursoId) => {
+
+    let url = 'http://localhost:3000/recurso/' + recursoId;
+    let method = 'GET';
+   
+    fetch(url, {
+      method: method,
+      headers: {
+
+      }
+    })  
+       
+        .then(res => {
+                
+            if ( res.status !== 200) {
+            
+                throw new Error(res.message);
+            }
+            return res.json();
+           
+        })
+        .then(resultado => {
+           
+           
+            let recurso = resultado.recurso;  
+            muestraRecurso(recurso);
+       
+             
+            
+        }).catch(error => alert(error));
+
+};
+
 
 
 
@@ -402,7 +421,7 @@ const putRecurso = () => {
                 leeListaRecursos();
             }  
             else {
-                alert(json.Error.message);
+                alert(json.message);
             }
          })
       
@@ -427,39 +446,35 @@ const editaRecurso = (recursoId) => {
 
     fetch(url, {
       method: method,
-      body: json,
       headers: {
 
         Authorization: 'Bearer ' + token
        
       }
     })  
-       
-        .then(res => {
-                
-            if ( res.status !== 200) {
-            
-                throw new Error(res.message);
-            }
-            return res.json();
-           
-        })
-        .then(resultado => {
-           
-           
-            let recurso = resultado.recurso;  
-           
-            creaFormRecurso(recurso);
-          
-            
-           
+    .then(response => {
+        response.json()
+        .then(json => {
+            if (response.status === 200) {
+                creaFormRecurso(json.recurso);
                 $('#modalRecurso').modal({
                     show: true
                 });
-            
-        }).catch(error => alert(error));
+     
+            }  
+            else {
+                alert(json.message);
+                return 
+            }
+        })
+    }) 
+    .catch (error => { 
+        alert(error)
+    })        
+    
 
-};
+};   
+     
 
 
 
@@ -513,7 +528,7 @@ const postRecurso = (recursoId) => {
                 leeListaRecursos();
             }  
             else {
-                alert(json.error.message);
+                alert(json.message);
             }
          })
       

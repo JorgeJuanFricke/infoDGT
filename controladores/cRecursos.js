@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Tipo = require('../modelos/mTipo.js');
 const Recurso = require('../modelos/mRecurso.js');
-let config = require('../configuracion.js');
+const config = require('../configuracion.js');
 const d3 = require("d3");
 const fetch = require('node-fetch');
 const rp = require('request-promise');
@@ -92,9 +92,7 @@ exports.putRecurso = async (req, res, next) => {
 
      
     });
-     // oficina: config.Oficina
-     //autor: req.user.email,
-    
+         
       let resultado = await recurso.save()
   
          return res.status(201).json({
@@ -142,7 +140,7 @@ exports.postRecurso = async (req, res, next) => {
         recurso.derogacion = req.body.derogacion;
         
                
-        recurso.actualizadoPor = app.currentUser.email;  
+        recurso.actualizadoPor = app.currentUser;  
         
         let result = await recurso.save();
         return res.status(200).json({ message: 'recurso modificado!', recurso: result });

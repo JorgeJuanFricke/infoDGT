@@ -5,6 +5,7 @@ const Recurso = require('../modelos/mRecurso.js');
 const async = require("async");
 const app = require("../app");
 const Usuario = require('../modelos/mUsuario');
+const config = require('../configuracion.js');
 
 
 const {
@@ -58,12 +59,20 @@ exports.getListaTipos = async (req,res,next) => {
 
 
 exports.getRecursos = async (req, res, next) => {
-    const paginaActual = req.query.pagina || 1;
-    const recursosPorPagina = 10;
-    // necesito limites y pagina
-    let texto = req.query.texto;
+
+    const pagina = req.query.pagina || 1;
+    const recursosPagina = config.recursosPagina;
+    const texto = req.query.texto;
         
        try {
+
+        let totalRecursos =  await Recurso.find({ 
+            $text : { 
+                $search : texto
+            } 
+        }).countDocuments();
+
+
         let recursos = await Recurso.find({ 
             $text : { 
                 $search : texto
@@ -72,18 +81,18 @@ exports.getRecursos = async (req, res, next) => {
         { score:{$meta:'textScore'} })
         .sort({ score : { $meta : 'textScore' } })
         .populate('tipo')
+        .skip((pagina - 1) * recursosPagina)
+        .limit(recursosPagina)
         .exec();
 
-        let totalRecursos =  await Recurso.find({ 
-            $text : { 
-                $search : texto
-            } 
-        }).countDocuments();
+        
 
        res.status(200).json({
          message: 'página de recursos cargados correctamente!!.',
          recursos: recursos,
-         totalRecursos: totalRecursos
+         pagina: pagina,
+         totalRecursos: totalRecursos,
+         recursosPagina: recursosPagina
        });
    } catch (error) {
     
@@ -93,41 +102,15 @@ exports.getRecursos = async (req, res, next) => {
 
 
 
+
+
+ 
+
+
+
+  
 exports.renderPagina = async (req, res, next) => {
-   
      
         return res.sendFile(__dirname + '/public/index.html');
 
-
-    
 };
-
-
-
-/*
-  
-       let query = [
-         
-              
-                {$match:  { $text: { $search: texto, $language: "es" }}} ,
-                {$sort: { score: { $meta: "textScore" } } },
-                
-        
-           {
-               $lookup: {
-                   from: 'tipos',
-                   localField: 'tipo',
-                   foreignField: 'codigo',
-                   as: 'tipo'
-               }
-           },
-           {
-               $unwind: '$tipo'
-           }
-       ];
-         let totalRecursos = await Recurso.countDocuments(query2);
-       let recursos =  await Recurso.aggregate(query2) 
-            .skip((paginaActual - 1) * recursosPorPagina)
-            .limit(recursosPorPagina).exec();
-
-            */
