@@ -56,7 +56,7 @@ recursosRouter.post('/:Id', Auto.esAutenticado, Auto.esAutorizadoEditar, VALIDAP
 
 
 
-recursosRouter.delete('/:Id', Auto.esAutenticado, Auto.esAutorizadoEditar,
+recursosRouter.delete('/:Id', Auto.esAutenticado, Auto.esAdmin,
  function (req, res, next) {
     cRecursos.deleteRecurso(req, res, next);
 });

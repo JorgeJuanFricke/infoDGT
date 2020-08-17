@@ -354,7 +354,7 @@ const nuevoRecurso = (btn) => {
      
             }  
             else {
-                alert(json.Error.message);
+                alert(json.message);
                 return 
             }
         })
@@ -547,7 +547,7 @@ const postRecurso = (recursoId) => {
 
 
 
-const deleteRecurso = (recursoId) => {
+const deleteRecurso = () => {
     // para input
     // delete solo admin
     // csrf-token en main?
@@ -556,6 +556,7 @@ const deleteRecurso = (recursoId) => {
     //const csrf = btn.parentNode.querySelector('[name=_csrf]').value;
 
     //const productElement = btn.closest('article');
+    let recursoId = d3.select("#removeUser").datum()._id;
     let url = 'http://localhost:3000/recurso/'+recursoId;
     let method = 'DELETE';
    
@@ -581,7 +582,7 @@ const deleteRecurso = (recursoId) => {
                 leeListaRecursos();
             }  
             else {
-                alert(json.error.message);
+                alert(json.message);
             }
          })
       
