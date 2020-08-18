@@ -4,11 +4,11 @@
 const getUsuario = (email) => {
 
   
-    //let tipo = $('#tipos').children("option:selected").text();
-    //let texto =$('#buscaRecursos').val();
+    var base_url = window.location.origin;
+
+    var host = window.location.host;
     
-    
-    fetch('http://localhost:3000/usuario/' + email , {
+    fetch(base_url + '/usuario/' + email , {
             method: 'GET',
             headers: {
                 //'csrf-token': "csrf23454345"
@@ -50,8 +50,11 @@ const postUsuario = () => {
     formData.forEach((value, key) => {object[key] = value});
     var json = JSON.stringify(object);
 
-    
-    let url = 'http://localhost:3000/usuario/';
+    var base_url = window.location.origin;
+
+    var host = window.location.host;
+
+    let url = base_url + '/usuario/';
     let method = 'POST';
     let token = localStorage.getItem("token");
 
@@ -72,7 +75,7 @@ const postUsuario = () => {
                 alert(json.message);
             }  
             else {
-                alert(json.Error.message);
+                alert(json.message);
             }
          })
   
@@ -119,8 +122,12 @@ const login = () => {
     var json = JSON.stringify(object);
 
     localStorage.removeItem("token");
+
+    var base_url = window.location.origin;
+
+    var host = window.location.host;
     
-    let url = 'http://localhost:3000/usuario/login';
+    let url = base_url + '/usuario/login';
     let method = 'POST';
     
    
@@ -133,14 +140,11 @@ const login = () => {
         'Content-Type': 'application/json'
       }
     })
+    
     .then(response => {
         response.json()
         .then(json => {
-       
-            
-            // usuario logeado
             if (response.status === 200) {
-                
                 localStorage.setItem("token", json.token);
                 // recargar
                 $('#nologeado').addClass('d-none');
@@ -153,25 +157,21 @@ const login = () => {
                     $('#adminMenu').addClass('d-none');
                 }
                
-              
-            }  
-            else if (response.status === 299) {
-                console.log(json);
-                alert(json.Error.message);
-            } 
-            else if (response.status === 401) {
-               
-                alert("email y/o password incorrecto");
-            }
-        })   
      
-
-    }).catch(error =>  {
-       console.log(error)
-        alert (error);
-     })
+            }  
+            else {
+                alert(json.message);
+                return 
+            }
+        })
+    }) 
+    .catch (error => { 
+        alert(error)
+    })        
     
-   } ;
+
+};
+
 
 
 const resetUsuario = () => {
@@ -209,9 +209,12 @@ const resetPassword = (email, password, password2) => {
     var object = {};
     formData.forEach((value, key) => {object[key] = value});
     var json = JSON.stringify(object);
-   
+
+    var base_url = window.location.origin;
+
+    var host = window.location.host;
     
-    let url = 'http://localhost:3000/usuario/reset';
+    let url = base_url + '/usuario/reset';
     let method = 'POST';
     token = localStorage.getItem("token");
    
@@ -233,7 +236,7 @@ const resetPassword = (email, password, password2) => {
                     
                 }  
                 else {
-                    alert(json.Error.message);
+                    alert(json.message);
                 }
             })
             

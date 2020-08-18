@@ -47,17 +47,20 @@ exports.resetPassword = async(req, res, next) => {
 
   let email = req.body.email;
   
-
   const errors = validationResult(req);
+  const listaErrores = errors.errors;
 
-    if (!errors.isEmpty()) {
-      const error = new Error('validación fallida.');
-      error.message ='validación fallida';
-      error.data = errors.array();
-      return res.status(299).json(error);
-    };
+  try {
 
-    try {
+        if (!errors.isEmpty()) {
+          let msgErrores = listaErrores.map(e => {return e.msg});
+          const error = new Error(msgErrores.join(","));
+          error.statusCode = 422;
+          throw error;
+        
+        };
+
+  
       
         const usuario = await Usuario.findOne({
           email: email
@@ -94,18 +97,19 @@ exports.resetPassword = async(req, res, next) => {
 exports.updateUsuario = async (req, res, next) => {
 
  
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    const error = {};
-    error.message = errors.array().joint(",");
-    error.statusCode = 422;
-    throw error;
-  };
-
   
+  const errors = validationResult(req);
+  const listaErrores = errors.errors;
   
   try {
+
+      if (!errors.isEmpty()) {
+        let msgErrores = listaErrores.map(e => {return e.msg});
+        const error = new Error(msgErrores.join(","));
+        error.statusCode = 422;
+        throw error;
+      };
+
    
     const email = req.body.email
     const nombre = req.body.nombre;
@@ -143,54 +147,55 @@ exports.updateUsuario = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   
-  
-   
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const error = {};
-    error.message = errors.array().joint(",");
-    error.statusCode = 422;
-    throw error;
-  };
+  const listaErrores = errors.errors;
 
-  
-  
-  const email = req.body.email;
-  const password = req.body.password;
   try {
-    const usuario = await Usuario.findOne({
-      email: email
-    });
-    if (!usuario) {
-      const error = new Error(`el usuario con email:${email} no existe`);
-      error.statusCode = 401;
-      throw error;
-    }
-    //UsuarioOK = usuario;
-    const isEqual = await bcrypt.compare(password, usuario.password);
-    if (!isEqual) {
-      const error = new Error("password incorrecta!");
-      error.statusCode = 401;
-      throw error;
-    }
-   
-    const token = jwt.sign({
-        email: usuario.email,
-        usuarioId: usuario._id.toString()
-       
-        
-      },
-      "primersabadocuarentena", {
-        expiresIn: "5h"
-      }
-    );
-   
-    return res.status(200).json({
-        token: token,
-        usuario: usuario
-       
+
+      if (!errors.isEmpty()) {
+        let msgErrores = listaErrores.map(e => {return e.msg});
+        const error = new Error(msgErrores.join(","));
+        error.statusCode = 422;
+        throw error;
+       };
+
+     
+      const email = req.body.email;
+      const password = req.body.password;
+  
+      const usuario = await Usuario.findOne({
+        email: email
       });
-      
+      if (!usuario) {
+        const error = new Error(`el usuario con email:${email} no existe`);
+        error.statusCode = 401;
+        throw error;
+      }
+      //UsuarioOK = usuario;
+      const isEqual = await bcrypt.compare(password, usuario.password);
+      if (!isEqual) {
+        const error = new Error("password incorrecta!");
+        error.statusCode = 401;
+        throw error;
+      }
+    
+      const token = jwt.sign({
+          email: usuario.email,
+          usuarioId: usuario._id.toString()
+        
+          
+        },
+        "primersabadocuarentena", {
+          expiresIn: "5h"
+        }
+      );
+    
+      return res.status(200).json({
+          token: token,
+          usuario: usuario
+        
+        });
+        
   } 
   catch (error) {
     

@@ -7,7 +7,9 @@ const leeListaRecursos = (pagina) => {
     if (pagina) {
         query = query +  `&pagina=${pagina}`;
     }
-    fetch('http://localhost:3000/recursos' + query , {
+    var base_url = window.location.origin;
+
+    fetch(base_url + '/recursos' + query , {
             method: 'GET',
             headers: {
                 //'csrf-token': "csrf23454345"
@@ -306,11 +308,14 @@ muestralogin = () => {
     $('#modalLogin').modal('show');
 }
 
-
-// 'Authorization': 'Bearer ' + token
-
+/*
 logea = () => {
-    url = 'http://localhost:3000/usuario/login'
+
+    var base_url = window.location.origin;
+
+    var host = window.location.host;
+    
+    url = base_url + '/usuario/login'
     d3.json(url, {
             headers: {
                 'Accept': 'application/json',
@@ -336,6 +341,10 @@ logea = () => {
         });
 
 };
+*/
+
+
+
 
 logout = () => {
     $('#modalLogout').modal('show');

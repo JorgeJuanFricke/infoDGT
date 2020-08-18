@@ -249,7 +249,8 @@ const nuevaCategoria = () => {
 
 
 const getTipos = () => {
-    let url = 'http://localhost:3000/tipos';
+    var base_url = window.location.origin;
+    let url = base_url + '/tipos';
     let method = 'GET';
     token = localStorage.getItem("token");
 
@@ -271,7 +272,7 @@ const getTipos = () => {
                
             }  
             else {
-                alert(json.Error.message);
+                alert(json.message);
                 return 
             }
          })
@@ -288,8 +289,8 @@ const getTipos = () => {
 
 
  const verRecurso = (recursoId) => {
-
-    let url = 'http://localhost:3000/recurso/' + recursoId;
+    var base_url = window.location.origin;
+    let url = base_url + '/recurso/' + recursoId;
     let method = 'GET';
    
     fetch(url, {
@@ -332,7 +333,8 @@ const nuevoRecurso = (btn) => {
         alert("Debe estar autenticado para añadir recursos");
         return;
     }
-    let url = 'http://localhost:3000/tipos';
+    var base_url = window.location.origin;
+    let url = base_url + '/tipos';
     let method = 'GET';
     token = localStorage.getItem("token");
 
@@ -395,7 +397,9 @@ const putRecurso = () => {
     formData.forEach((value, key) => {object[key] = value});
     var json = JSON.stringify(object);
 
-    let url = 'http://localhost:3000/recurso/';
+    var base_url = window.location.origin;
+
+    let url = base_url + '/recurso/';
     let method = 'PUT';
     token = localStorage.getItem("token");
 
@@ -439,8 +443,9 @@ const putRecurso = () => {
 
 
 const editaRecurso = (recursoId) => {
-
-    let url = 'http://localhost:3000/recurso/' + recursoId;
+    
+    var base_url = window.location.origin;
+    let url = base_url + '/recurso/' + recursoId;
     let method = 'GET';
     token = localStorage.getItem("token");
 
@@ -499,8 +504,8 @@ const postRecurso = (recursoId) => {
     formData.forEach((value, key) => {object[key] = value});
     var json = JSON.stringify(object);
 
-    
-    let url = 'http://localhost:3000/recurso/' + recursoId;
+    var base_url = window.location.origin;
+    let url = base_url + '/recurso/' + recursoId;
     let method = 'POST';
    
     token = localStorage.getItem("token");
@@ -557,7 +562,8 @@ const deleteRecurso = () => {
 
     //const productElement = btn.closest('article');
     let recursoId = d3.select("#removeUser").datum()._id;
-    let url = 'http://localhost:3000/recurso/'+recursoId;
+    var base_url = window.location.origin;
+    let url = base_url + '/recurso/'+ recursoId;
     let method = 'DELETE';
    
     token = localStorage.getItem("token");
