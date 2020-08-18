@@ -1,19 +1,11 @@
 let config = require("./configuracion.js");
-//const createError = require('http-errors');
 const mongoose = require("mongoose");
 const express = require("express");
 const path = require("path");
-//const logger = require("morgan");
 const bodyParser = require("body-parser");
 const ini = require("./controladores/cIni");
 const env = require("dotenv").config();
-const moment = require('moment');
-
-
 const morgan = require("morgan");
-
-
-
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' })
 

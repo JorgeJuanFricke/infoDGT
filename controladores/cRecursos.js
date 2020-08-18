@@ -1,12 +1,9 @@
-const mongoose = require('mongoose');
-const Tipo = require('../modelos/mTipo.js');
+
 const Recurso = require('../modelos/mRecurso.js');
 const config = require('../configuracion.js');
 const d3 = require("d3");
 const fetch = require('node-fetch');
-const rp = require('request-promise');
-const $ = require('cheerio');
-const xml2js = require('xml2js');
+
 const parseString = require('xml2js').parseString;
 const moment = require('moment');
 const app = require('../app');
@@ -18,7 +15,7 @@ const {
     validationResult
 } = require('express-validator/check');
 
-const R = require('ramda');
+
 const recursosRouter = require('../rutas/rRecursos.js');
 
 

@@ -1,8 +1,6 @@
-const mongoose = require('mongoose');
-const fs = require("fs");
+
 const Tipo = require('../modelos/mTipo.js');
 const Recurso = require('../modelos/mRecurso.js');
-const async = require("async");
 const app = require("../app");
 const Usuario = require('../modelos/mUsuario');
 const config = require('../configuracion.js');
@@ -11,7 +9,7 @@ const config = require('../configuracion.js');
 const {
     validationResult
 } = require('express-validator/check');
-const R = require('ramda');
+
 
 
 
