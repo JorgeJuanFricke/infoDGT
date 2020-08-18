@@ -3,6 +3,7 @@ const fs = require("fs");
 const Tipo = require('../modelos/mTipo.js');
 const Usuario = require('../modelos/mUsuario.js');
 const async = require("async");
+const { debugPort } = require('process');
 
 exports.updateTipos =  () => {
     let tipos = JSON.parse(fs.readFileSync('./tipos.json'));
@@ -23,11 +24,31 @@ exports.updateTipos =  () => {
    
 };
 
-exports.creaUsuarios =  () => {
-    let usuarios = JSON.parse(fs.readFileSync('./usuarios.json'));
-   Usuario.insertMany(usuarios, { ordered: false },  function(err, res){
-        if (err) {console.log(err)}
-        else console.log("actualizado usuarios")
-    });
-   
+exports.creaAdmin =  async () => {
+    try {
+        let admin = await Usuario.findOne({email: "Admin@dgt.es"}).exec();
+        if (!admin) {
+            admin = await Usuario.create({              
+                email: "Admin@dgt.es",
+                nombre: "administrador",
+                admin: true,
+                oat: false,
+                oi: false,
+                reset: true,
+                password: "123456"
+            });
+        
+            console.log("creado admin");
+
+        }    
+        
+    }    
+    catch (error) {
+
+        console.log(error);
+
+    }
+
+
+
 };

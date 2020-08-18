@@ -70,10 +70,9 @@ exports.resetPassword = async(req, res, next) => {
         }
       
   
-      const hashedPassword = await bcrypt.hash(req.body.password, 12);
     
         
-      let result = await Usuario.updateOne({email:email}, {$set:{password: hashedPassword}});
+      let result = await Usuario.updateOne({email:email}, {$set:{password: req.body.passwword}});
     
       return res.status(200).json({ message: 'contraseña modificada!', usuario: result });
     

@@ -102,6 +102,7 @@ switch (process.env.NODE_ENV) {
 
 /**** actualizar datos ******************/
 ini.updateTipos();
+ini.creaAdmin();
 
 
 
