@@ -71,13 +71,11 @@ exports.resetPassword = async(req, res, next) => {
           error.statusCode = 401;
           throw error;
         }
-      
-  
-    
+        usuario.password = req.body.password;
         
-      let result = await Usuario.updateOne({email:email}, {$set:{password: req.body.passwword}});
-    
-      return res.status(200).json({ message: 'contraseña modificada!', usuario: result });
+        let resultado = await usuario.save();
+  
+      return res.status(200).json({ message: 'contraseña modificada!', usuario: resultado });
     
 
   } catch(err) {
@@ -118,15 +116,19 @@ exports.updateUsuario = async (req, res, next) => {
     const oat = req.body.oat;
 
     let update = {
-     
+    
       nombre: nombre,
       admin: admin,
       oi: oi,
-      oat: oat
+      oat: oat,
+      reset: true
     };
   
-    let resultado = await Usuario.findOneAndUpdate({email:email}, update, {upsert:true, new: true})
-  
+    let usuario = await Usuario.findOne({email:email});
+    if (!usuario) {
+        usuario = await Usuario.create({email:email})
+    }
+    let resultado = await usuario.save({udpate})
     return res.status(200).json({ message: 'usuario modificado!', usuario: resultado });
     
   }

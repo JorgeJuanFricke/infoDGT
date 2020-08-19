@@ -165,17 +165,18 @@ let formulario = d3.select("body").append("div")
         let documento = $('#documento')[0].files[0]; 
         let formData = new FormData();
         formData.append('documento',  documento);
+        var base_url = window.location.origin;
         $.ajax({
-            url: '/documento',
+            url: base_url + '/documento',
             data: formData,
             type: 'POST',
             contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
             processData: false, // NEEDED, DON'T OMIT THIS
-            // ... Other options like success and etc
+          
         })
         .then(result => {
             console.log(result);
-            url  = result.path.replace(/\\/g,"/");
+            url  = base_url + '/' + result.path.replace(/\\/g,"/");
             $('input[name=url').val(url);
           
 
@@ -249,7 +250,9 @@ const nuevaCategoria = () => {
 
 
 const getTipos = () => {
+
     var base_url = window.location.origin;
+
     let url = base_url + '/tipos';
     let method = 'GET';
     token = localStorage.getItem("token");

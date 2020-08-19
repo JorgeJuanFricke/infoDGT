@@ -17,21 +17,21 @@ const {
 
 exports.getListaTipos = async (req,res,next) => {
     // dar los tipos a los que puede añadir 
-    let permisos = [];
+    let permisosUsuario = [];
     try {
         let usuario = await Usuario.findOne({email: app.currentUser});
   
         if (usuario._doc.admin) {
-            permisos.push('ADMIN');
+            permisosUsuario.push('ADMIN');
         } 
         if (usuario._doc.oat) {
-            permisos.push('OAT');
+            permisosUsuario.push('OAT');
         }
         if (usuario._doc.oi) {
-            permisos.push('OI');
+            permisosUsuario.push('OI');
         } 
-       if(permisos.length > 0) {
-            let tipos = await Tipo.find({permisos: {$all: permisos }}, {codigo: 1  })
+       if(permisosUsuario.length > 0) {
+            let tipos = await Tipo.find({permisos: {$in: permisosUsuario }}, {codigo: 1  })
             .sort('codigo').lean();
             let listaTipos = tipos.map(function (tipo) {
                 return {id: tipo._id, text:tipo.codigo}
