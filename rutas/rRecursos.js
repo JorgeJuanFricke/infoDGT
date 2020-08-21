@@ -1,11 +1,30 @@
 const express = require('express');
 const Recurso = require('../modelos/mRecurso');
 
+const crypto = require("crypto");
+const mime = require("mime-types");
+
+
 const recursosRouter = express.Router();
 
 const cRecursos = require('../controladores/cRecursos');
 const Auto = require('../middleware/Autorizacion');
 const {body, validationResult} = require('express-validator');
+const multer= require('multer');
+
+var storage = multer.diskStorage({
+    destination: './uploads/',
+    filename: function (req, file, cb) {
+      crypto.pseudoRandomBytes(16, function (err, raw) {
+        if (err) return cb(err)
+  
+        cb(null, raw.toString('hex') + '.' + mime.extension(file.mimetype))
+      })
+    }
+  })
+  
+  var upload = multer({ storage: storage })
+  
 
 
 
@@ -27,9 +46,12 @@ VALIDAPOST = [
   
 ];
 
+recursosRouter.post('/documento', Auto.esAutenticado,  upload.single('documento'), 
+    function (req, res, next) {
+        return res.json(req.file);
+  });
 
 
-/*** RECURSO general **************************************/
 
 recursosRouter.get('/',  function (req, res, next) {
     cRecursos.getRecurso(req, res, next);

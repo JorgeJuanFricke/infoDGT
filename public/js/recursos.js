@@ -161,27 +161,12 @@ let formulario = d3.select("body").append("div")
 
     
     .on("change", function () {
+        
       
         let documento = $('#documento')[0].files[0]; 
-        let formData = new FormData();
-        formData.append('documento',  documento);
-        var base_url = window.location.origin;
-        $.ajax({
-            url: base_url + '/documento',
-            data: formData,
-            type: 'POST',
-            contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
-            processData: false, // NEEDED, DON'T OMIT THIS
-          
-        })
-        .then(result => {
-            console.log(result);
-            url  = base_url + '/' + result.path.replace(/\\/g,"/");
-            $('input[name=url').val(url);
-          
+        $('input[name=url').val("");
 
-        })
-        .catch(alert('error subiendo documento'))
+       
     });
 
     
@@ -200,7 +185,7 @@ let formulario = d3.select("body").append("div")
     .text("Aceptar");
 
     if (!isEmpty(recurso)) {
-  
+        // si modificado 
         Aceptar.on("click", function() {
         postRecurso(recurso._id)})
      }
@@ -376,6 +361,16 @@ const nuevoRecurso = (btn) => {
 
  //    "csrf-token": "csrf23454345"
 const putRecurso = () => {
+
+   
+    let documento = $('#documento')[0].files[0]; 
+    if (documento) {
+        let url = uploadDocumento(documento);
+    }
+    else {
+        let url = $('input:text[name=url]').val();
+    }
+
     const formData = new FormData();
     let pub =  moment.utc($('#publicacion').val(),'DD/MM/YYYY');
   
@@ -386,7 +381,7 @@ const putRecurso = () => {
     formData.append('tipo', tipo);
     formData.append('nombre', $('input:text[name=nombre]').val());
     formData.append('procedencia',$('input:text[name=procedencia]').val() );
-    formData.append('url', $('input:text[name=url]').val());
+    formData.append('url', url);
     formData.append('publicacion', pub.isValid()? pub: "");
     formData.append('derogacion', der.isValid()? der: "");
    
@@ -489,6 +484,17 @@ const editaRecurso = (recursoId) => {
 
 
 const postRecurso = (recursoId) => {
+
+    let documento = $('#documento')[0].files[0]; 
+    let urlDcmto = "";
+    
+    if (documento !== undefined) {
+  
+        urlDcmto = uploadDocumento(documento);
+    }
+    else {
+        urlDcmto = $('input:text[name=url]').val();
+    }
  
     let pub =  moment.utc($('#publicacion').val(),'DD/MM/YYYY');
     let der =  moment.utc($('#derogacion').val(), 'DD/MM/YYYY');
@@ -499,7 +505,7 @@ const postRecurso = (recursoId) => {
     formData.append('nombre', $('input:text[name=nombre]').val());
     formData.append('descripcion',$('#Descrip').val());
     formData.append('procedencia',$('input:text[name=procedencia]').val() );
-    formData.append('url', $('input:text[name=url]').val());
+    formData.append('url',urlDcmto );
     formData.append('publicacion', pub.isValid()? pub: "");
     formData.append('derogacion', der.isValid()? der: "");
     
@@ -553,6 +559,75 @@ const postRecurso = (recursoId) => {
 
 
 
+const uploadDocumento = (documento) => {
+
+    let formData = new FormData();
+    formData.append('documento',  documento);
+    
+    var base_url = window.location.origin;
+  
+    let method = 'POST';
+   
+    token = localStorage.getItem("token");
+
+    fetch(base_url +'/recurso/documento', {
+      method: method,
+      body: formData,
+     
+      headers: {
+        'Accept': 'application/json',
+        Authorization: 'Bearer ' + token,
+        
+      }
+    })
+
+   
+   
+    .then(response => {
+        response.json()
+        .then(json => {
+            
+            // documento subido
+            if (response.status === 200) {
+                 url  = base_url + '/' + json.path.replace(/\\/g,"/");
+                $('input[name=url').val(url);
+                return url;
+            }  
+            else {
+                let mensaje = json.message || "error subiendo documento";
+                alert(json.message);
+            }
+         })
+      
+       
+    })  
+   .catch(error =>  {
+       console.log(error)
+        alert (error);
+     })
+    
+ } ;
+
+/*
+    $.ajax({
+        url: base_url + '/documento',
+        data: formData,
+        type: 'POST',
+        contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
+        processData: false, // NEEDED, DON'T OMIT THIS
+        
+    })
+    .then(result => {
+        console.log(result);
+        url  = base_url + '/' + result.path.replace(/\\/g,"/");
+        $('input[name=url').val(url);
+        
+
+    })
+    .catch(alert('error subiendo documento'))
+    };
+*/
+
 
 
 const deleteRecurso = () => {
@@ -568,7 +643,7 @@ const deleteRecurso = () => {
     var base_url = window.location.origin;
     let url = base_url + '/recurso/'+ recursoId;
     let method = 'DELETE';
-   
+
     token = localStorage.getItem("token");
 
     fetch(url, {

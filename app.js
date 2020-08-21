@@ -7,7 +7,7 @@ const ini = require("./controladores/cIni");
 const env = require("dotenv").config();
 const morgan = require("morgan");
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' })
+
 
 const app = express();
 
@@ -51,11 +51,10 @@ app.use(
   })
 );
 
-app.post('/documento', upload.single('documento'), function (req, res, next) {
-  // req.file is the `avatar` file
-  
-  return res.json(req.file);
-})
+
+
+
+//const upload = multer({ dest: 'uploads/' })
 
 app.use(express.json());
 
