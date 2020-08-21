@@ -483,130 +483,129 @@ const editaRecurso = (recursoId) => {
 
 
 
-const postRecurso = (recursoId) => {
+
+ 
+ const postRecurso = async (recursoId) => {
+
 
     let documento = $('#documento')[0].files[0]; 
-    let urlDcmto = "";
-    
-    if (documento !== undefined) {
-  
-        urlDcmto = uploadDocumento(documento);
-    }
-    else {
-        urlDcmto = $('input:text[name=url]').val();
-    }
- 
-    let pub =  moment.utc($('#publicacion').val(),'DD/MM/YYYY');
-    let der =  moment.utc($('#derogacion').val(), 'DD/MM/YYYY');
-     
-    const formData = new FormData();
-    
-    //formData.append('tipo', tipo.codigo);
-    formData.append('nombre', $('input:text[name=nombre]').val());
-    formData.append('descripcion',$('#Descrip').val());
-    formData.append('procedencia',$('input:text[name=procedencia]').val() );
-    formData.append('url',urlDcmto );
-    formData.append('publicacion', pub.isValid()? pub: "");
-    formData.append('derogacion', der.isValid()? der: "");
-    
-    var object = {};
-    formData.forEach((value, key) => {object[key] = value});
-    var json = JSON.stringify(object);
-
-    var base_url = window.location.origin;
-    let url = base_url + '/recurso/' + recursoId;
-    let method = 'POST';
    
-    token = localStorage.getItem("token");
-
-    fetch(url, {
-      method: method,
-      body: json,
-      headers: {
-
-        Authorization: 'Bearer ' + token,
-        'Content-Type': 'application/json'
-      }
-    })
-
-   
-   
-    .then(response => {
-        response.json()
-        .then(json => {
-            
-            // recurso modificado
-            if (response.status === 201) {
-                alert(json.message);
-                $('#modalRecurso').modal('hide');
-                leeListaRecursos();
-            }  
-            else {
-                alert(json.message);
-            }
-         })
+          
       
-       
-    })  
-   .catch(error =>  {
-       console.log(error)
-        alert (error);
-     })
-    
- } ;
- 
+    postDcmtoRecurso(documento).then(urlDcmnto => {
 
-
-
-
-const uploadDocumento = (documento) => {
-
-    let formData = new FormData();
-    formData.append('documento',  documento);
-    
-    var base_url = window.location.origin;
-  
-    let method = 'POST';
-   
-    token = localStorage.getItem("token");
-
-    fetch(base_url +'/recurso/documento', {
-      method: method,
-      body: formData,
-     
-      headers: {
-        'Accept': 'application/json',
-        Authorization: 'Bearer ' + token,
+        let pub =  moment.utc($('#publicacion').val(),'DD/MM/YYYY');
+        let der =  moment.utc($('#derogacion').val(), 'DD/MM/YYYY');
         
-      }
-    })
+        const formData = new FormData();
+        
+        //formData.append('tipo', tipo.codigo);
+        formData.append('nombre', $('input:text[name=nombre]').val());
+        formData.append('descripcion',$('#Descrip').val());
+        formData.append('procedencia',$('input:text[name=procedencia]').val() );
+        formData.append('url',urlDcmto );
+        formData.append('publicacion', pub.isValid()? pub: "");
+        formData.append('derogacion', der.isValid()? der: "");
+        
+        var object = {};
+        formData.forEach((value, key) => {object[key] = value});
+        var json = JSON.stringify(object);
 
-   
-   
-    .then(response => {
-        response.json()
-        .then(json => {
+        var base_url = window.location.origin;
+        let url = base_url + '/recurso/' + recursoId;
+        let method = 'POST';
+    
+        token = localStorage.getItem("token");
+
+        fetch(url, {
+        method: method,
+        body: json,
+        headers: {
+
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        }
+        })
+
+        .then(response => {
+            response.json()
+            .then(json => {
+                
+                // recurso modificado
+                if (response.status === 201) {
+                    alert(json.message);
+                    $('#modalRecurso').modal('hide');
+                    leeListaRecursos();
+                }  
+                else {
+                    alert(json.message);
+                }
+            })
+        })  
+        .catch(error =>  {
+            console.log(error)
+                alert (error);
+        })
+    })
+ };
+ 
+
+
+
+
+
+  function postDcmtoRecurso(url) {
+
+    var promise = new Promise(function (resolve,reject) {
+
+        if (!url){
+            reject("");
+        }
+        let formData = new FormData();
+        formData.append('documento',  documento);
+        var base_url = window.location.origin;
+        let method = 'POST';
+        token = localStorage.getItem("token");
+    
+        fetch(base_url +'/recurso/documento', {
+          method: method,
+          body: formData,
+         
+          headers: {
+            //no poner nada,
+            //Authorization: 'Bearer ' + token,
             
-            // documento subido
-            if (response.status === 200) {
-                 url  = base_url + '/' + json.path.replace(/\\/g,"/");
-                $('input[name=url').val(url);
-                return url;
-            }  
-            else {
-                let mensaje = json.message || "error subiendo documento";
-                alert(json.message);
-            }
+          }
+        })
+        .then(response => {
+            response.json()
+            .then(json => {
+                
+                // documento subido
+                if (response.status === 200) {
+                     url  = base_url + '/' + json.url.replace(/\\/g,"/");
+                     resolve(url);
+                }  
+                else {
+                    alert(json.message);
+                    reject("error subiendo documento");
+                }
+             })
+          
+        }).catch(error =>  {
+           console.log(error)
+           reject("error subiendo documento")
          })
       
-       
-    })  
-   .catch(error =>  {
-       console.log(error)
-        alert (error);
-     })
-    
- } ;
+    });
+    return promise;
+  
+};
+
+
+
+
+
 
 /*
     $.ajax({
