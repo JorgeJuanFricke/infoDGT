@@ -1,11 +1,5 @@
    [
-      {
-         "codigo": " ",
-         "sigla": "",
-         "permisos": ["ADMIN","OAT", "OI", "EX", "SAN"]
-      },
-   
-
+     
     
      {
         "codigo": "oficio",
@@ -65,8 +59,8 @@
          "permisos": ["ADMIN", "OI"]
       },
       {
-         "codigo": "declaración",
-         "sigla": "DEC",
+         "codigo": "modelo",
+         "sigla": "MOD",
          "permisos": ["ADMIN", "OI"]
       },
      {
@@ -84,11 +78,7 @@
       "sigla": "APW",
       "permisos": ["ADMIN","OAT","OI"]
       },
-      {
-         "codigo": "alegación",
-         "sigla": "ALE",
-         "permisos": ["ADMIN","OI"]
-      },
+     
       {
          "codigo": "hoja calculo",
          "sigla": "CAL",

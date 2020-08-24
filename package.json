@@ -7,6 +7,9 @@
     "start": "node ./bin/www",
     "hbs": "handlebars ./vistas/vRecurso.handlebars -f ./public/js/hbs/vRecurso.tmpl.js -k know ",
     "debug": "set DEBUG=express:router & node ./bin/wwww.js",
+    "http": "set PROXY http://42795331:jjfF556Ud@http://proxynet.trafico.es:9001/proxy.pac",
+    "https": "set HTTPS-PROXY http://42795331:jjfF556U@https://proxynet.trafico.es:9001/proxy.pac",
+    "ssl": "set config strict-ssl false -g",
     "node-debug": "node-debug ./bin/www"
   },
   "dependencies": {
@@ -30,6 +33,7 @@
     "mime-types": "^2.1.27",
     "moment": "^2.27.0",
     "mongoose": "^5.9.6",
+    "mongoose-fuzzy-searching": "^1.3.1",
     "morgan": "~1.9.0",
     "multer": "^1.4.2",
     "node-fetch": "^2.6.0",

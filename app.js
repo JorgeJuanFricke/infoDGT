@@ -20,15 +20,14 @@ const fs = require("fs");
 const dataDir = __dirname + "/public/uploads";
 fs.existsSync(dataDir) || fs.mkdirSync(dataDir);
 
-const dataDir2 = __dirname + "/uploads";
-fs.existsSync(dataDir2) || fs.mkdirSync(dataDir2);
 
 
 
 /********** static ******************/
+//app.use(express.static(path.join(__dirname, "/public/uploads")));
 app.use(express.static(path.join(__dirname, "/public")));
-app.use(express.static(path.join(__dirname, "/public/uploads")));
 
+app.use('/uploads', express.static(path.join(__dirname, "/public")));
 
 
 

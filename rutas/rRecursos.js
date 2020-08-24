@@ -13,7 +13,7 @@ const {body, validationResult} = require('express-validator');
 const multer= require('multer');
 
 var storage = multer.diskStorage({
-    destination: './uploads/',
+    destination: './public/uploads/',
     filename: function (req, file, cb) {
       crypto.pseudoRandomBytes(16, function (err, raw) {
         if (err) return cb(err)

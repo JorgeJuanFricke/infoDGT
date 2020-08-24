@@ -357,20 +357,28 @@ const nuevoRecurso = (btn) => {
 };
 
 
+const putRecurso = async () => {
+    
+    let documento = $('#documento')[0].files[0]; 
+     if (documento)  {
+         postDcmtoRecurso(documento).then(urlDocumento => {
+           putDatosRecurso(urlDocumento);
+         });
+    }     
+    else {
+        urlDocumento = $('input:text[name=url]').val();
+        putDatosRecurso(urlDocumento);
+    }    
+};
+
+
+
 
 
  //    "csrf-token": "csrf23454345"
-const putRecurso = () => {
+const putDatosRecurso = (urlDocumento) => {
 
-   
-    let documento = $('#documento')[0].files[0]; 
-    if (documento) {
-        let url = uploadDocumento(documento);
-    }
-    else {
-        let url = $('input:text[name=url]').val();
-    }
-
+  
     const formData = new FormData();
     let pub =  moment.utc($('#publicacion').val(),'DD/MM/YYYY');
   
@@ -381,7 +389,7 @@ const putRecurso = () => {
     formData.append('tipo', tipo);
     formData.append('nombre', $('input:text[name=nombre]').val());
     formData.append('procedencia',$('input:text[name=procedencia]').val() );
-    formData.append('url', url);
+    formData.append('url', urlDocumento);
     formData.append('publicacion', pub.isValid()? pub: "");
     formData.append('derogacion', der.isValid()? der: "");
    
@@ -479,20 +487,27 @@ const editaRecurso = (recursoId) => {
 };   
      
 
-
+const postRecurso = async (recursoId) => {
+    
+    let documento = $('#documento')[0].files[0]; 
+   
+          
+    if (documento)  {
+         postDcmtoRecurso(documento).then(urlDocumento => {
+           postDatosRecurso(recursoId, urlDocumento)
+         })
+    }     
+    else {
+        urlDocumento = $('input:text[name=url]').val();
+        postDatosRecurso(recursoId, urlDocumento)
+    }    
+};
 
 
 
 
  
- const postRecurso = async (recursoId) => {
-
-
-    let documento = $('#documento')[0].files[0]; 
-   
-          
-      
-    postDcmtoRecurso(documento).then(urlDcmnto => {
+ const postDatosRecurso = async (recursoId, urlDocumento) => {
 
         let pub =  moment.utc($('#publicacion').val(),'DD/MM/YYYY');
         let der =  moment.utc($('#derogacion').val(), 'DD/MM/YYYY');
@@ -503,7 +518,7 @@ const editaRecurso = (recursoId) => {
         formData.append('nombre', $('input:text[name=nombre]').val());
         formData.append('descripcion',$('#Descrip').val());
         formData.append('procedencia',$('input:text[name=procedencia]').val() );
-        formData.append('url',urlDcmto );
+        formData.append('url',urlDocumento );
         formData.append('publicacion', pub.isValid()? pub: "");
         formData.append('derogacion', der.isValid()? der: "");
         
@@ -546,7 +561,7 @@ const editaRecurso = (recursoId) => {
             console.log(error)
                 alert (error);
         })
-    })
+    
  };
  
 
@@ -554,12 +569,12 @@ const editaRecurso = (recursoId) => {
 
 
 
-  function postDcmtoRecurso(url) {
+  function postDcmtoRecurso(documento) {
 
     var promise = new Promise(function (resolve,reject) {
 
-        if (!url){
-            reject("");
+        if (!documento){
+            reject("no existe documento a subir");
         }
         let formData = new FormData();
         formData.append('documento',  documento);
@@ -573,7 +588,7 @@ const editaRecurso = (recursoId) => {
          
           headers: {
             //no poner nada,
-            //Authorization: 'Bearer ' + token,
+            Authorization: 'Bearer ' + token,
             
           }
         })
@@ -583,7 +598,7 @@ const editaRecurso = (recursoId) => {
                 
                 // documento subido
                 if (response.status === 200) {
-                     url  = base_url + '/' + json.url.replace(/\\/g,"/");
+                     url  = '/uploads/' + json.filename;
                      resolve(url);
                 }  
                 else {
