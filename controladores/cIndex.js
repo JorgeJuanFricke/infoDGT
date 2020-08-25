@@ -14,7 +14,6 @@ const {
 
 
 
-
 exports.getListaTipos = async (req,res,next) => {
     // dar los tipos a los que puede añadir 
     let permisosUsuario = [];
@@ -63,7 +62,7 @@ exports.getRecursos = async (req, res, next) => {
     const texto = req.query.texto;
         
        try {
-
+        /*
         let totalRecursos =  await Recurso.find({ 
             $text : { 
                 $search : texto
@@ -82,8 +81,15 @@ exports.getRecursos = async (req, res, next) => {
         .skip((pagina - 1) * recursosPagina)
         .limit(recursosPagina)
         .exec();
+        */
 
-        
+        let recursos = await Recurso.fuzzySearch(texto)
+        .populate('tipo')
+        .skip((pagina - 1) * recursosPagina)
+        .limit(recursosPagina)
+        .exec();
+
+        let totalRecursos = recursos.length;
 
        res.status(200).json({
          message: 'página de recursos cargados correctamente!!.',
