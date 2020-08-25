@@ -1,4 +1,24 @@
 
+const renderUsuario = (usuario) => {
+    if (usuario) {
+      $('#nologeado').addClass('d-none');
+      $('#logeado').removeClass('d-none');
+      if (usuario.admin) {
+        $('#adminMenu').removeClass('d-none');
+      }
+      else {
+        $('#adminMenu').addClass('d-none');
+       }
+    }  
+    else {  
+        $('#logeado').addClass('d-none');
+        $('#nologeado').removeClass('d-none');
+
+    }    
+
+    
+};
+
 
 const leeListaRecursos = (pagina) => {
     //let tipo = $('#tipos').children("option:selected").text();
@@ -9,17 +29,20 @@ const leeListaRecursos = (pagina) => {
     }
     var base_url = window.location.origin;
 
+   
+
     fetch(base_url + '/recursos' + query , {
             method: 'GET',
             headers: {
-                //'csrf-token': "csrf23454345"
+                //Authorization: 'Bearer ' + token,
+              
             }
         })
         .then(res => {
             return res.json();
         })
         .then(resultado => {
-           
+         
             muestraListaRecursos(resultado.recursos);
             muestraPaginacion(resultado.pagina, resultado.recursosPagina, resultado.totalRecursos)
                         

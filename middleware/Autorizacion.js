@@ -25,12 +25,47 @@ exports.esAutenticado = (req, res, next) => {
       throw error;
     }
     app.currentUser = decodedToken.email;
+    req.email = decodedToken.email;
  
     next();
     
   }
   catch (error) {
     next (error);
+  }
+};
+
+
+
+
+exports.leeUsuario = async (req,res, next) => {
+  try {
+    const authHeader = req.get('Authorization');
+    if (!authHeader) {
+      const error = new Error('No autenticado.');
+      error.statusCode = 401;
+      throw error;
+    }
+    const token = authHeader.split(' ')[1];
+    let decodedToken;
+
+    decodedToken = jwt.verify(token, 'primersabadocuarentena');
+
+    if (!decodedToken) {
+      const error = new Error('No autenticado.');
+      error.statusCode = 401;
+      throw error;
+    }
+    app.currentUser = decodedToken.email;
+    usuario = await Usuario.findOne({email: app.currentUser});
+
+    req.usuario = usuario;
+    next();
+    
+  }
+  catch (error) {
+    res.usuario = null;
+    next();
   }
 };
 

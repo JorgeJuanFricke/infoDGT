@@ -146,16 +146,9 @@ const login = () => {
         .then(json => {
             if (response.status === 200) {
                 localStorage.setItem("token", json.token);
+                renderUsuario(json.usuario);
                 // recargar
-                $('#nologeado').addClass('d-none');
-                $('#logeado').removeClass('d-none');
-                $('#emailLogeado').html(json.usuario.email);
-                if (json.usuario.admin) {
-                    $('#adminMenu').removeClass('d-none');
-                }
-                else {
-                    $('#adminMenu').addClass('d-none');
-                }
+               
                
      
             }  
@@ -171,6 +164,11 @@ const login = () => {
     
 
 };
+
+
+
+
+
 
 
 
@@ -249,3 +247,55 @@ const resetPassword = (email, password, password2) => {
      })
     
    } ;
+
+
+   
+
+  const esLogeado = ()  => {
+
+    var promise = new Promise(function (resolve,reject) {
+
+       
+        var base_url = window.location.origin;
+        let method = 'GET';
+
+        token = localStorage.getItem("token");
+    
+        fetch(base_url +'/logeado', {
+          method: method,
+          body: formData,
+         
+          headers: {
+            
+            Authorization: 'Bearer ' + token,
+            
+          }
+        })
+        .then(response => {
+            response.json()
+            .then(usuario=> {
+                
+              
+                if (response.status === 200) {
+                     renderUsuario(usuario)
+                     resolve();
+                }  
+                else {
+                  
+                    reject();
+                }
+             })
+          
+        }).catch(error =>  {
+           console.log(error)
+           reject();
+         })
+      
+    });
+    return promise;
+  
+};
+
+
+
+

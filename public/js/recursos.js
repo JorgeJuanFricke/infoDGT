@@ -256,6 +256,7 @@ const getTipos = () => {
             
             // tipos 
             if (response.status === 200) {
+             
                 return json;
                
             }  
@@ -315,15 +316,13 @@ const getTipos = () => {
 
 
 const nuevoRecurso = (btn) => {
+
     let recurso = {};
-    let logeado = $('#emailLogeado').text().trim();
-    if (!logeado)  {
-        alert("Debe estar autenticado para añadir recursos");
-        return;
-    }
+   
     var base_url = window.location.origin;
     let url = base_url + '/tipos';
     let method = 'GET';
+
     token = localStorage.getItem("token");
 
     fetch(url, {
@@ -337,13 +336,14 @@ const nuevoRecurso = (btn) => {
         response.json()
         .then(json => {
             if (response.status === 200) {
-                creaFormRecurso(recurso, json);
+                 creaFormRecurso(recurso, json.tipos);
                 $('#modalRecurso').modal({
                     show: true
                 });
      
             }  
             else {
+
                 alert(json.message);
                 return 
             }
@@ -358,18 +358,24 @@ const nuevoRecurso = (btn) => {
 
 
 const putRecurso = async () => {
-    
+     
     let documento = $('#documento')[0].files[0]; 
-     if (documento)  {
-         postDcmtoRecurso(documento).then(urlDocumento => {
-           putDatosRecurso(urlDocumento);
-         });
-    }     
+
+    if (documento)  {
+        esLogeado()
+        .then({postDcmtoRecurso(documento)})
+        .then((urlDocumento => {
+                putDatosRecurso(urlDocumento);
+        }));
+    }
     else {
         urlDocumento = $('input:text[name=url]').val();
-        putDatosRecurso(urlDocumento);
+        esLogeado().then(urlDocumento => {
+            putDatosRecurso(urlDocumento)
+        });
     }    
-};
+    
+
 
 
 
@@ -449,6 +455,8 @@ const putDatosRecurso = (urlDocumento) => {
 
 
 const editaRecurso = (recursoId) => {
+
+    
     
     var base_url = window.location.origin;
     let url = base_url + '/recurso/' + recursoId;
@@ -467,6 +475,7 @@ const editaRecurso = (recursoId) => {
         response.json()
         .then(json => {
             if (response.status === 200) {
+              
                 creaFormRecurso(json.recurso);
                 $('#modalRecurso').modal({
                     show: true
@@ -490,17 +499,21 @@ const editaRecurso = (recursoId) => {
 const postRecurso = async (recursoId) => {
     
     let documento = $('#documento')[0].files[0]; 
-   
-          
+
     if (documento)  {
-         postDcmtoRecurso(documento).then(urlDocumento => {
-           postDatosRecurso(recursoId, urlDocumento)
-         })
-    }     
+        esLogeado()
+        .then({postDcmtoRecurso(documento)})
+        .then((urlDocumento => {
+                postDatosRecurso(recursoId, urlDocumento);
+        }));
+    }
     else {
         urlDocumento = $('input:text[name=url]').val();
-        postDatosRecurso(recursoId, urlDocumento)
+        esLogeado().then(urlDocumento => {
+            postDatosRecurso(recursoId, urlDocumento)
+        });
     }    
+
 };
 
 

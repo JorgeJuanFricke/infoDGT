@@ -4,7 +4,7 @@ const Recurso = require('../modelos/mRecurso.js');
 const app = require("../app");
 const Usuario = require('../modelos/mUsuario');
 const config = require('../configuracion.js');
-
+const Auto = require('../middleware/Autorizacion');
 
 const {
     validationResult
@@ -82,6 +82,7 @@ exports.getRecursos = async (req, res, next) => {
         .limit(recursosPagina)
         .exec();
         */
+        let usuario = req.Usuario;
 
         let recursos = await Recurso.fuzzySearch(texto)
         .populate('tipo')
@@ -93,6 +94,7 @@ exports.getRecursos = async (req, res, next) => {
 
        res.status(200).json({
          message: 'página de recursos cargados correctamente!!.',
+         usuario: usuario,
          recursos: recursos,
          pagina: pagina,
          totalRecursos: totalRecursos,

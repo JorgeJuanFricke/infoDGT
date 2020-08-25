@@ -11,6 +11,9 @@ indexRouter.get('/categorias', (req, res, next) => Index.getCategorias(req, res,
 indexRouter.get('/recursos', (req, res, next) => Index.getRecursos(req, res, next));
 
 
+indexRouter.get('/logeado', Auto.esAutenticado, (req, res, next) => {
+    cUsuarios.getUsuario(req, res, next);
+});
 
 
 indexRouter.get('/', (req, res, next) => Index.renderPagina(req, res, next));
