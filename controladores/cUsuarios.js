@@ -22,23 +22,6 @@ const transporter = nodemailer.createTransport(
 */
 
 
-exports.getUsuario = async(req, res, next) => {
-  try {
-    let usuario = await Usuario.findOne(req.email);
-    if (!usuario) {
-      const error = new Error("Usuario no encontrado.");
-      error.statusCode = 404;
-      throw error;
-    }
-    return res.status(200).json({ message: 'usuario encontrado.', usuario: usuario });
-    
-  } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-};
 
 
 

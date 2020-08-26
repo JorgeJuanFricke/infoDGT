@@ -5,6 +5,10 @@ const Usuario = require('../modelos/mUsuario.js');
 const async = require("async");
 const { debugPort } = require('process');
 
+
+
+
+
 exports.updateTipos =  () => {
     let tipos = JSON.parse(fs.readFileSync('./tipos.json'));
     async.each(tipos, function(tipo, next){

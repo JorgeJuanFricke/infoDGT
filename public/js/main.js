@@ -73,14 +73,16 @@ muestraListaRecursos = (data) => {
     li.exit().remove();
 
     var newli = li.enter().append('li')
-    .attr("class","list-group-item d-flex justify-content-between align-items-center");
+    .attr("class","list-group-item d-flex ");
 
     newli.append('span')
+    .attr("style" ,"margin-left: 20px")
     .text(function(d){ return d.tipo.codigo });
 
    
      newli.append("span")
-   
+     .attr("style" ,"margin-left: 20px")
+     
      .append("a")
      .attr("href", "#")
      .on("click", function (d) {
@@ -96,7 +98,8 @@ muestraListaRecursos = (data) => {
 
 
     newli.append("span")
-   
+    .attr("style" ,"margin-left: 20px")
+    
     .text(function (d) {
         return moment(d.publicacion).format("MM-YYYY");
     });
@@ -120,6 +123,8 @@ muestraListaRecursos = (data) => {
 
 
     newli.append("span")
+    .attr("style" ,"margin-left: 20px")
+   
     //.attr("class", "badge badge-primary badge-pill")
     .on("click", function (d) {
        
@@ -127,8 +132,8 @@ muestraListaRecursos = (data) => {
         
     })
     .append("svg")
-    .attr("width", "2em")
-    .attr("height", "2em")
+    .attr("width", "1em")
+    .attr("height", "1em")
     .attr("viewBox", "0 0 16 16")
     .attr("class", "bi bi-pencil")
     .attr("fill", "currentColor")
@@ -145,6 +150,7 @@ muestraListaRecursos = (data) => {
 
 
     newli.append("span")
+    .attr("style" ,"margin-left: 20px")
     .append("button")
     .attr("type", "button")
     .attr("data-toggle", "modal")
@@ -157,8 +163,8 @@ muestraListaRecursos = (data) => {
    
    
     .append("svg")
-    .attr("width", "2em")
-    .attr("height", "2em")
+    .attr("width", "1em")
+    .attr("height", "1em")
     .attr("viewBox", "0 0 16 16")
     .attr("class", "bi bi-trash")
     .attr("fill", "currentColor")
@@ -283,6 +289,7 @@ const muestraRecurso = (recurso) => {
 
       titulo.append("span")  
       .text(recurso.nombre)
+      .attr("class", "float-right");
       
       if(recurso.derogacion) {
         titulo.append("span")
@@ -297,7 +304,8 @@ const muestraRecurso = (recurso) => {
       .text(recurso.procedencia);
 
       subtitulo.append("span")
-      .text( moment(recurso.publicacion).format("MM-YYYY"));
+      .text( moment(recurso.publicacion).format("MM-YYYY"))
+      .attr("class", "float-right");
     
 
 
@@ -373,6 +381,51 @@ logout = () => {
     $('#modalLogout').modal('show');
 }
 
+
+
+
+const updateUsuario = () => {
+
+   
+    var base_url = window.location.origin;
+    let url = base_url + '/autenticado';
+    let method = 'GET';
+
+    token = localStorage.getItem("token");
+
+    fetch(url, {
+      method: method,
+      headers: {
+
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json'
+      }
+    })
+     
+    .then(response => {
+        response.json()
+        .then(json => {
+            
+          
+            if (response.status === 200) {
+              
+                renderUsuario(json.usuario);
+               
+            }  
+            else {
+                alert(json.message);
+            }
+         })
+      
+       
+    })  
+   .catch(error =>  {
+       console.log(error)
+        alert (error);
+     })
+    
+};
+ 
 
 
 

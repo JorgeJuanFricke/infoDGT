@@ -12,6 +12,24 @@ const {
 
 
 
+exports.getUsuarioActual  = async(req, res, next) => {
+    try {
+      let usuario = await Usuario.findOne({email:req.email});
+      if (!usuario) {
+        const error = new Error("Usuario no encontrado.");
+        error.statusCode = 404;
+        throw error;
+      }
+      return res.status(200).json({ message: 'usuario encontrado.', usuario: usuario });
+      
+    } catch (error) {
+      
+      next(error);
+    }
+  };
+
+
+
 
 
 exports.getListaTipos = async (req,res,next) => {
@@ -84,7 +102,7 @@ exports.getRecursos = async (req, res, next) => {
         */
         let usuario = req.Usuario;
 
-        let recursos = await Recurso.fuzzySearch(texto)
+        let recursos = await Recurso.fuzzySearch({query:texto, prefixOnly: true, minSize: 4 })
         .populate('tipo')
         .skip((pagina - 1) * recursosPagina)
         .limit(recursosPagina)

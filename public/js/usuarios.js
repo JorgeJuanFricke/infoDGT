@@ -249,7 +249,10 @@ const resetPassword = (email, password, password2) => {
    } ;
 
 
+
    
+
+/******     E S   L O G E A D O      ****************************** */
 
   const esLogeado = ()  => {
 
@@ -263,8 +266,7 @@ const resetPassword = (email, password, password2) => {
     
         fetch(base_url +'/logeado', {
           method: method,
-          body: formData,
-         
+        
           headers: {
             
             Authorization: 'Bearer ' + token,

@@ -147,12 +147,13 @@ let formulario = d3.select("body").append("div")
  
             
     let linea5 = formulario.append("div")
-    .attr("class","form-group row");
+    .attr("class","form-group");
 
     archivo = linea5.append("div")
     .attr("class","col")
     .append("span")
-    .attr("class","btn btn-default btn-file")
+    .attr("class","btn btn-default btn-file btn-block")
+
     .append("input")
     .attr("id", "documento")
     .attr("type","file")
@@ -256,9 +257,7 @@ const getTipos = () => {
             
             // tipos 
             if (response.status === 200) {
-             
-                return json;
-               
+                 return json;
             }  
             else {
                 alert(json.message);
@@ -272,7 +271,7 @@ const getTipos = () => {
        alert (error);
      })
     
- } ;
+ };
 
 
 
@@ -317,44 +316,48 @@ const getTipos = () => {
 
 const nuevoRecurso = (btn) => {
 
-    let recurso = {};
-   
-    var base_url = window.location.origin;
-    let url = base_url + '/tipos';
-    let method = 'GET';
 
-    token = localStorage.getItem("token");
+        let recurso = {};
+    
+        var base_url = window.location.origin;
+        let url = base_url + '/tipos';
+        let method = 'GET';
 
-    fetch(url, {
-        method: method,
-        headers: {
-        Authorization: 'Bearer ' + token
-        }
-    })
+        token = localStorage.getItem("token");
 
-    .then(response => {
-        response.json()
-        .then(json => {
-            if (response.status === 200) {
-                 creaFormRecurso(recurso, json.tipos);
-                $('#modalRecurso').modal({
-                    show: true
-                });
-     
-            }  
-            else {
-
-                alert(json.message);
-                return 
+        fetch(url, {
+            method: method,
+            headers: {
+            Authorization: 'Bearer ' + token
             }
         })
-    }) 
-    .catch (error => { 
-        alert(error)
-    })        
-    
 
+        .then(response => {
+            response.json()
+            .then(json => {
+                if (response.status === 200) {
+                    creaFormRecurso(recurso, json);
+                    $('#modalRecurso').modal({
+                        show: true
+                    });
+        
+                }  
+                else {
+
+                    alert(json.message);
+                    return 
+                }
+            })
+        }) 
+        .catch (error => { 
+            alert(error)
+        })        
+        
+  
 };
+
+
+
 
 
 const putRecurso = async () => {
@@ -362,19 +365,18 @@ const putRecurso = async () => {
     let documento = $('#documento')[0].files[0]; 
 
     if (documento)  {
-        esLogeado()
-        .then({postDcmtoRecurso(documento)})
+        
+        postDcmtoRecurso(documento)
         .then((urlDocumento => {
                 putDatosRecurso(urlDocumento);
         }));
     }
     else {
         urlDocumento = $('input:text[name=url]').val();
-        esLogeado().then(urlDocumento => {
-            putDatosRecurso(urlDocumento)
-        });
+        putDatosRecurso(urlDocumento);
+        
     }    
-    
+};   
 
 
 
@@ -424,8 +426,6 @@ const putDatosRecurso = (urlDocumento) => {
        
       }
     })
-   
-    
     .then(response => {
         response.json()
         .then(json => {
@@ -450,6 +450,10 @@ const putDatosRecurso = (urlDocumento) => {
     
  } ;
  
+
+
+
+
 
 
 
@@ -496,22 +500,24 @@ const editaRecurso = (recursoId) => {
 };   
      
 
+
+
+
+
 const postRecurso = async (recursoId) => {
     
     let documento = $('#documento')[0].files[0]; 
 
     if (documento)  {
-        esLogeado()
-        .then({postDcmtoRecurso(documento)})
+        postDcmtoRecurso(documento)
         .then((urlDocumento => {
-                postDatosRecurso(recursoId, urlDocumento);
+            postDatosRecurso(recursoId, urlDocumento);
         }));
     }
     else {
         urlDocumento = $('input:text[name=url]').val();
-        esLogeado().then(urlDocumento => {
-            postDatosRecurso(recursoId, urlDocumento)
-        });
+            postDatosRecurso(recursoId, urlDocumento);
+        
     }    
 
 };
@@ -634,29 +640,6 @@ const postRecurso = async (recursoId) => {
 
 
 
-
-/*
-    $.ajax({
-        url: base_url + '/documento',
-        data: formData,
-        type: 'POST',
-        contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
-        processData: false, // NEEDED, DON'T OMIT THIS
-        
-    })
-    .then(result => {
-        console.log(result);
-        url  = base_url + '/' + result.path.replace(/\\/g,"/");
-        $('input[name=url').val(url);
-        
-
-    })
-    .catch(alert('error subiendo documento'))
-    };
-*/
-
-
-
 const deleteRecurso = () => {
     // para input
     // delete solo admin
@@ -667,6 +650,7 @@ const deleteRecurso = () => {
 
     //const productElement = btn.closest('article');
     let recursoId = d3.select("#removeUser").datum()._id;
+    $('#removeUser').modal('hide');
     var base_url = window.location.origin;
     let url = base_url + '/recurso/'+ recursoId;
     let method = 'DELETE';
@@ -689,7 +673,7 @@ const deleteRecurso = () => {
             // recurso borrado
             if (response.status === 200) {
                 alert(json.message);
-                $('#modalRecurso').modal('hide');
+              
                 leeListaRecursos();
             }  
             else {
@@ -704,9 +688,7 @@ const deleteRecurso = () => {
         alert (error);
      })
     
- } ;
+};
  
 
-   
-  
-  
+
