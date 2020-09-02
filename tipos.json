@@ -16,6 +16,12 @@
         "sigla": "INF",
         "permisos": ["ADMIN","OAT", "OI", "EX", "SAN"]
      },
+     
+     {
+      "codigo": "certificado",
+      "sigla": "CER",
+      "permisos": ["ADMIN", "OI"]
+   },
 
      {
         "codigo": "circular",
@@ -34,9 +40,9 @@
          "permisos": ["ADMIN", "OI"]
       },
       {
-         "codigo": "ley",
-         "sigla": "LEY",
-         "permisos": ["ADMIN", "OI"]
+         "codigo": "agente",
+         "sigla": "AGE",
+         "permisos": ["ADMIN", "OI", "OAT"]
       },
       {
          "codigo": "norma",
@@ -65,23 +71,34 @@
       },
      {
         "codigo": "tarea administrativa",
-        "sigla": "ADM",
+        "sigla": "TAADM",
         "permisos": ["ADMIN", "OI" ]
      },
      {
         "codigo": "tarea informática",
-        "sigla": "INF",
+        "sigla": "TAINF",
         "permisos": ["ADMIN","OAT"]
      },
      {
-      "codigo": "aplicación web",
+      "codigo": "aplicación",
       "sigla": "APW",
       "permisos": ["ADMIN","OAT","OI"]
       },
      
       {
-         "codigo": "hoja calculo",
-         "sigla": "CAL",
-         "permisos": ["ADMIN","OI","OAT"]
-         }
+      "codigo": "hoja calculo",
+      "sigla": "CAL",
+      "permisos": ["ADMIN","OI","OAT"]
+      },
+      {
+      "codigo": "plantilla",
+      "sigla": "PLA",
+      "permisos": ["ADMIN","OI","OAT"]
+      },
+      
+      {
+      "codigo": "información ciudadano",
+      "sigla": "INFOC",
+      "permisos": ["ADMIN","OI","OAT"]
+      }
 ]

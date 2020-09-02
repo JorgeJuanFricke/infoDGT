@@ -95,8 +95,15 @@ muestraListaRecursos = (data) => {
 
 
 
+    newli.append("span")
+    .attr("style" ,"margin-left: 20px")
+    
+    .text(function (d) {
+        return d.procedencia;
+    });
 
 
+    
     newli.append("span")
     .attr("style" ,"margin-left: 20px")
     
@@ -105,16 +112,32 @@ muestraListaRecursos = (data) => {
     });
 
 
+    newli.append("span")
+    .attr("style" ,"margin-left: 20px")
+    .append("a")
+    .append("img")
+    .attr("width", "32")
+    .attr("height", "32")
+    .attr("alt", function (d)  {
+        return  d.url.substring(d.url.lastIndexOf('.') + 1) 
+    })
+    .attr("src", function(d) {
+          return  "/iconos/svg/" + getExtension(d.url)  +".svg";
+    })
+    .on("click", function (d) {
+        //window.location.href = d.url
+        window.open(d.url,"documento" ); 
+                
+    })
+
+
     if (data.url) {
         newli.append("span")
         .attr("class", "badge badge-primary badge-pill")
         .append("a")
         .attr("href", "#")
 
-        .on("click", function (d) {
-            window.open(data.url); 
-                    
-        })
+        
         .text("IR");
     };
 
@@ -178,6 +201,24 @@ muestraListaRecursos = (data) => {
 };
 
 
+function getExtension(path) {
+    var basename = path.split(/[\\/]/).pop(),  // extract file name from full path ...
+                                               // (supports `\\` and `/` separators)
+        pos = basename.lastIndexOf(".");       // get last position of `.`
+
+    if (basename === "" || pos < 1)            // if file name is empty or ...
+        return "";                              //  `.` not found (-1) or comes first (0)
+    
+    if (basename.indexOf('php?id=BOE') !== -1 )      // maldito boe
+        return "html";     
+
+    return basename.slice(pos + 1);            // extract extension ignoring `.`
+};
+
+
+
+
+
 
 
 const muestraPaginacion= (pagina, recursosPagina, totalRecursos) => {
@@ -197,6 +238,10 @@ const muestraPaginacion= (pagina, recursosPagina, totalRecursos) => {
     let paginaSiguiente = paginaActual + 1;
     let paginaAnterior = paginaActual - 1;
     let ultimaPagina = Math.ceil(totalRecursos / recursosPagina);
+
+    paginacion.append("p")
+    .append("span")
+    .attr("text", "recursos:" + totalRecursos);
     
     if (paginaActual !== 1 && paginaAnterior !== 1) {
         paginacion.append("a")
@@ -413,7 +458,8 @@ const updateUsuario = () => {
                
             }  
             else {
-                alert(json.message);
+                // no mostramos nada
+                console.log(json.message);
             }
          })
       

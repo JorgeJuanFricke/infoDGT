@@ -106,10 +106,10 @@
                                         r<div id="resetPasswordUsuario" class="option-target">
                                             <div class="form-group">
                                                 <label for="reset">contraseña:</label>
-                                                <input type="text" name="resetPasswordUsuario1" class="form-control">
+                                                <input type="password" name="resetPasswordUsuario1" class="form-control">
                                         
                                                 <label for="password">repite contraseña</label>
-                                                <input type="text" name="resetPasswordUsuario2" class="form-control">
+                                                <input type="password" name="resetPasswordUsuario2" class="form-control">
                                             </div>
                                     
                                             <button  class="btn btn-primary" id="ResetPassword" type="button" onclick="resetUsuario()" class="btn btn-primary">grabar</button>
@@ -137,7 +137,7 @@
                                                 <input id="emailLogin" placeholder="Email" class="form-control form-control-sm" type="text" required="">
                                             </div>
                                             <div class="form-group">
-                                                <input id="passwordLogin" placeholder="Password" class="form-control form-control-sm" type="text" required="">
+                                                <input id="passwordLogin" placeholder="Password" class="form-control form-control-sm" type="password" required="">
                                             </div>
                                             <div class="form-group">
                                                 <button type="button" onclick="login()" class="btn btn-primary btn-block">Login</button>
@@ -236,7 +236,7 @@
     </section>
     
     
-    <nav id="paginacion" aria-label="Page navigation">
+    <nav id="paginacion" class="nav navbar-nav flex-row justify-content-between ml-auto" aria-label="Page navigation">
     
     </nav>
     

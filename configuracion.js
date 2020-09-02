@@ -1,6 +1,6 @@
 const oficina = 'OLTF';
 const nombreOficina = 'OLT Fuerteventura';
-const recursosPagina = 5;
+const recursosPagina = 10;
 const nuevo = 45;
 const desarrollo = 'mongodb://127.0.0.1:27017/deDGT';
 const produccion = 'mongodb://127.0.0.1:27017/deDGT';
