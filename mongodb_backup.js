@@ -14,15 +14,15 @@ var _ = require('lodash');
 var exec = require('child_process').exec;
 
 var dbOptions =  {
-    user: 'buscaDGT',
-    pass: 'Kiko147239',
+    user: 'appBuscaDGT',
+    pass: 'buscaDGT147239',
     host: 'localhost',
     port: 27017,
     database: 'deDGT',
     autoBackup: true, 
     removeOldBackup: true,
     keepLastDaysBackup: 2,
-    autoBackupPath: '/backup' // i.e. /var/database-backup/
+    autoBackupPath: 'c:/backup' // i.e. /var/database-backup/
 };
 
 
