@@ -234,7 +234,7 @@ const nuevaCategoria = () => {
 
 
 
-
+/*
 const getTipos = () => {
 
     var base_url = window.location.origin;
@@ -272,7 +272,7 @@ const getTipos = () => {
      })
     
  };
-
+*/
 
 
 
@@ -320,7 +320,7 @@ const nuevoRecurso = (btn) => {
         let recurso = {};
     
         var base_url = window.location.origin;
-        let url = base_url + '/tipos';
+        let url = base_url + '/tiposUsuario';
         let method = 'GET';
 
         token = localStorage.getItem("token");
@@ -392,9 +392,11 @@ const putDatosRecurso = (urlDocumento) => {
   
     let der =  moment.utc($('#derogacion').val(), 'DD/MM/YYYY');
   
-    let tip = $('#tiposRecurso').children("option:selected").val();
-    let tipo =  tip ? tip: "";
+    let tipo = $('#tiposRecurso').children("option:selected").val();
+    let tipoNombre =  $('#tiposRecurso').children("option:selected").text();
+   
     formData.append('tipo', tipo);
+    formData.append('tipoNombre', tipoNombre);
     formData.append('nombre', $('input:text[name=nombre]').val());
     formData.append('procedencia',$('input:text[name=procedencia]').val() );
     formData.append('url', urlDocumento);

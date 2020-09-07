@@ -69,6 +69,7 @@ exports.putRecurso = async (req, res, next) => {
     
   
     const tipo = req.body.tipo;
+    const tipoNombre = req.body.tipoNombre;
     const nombre = req.body.nombre;
     const descripcion = req.body.descripcion;
     const url = req.body.url;
@@ -78,6 +79,7 @@ exports.putRecurso = async (req, res, next) => {
 
     let recurso = new Recurso({
       tipo: tipo,
+      tipoNombre: tipoNombre,
       nombre: nombre,
       descripcion: descripcion,
       url: url,

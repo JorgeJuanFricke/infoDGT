@@ -20,10 +20,25 @@ const renderUsuario = (usuario) => {
 };
 
 
+
+ 
+
+
+
+
+
+
 const leeListaRecursos = (pagina) => {
     //let tipo = $('#tipos').children("option:selected").text();
+
     let texto =$('#buscaRecursos').val();
-    let query = `?texto=${texto}`;
+    let tipoId = $('#filtro').children("option:selected").val();
+
+    let query =  `?texto=${texto}`;
+    
+    if (tipoId) {
+        query = query + `&tipo=${tipoId}`
+    }
     if (pagina) {
         query = query +  `&pagina=${pagina}`;
     }
@@ -78,6 +93,7 @@ muestraListaRecursos = (data) => {
     newli.append('span')
     .attr("style" ,"margin-left: 20px")
     .text(function(d){ return d.tipo.codigo });
+    
 
    
      newli.append("span")
@@ -241,7 +257,7 @@ const muestraPaginacion= (pagina, recursosPagina, totalRecursos) => {
 
     paginacion.append("p")
     .append("span")
-    .attr("text", "recursos:" + totalRecursos);
+    .text(`recursos:  ${totalRecursos}`);
     
     if (paginaActual !== 1 && paginaAnterior !== 1) {
         paginacion.append("a")

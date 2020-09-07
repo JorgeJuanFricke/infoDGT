@@ -10,8 +10,13 @@ let RecursoSchema = mongoose.Schema({
     },
 
     tipo: { type: mongoose.Schema.Types.ObjectId, ref: 'Tipo', required: true, index:true },
+
+    tipoNombre: {
+        type: String,
+        required: true
+    },
+
     
-   
     
     nombre: {
         type: String,
@@ -54,7 +59,7 @@ let RecursoSchema = mongoose.Schema({
 
     
 });
-RecursoSchema.plugin(mongoose_fuzzy_searching, { fields: ['nombre'] });
+RecursoSchema.plugin(mongoose_fuzzy_searching, { fields: ['nombre', 'tipoNombre'] });
  
 RecursoSchema.index({ nombre: 'text', descripcion: 'text' },
 

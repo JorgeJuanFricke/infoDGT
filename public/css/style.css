@@ -39,3 +39,6 @@ button:focus {
   padding-top: 4em;
   
 }
+select #filtro {
+  width:120px;
+}

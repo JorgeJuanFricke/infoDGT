@@ -6,9 +6,13 @@ const Usuario = require('../modelos/mUsuario');
 const config = require('../configuracion.js');
 const Auto = require('../middleware/Autorizacion');
 
+global.CronJob = require('../cron.js');
+const backup = require('../mongodb_backup');
+
 const {
     validationResult
 } = require('express-validator/check');
+const configuracion = require('../configuracion.js');
 
 
 
@@ -30,9 +34,11 @@ exports.getUsuarioActual  = async(req, res, next) => {
 
 
 
+  
 
 
-exports.getListaTipos = async (req,res,next) => {
+
+exports.getListaTiposUsuario = async (req,res,next) => {
     // dar los tipos a los que puede añadir 
     let permisosUsuario = [];
     try {
@@ -68,7 +74,29 @@ exports.getListaTipos = async (req,res,next) => {
         next(error);
     }   
 
-}
+};
+
+
+
+
+exports.getListaTipos = async (req,res,next) => {
+  // dar los tipos a los que puede añadir 
+  try {
+          let tipos = await Tipo.find({}, {codigo: 1  })
+          .sort('codigo').lean();
+          let listaTipos = tipos.map(function (tipo) {
+              return {id: tipo._id, text:tipo.codigo}
+          });
+          return res.json({results: listaTipos});
+    
+     
+  }
+  catch (error) {
+     
+      next(error);
+  }   
+
+};
 
 
 
@@ -78,35 +106,49 @@ exports.getRecursos = async (req, res, next) => {
     const pagina = req.query.pagina || 1;
     const recursosPagina = config.recursosPagina;
     const texto = req.query.texto;
+    const tipo  = req.query.tipo;
         
        try {
-        /*
-        let totalRecursos =  await Recurso.find({ 
-            $text : { 
-                $search : texto
-            } 
-        }).countDocuments();
+          /*
+          let totalRecursos =  await Recurso.find({ 
+              $text : { 
+                  $search : texto
+              } 
+          }).countDocuments();
 
 
-        let recursos = await Recurso.find({ 
-            $text : { 
-                $search : texto
-            } 
-        },
-        { score:{$meta:'textScore'} })
-        .sort({ score : { $meta : 'textScore' } })
-        .populate('tipo')
-        .skip((pagina - 1) * recursosPagina)
-        .limit(recursosPagina)
-        .exec();
-        */
+          let recursos = await Recurso.find({ 
+              $text : { 
+                  $search : texto
+              } 
+          },
+          { score:{$meta:'textScore'} })
+          .sort({ score : { $meta : 'textScore' } })
+          .populate('tipo')
+          .skip((pagina - 1) * recursosPagina)
+          .limit(recursosPagina)
+          .exec();
+          */
         let usuario = req.Usuario;
+        let recursos = [];  
 
-        let recursos = await Recurso.fuzzySearch({query:texto, prefixOnly: true, minSize: 4 })
-        .populate('tipo')
-        .skip((pagina - 1) * recursosPagina)
-        .limit(recursosPagina)
-        .exec();
+        if (tipo) {
+          recursos = await Recurso.fuzzySearch({query:texto, prefixOnly: true, minSize: 4 }, {tipo: tipo})
+          .populate('tipo')
+          .skip((pagina - 1) * recursosPagina)
+          .limit(recursosPagina)
+          .exec();
+
+        }
+        else  {
+          recursos = await Recurso.fuzzySearch({query:texto, prefixOnly: true, minSize: 4 })
+          .populate('tipo')
+          .skip((pagina - 1) * recursosPagina)
+          .limit(recursosPagina)
+          .exec();
+
+        } 
+       
 
         let totalRecursos = recursos.length;
 
@@ -118,6 +160,7 @@ exports.getRecursos = async (req, res, next) => {
          totalRecursos: totalRecursos,
          recursosPagina: recursosPagina
        });
+
    } catch (error) {
     
      next(error);

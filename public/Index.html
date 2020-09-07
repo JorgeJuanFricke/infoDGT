@@ -63,7 +63,8 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto ">
                 <form class="form-inline">
-                  
+                    <!--select id="filtro" class="nav-item form-control"></select-->
+                    
                     <div class="input-group nav-item">
                         <input id="buscaRecursos" type="text" class="form-control" >
                         <div class="input-group-append">
@@ -82,11 +83,11 @@
                   </svg></a>
                  
                     
-                     <p class="nav-item">
+                     <!--p class="nav-item"-->
 
-                      
+                     
  
-                        <ul id="logeado" class="nav navbar-nav flex-row justify-content-between ml-auto d-none">
+                        <ul id="logeado" class="nav-item flex-row justify-content-between ml-auto d-none">
 
                             <li class="dropdown order-1">
                                
@@ -209,6 +210,9 @@
                                                 <button type="button" onclick="resetAdmin()" class="btn btn-default">Reset</button>   
                                       
                                             </div>
+
+                                            
+
                                             
                                         </form>
                                         
@@ -222,7 +226,7 @@
 
 
 
-                    </p>
+                    <!--/p-->
                 </form>
             </ul>
         </div>
@@ -312,8 +316,27 @@
 
             
         })
+        
     </script>
 
+
+
+
+    <script>
+ 
+        $('#filtro').select2({
+        ajax: {
+            url: window.location.origin +'/tipos',
+            dataType: 'json'
+           
+        },
+      
+        width:'25%'
+        });
+
+
+
+    </script>
     
     <script>
         (function(){
