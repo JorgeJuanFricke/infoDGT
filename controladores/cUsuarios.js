@@ -91,27 +91,13 @@ exports.updateUsuario = async (req, res, next) => {
         throw error;
       };
 
-   
-    const email = req.body.email
-    const nombre = req.body.nombre;
-    const admin = req.body.admin;
-    const oi = req.body.oi;
-    const oat = req.body.oat;
-
-    let update = {
+    let update = req.body;
     
-      nombre: nombre,
-      admin: admin,
-      oi: oi,
-      oat: oat,
-      reset: true
-    };
-  
-    let usuario = await Usuario.findOne({email:email});
-    if (!usuario) {
-        usuario = await Usuario.create({email:email})
-    }
-    let resultado = await usuario.save({udpate})
+    const opts = { new: true, upsert: true };
+
+    let resultado = await Usuario.findOneAndUpdate({email:req.body.email}, update, opts);
+   
+       
     return res.status(200).json({ message: 'usuario modificado!', usuario: resultado });
     
   }
@@ -156,7 +142,14 @@ exports.login = async (req, res, next) => {
         error.statusCode = 401;
         throw error;
       }
-      //UsuarioOK = usuario;
+   
+     
+      if (!usuario.password) {
+        const error = new Error(`el usuario con email:${email} no tiene contraseña`);
+        error.statusCode = 401;
+        throw error;
+      }
+
       const isEqual = await bcrypt.compare(password, usuario.password);
       if (!isEqual) {
         const error = new Error("password incorrecta!");

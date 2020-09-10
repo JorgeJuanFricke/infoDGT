@@ -168,14 +168,13 @@
                                         <form autocomplete="off" class="form" role="form">
                                             <div class="form-group">
                                                 <select id="opciones-admin" class="form-control" required>
-                                                    <option value="permisos" active>Permisos usuarios</option>
-                                                    <option value="reset">resetear contraseña</option>
-                                                    <option value="backup">copiar base de datos</option>
+                                                    <option value="usuarios" active>usuarios</option>
+                                                    <option value="configura">configuración</option>
+                                                   
                                                </select>
                                             </div>
-                                            
-                                            <div id="permisos" class="option-target">
-                                                <p>cambie los permisos.</p>
+                                            <div id="usuarios" class="option-target">
+                                             
                                                 <div class="form-group">
                                                     <label for="email">email</label>
                                                     <input type="text"  name="email" class="form-control" >
@@ -192,24 +191,21 @@
                                                     <input type="checkbox" id="oat" name="OAT">
                                                     <label for="OAT">OAT</label>
                                                 </div>    
-                                                <button type="button" onclick="postUsuario()" class="btn btn-default">Modificar</button>   
-                                        
-                                            </div>    
-                                            <div id="reset" class="option-target">
-                                                <p>resete la contraseña.</p>               
-                                                <div class="form-group">
-                                                    <input id="emailReset" name="emailResetAdmin" placeholder="Email" class="form-control form-control-sm" type="text" required="">
-                                                </div>
-                                                 <div class="form-group">
-                                                    <label for="reset">contraseña:</label>
-                                                    <input type="text" name="resetPasswordAdmin1" class="form-control">
+                                                
                                             
-                                                    <label for="password">repite contraseña</label>
-                                                    <input type="text" name="resetPasswordAdmin2" class="form-control">
+                                                <div id="reset" class="option-target">
+                                                    <p>para resetear contraseña introduzca una.</p>               
+                                                    
+                                                    <div class="form-group">
+                                                        <label for="reset">contraseña:</label>
+                                                        <input type="text" name="resetPasswordAdmin" class="form-control">
+                                                
+                                                    </div>
+                                                    <button type="button" onclick="postUsuario()" class="btn btn-default">Aceptar y grabar</button>   
+                                          
                                                 </div>
-                                                <button type="button" onclick="resetAdmin()" class="btn btn-default">Reset</button>   
-                                      
-                                            </div>
+                                            
+                                             </div>   
 
                                             
 

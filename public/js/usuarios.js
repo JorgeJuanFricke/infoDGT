@@ -38,14 +38,26 @@ const getUsuario = (email) => {
 
 const postUsuario = () => {
 
- 
+  
+    let password = $('input:text[name=resetPasswordAdmin]').val();
+
+  
     const formData = new FormData();
+ 
+    if (password) {
+        formData.append('password', password); 
+        formData.append('reset', true);
+    }    
+   
     formData.append('email',$('input:text[name=email]').val());
     formData.append('nombre',$('input:text[name=nombreUsuario]').val());
     formData.append('admin', $('#admin').is(':checked')); 
     formData.append('oat', $('#oat').is(':checked')); 
     formData.append('oi', $('#oi').is(':checked')); 
+
     
+
+   
     var object = {};
     formData.forEach((value, key) => {object[key] = value});
     var json = JSON.stringify(object);
@@ -72,6 +84,7 @@ const postUsuario = () => {
             
             // usuario actualizado
             if (response.status === 200) {
+                
                 alert(json.message);
             }  
             else {
@@ -172,27 +185,15 @@ const login = () => {
 
 
 
+
+
+
+
 const resetUsuario = () => {
+
     let email = $('#emailLogeado').html();
     let Password = $('input:text[name=resetPasswordUsuario1]').val();
     let Password2 = $('input:text[name=resetPasswordUsuario2]').val();
-    resetPassword(email, Password, Password2);
-}
-
-
-const resetAdmin = () => {
-    let email = $('input:text[name=emailResetAdmin]').val();
-    let Password = $('input:text[name=resetPasswordAdmin1]').val();
-    let Password2 = $('input:text[name=resetPasswordAdmin2]').val();
-    resetPassword(email, Password, Password2);
-}
-
-
-
-
-
-
-const resetPassword = (email, password, password2) => {
 
     if(password !== password2) {
         alert("contraseña no coincide");

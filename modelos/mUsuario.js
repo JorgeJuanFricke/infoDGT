@@ -32,17 +32,19 @@ const UsuarioSchema = mongoose.Schema({
 
 });
 
-
+    UsuarioSchema.pre('findOneAndUpdate', async function () {
+        try {
+            if (this._update.password) {
+                 this._update.password = await bcryptjs.hash(this._update.password, 10)
+            }    
+        }
+        catch (err) {
+            return next(err);
+       }
+    })
  
 
-    UsuarioSchema.pre('insertMany', function (next) {
-        try {
-            this._update.password = bcryptjs.hashSync(this._update.password, 10);
-        } catch {
-            return next("error encriptacion");
-        }
-        next();
-    });
+   
     
 
 
