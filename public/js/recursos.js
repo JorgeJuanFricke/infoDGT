@@ -22,7 +22,8 @@ let formulario = d3.select("body").append("div")
     .attr("action", "/documento")
     .attr("method", "post")
     .attr("enctype","multipart/form-data")
-    .attr("class","form");
+    .attr("class","form")
+    .attr("autocomplete","off");
 
     let linea1 = formulario.append("div")
     .attr("class","form-group row");
