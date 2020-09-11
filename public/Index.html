@@ -315,8 +315,14 @@
         
     </script>
 
+    <script>
+        $("#buscaRecursos").on('keypress',function(e) {
+            if(e.which == 13) {
+                leeListaRecursos();
+            }
+        })
 
-
+    </script>
 
     <script>
  
