@@ -321,6 +321,8 @@ const muestraRecurso = (recurso) => {
 
     var recursosSeccion = d3.select('#Recursos');
     recursosSeccion.selectAll("*").remove();
+    
+    d3.select('#paginacion').selectAll("*").remove();
 
         
 
@@ -370,6 +372,16 @@ const muestraRecurso = (recurso) => {
     
 
 
+      var autoria = cabecera.append("div")
+      .append("h6");
+
+      autoria.append("span")
+      .text(recurso.oficina);
+
+      autoria.append("span")
+      .text( recurso.autor)
+      .attr("class", "float-right");
+
     
 
     var cuerpo = panel.append("div")
@@ -381,13 +393,30 @@ const muestraRecurso = (recurso) => {
     .html(recurso.descripcion);
 
     var pie = panel.append("div");
-
-       
-    if(recurso.url) {
-        pie.append("a")
-        .attr("href", recurso.url)
+     
+    if (recurso.url) {
+        pie.append("span")
+        .attr("style" ,"margin-left: 20px")
+        .append("a")
+        .append("img")
+        .attr("width", "32")
+        .attr("height", "32")
+        .attr("alt", function ()  {
+            return  recurso.url.substring(recurso.url.lastIndexOf('.') + 1) 
+        })
+        .attr("src", function() {
+            return  "/iconos/svg/" + getExtension(recurso.url)  +".svg";
+        })
+        .on("click", function () {
+            //window.location.href = d.url
+            window.open(recurso.url,"documento" ); 
+                    
+        })
         .text(recurso.url);
-    }
+    }    
+
+
+   
     
 
 };

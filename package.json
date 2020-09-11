@@ -1,6 +1,6 @@
 {
-  "name": "untitled",
-  "version": "0.0.0",
+  "name": "buscadgt",
+  "version": "0.9.1",
   "private": true,
   "scripts": {
     "run": "nodemon .bin/www",
@@ -9,7 +9,6 @@
     "debug": "set DEBUG=express:router & node ./bin/wwww.js",
     "http": "set PROXY=http://42795331:XXXXXXX%40http://proxynet.trafico.es:9001/proxy.pac",
     "https": "set HTTPS-PROXY=http://42795331:XXXXXX%40https://proxynet.trafico.es:9001/proxy.pac",
-    "backup": "mongodump",
     "ssl": "set config strict-ssl false -g",
     "node-debug": "node-debug ./bin/www"
   },

@@ -42,3 +42,9 @@ button:focus {
 select #filtro {
   width:120px;
 }
+
+.container {
+  min-width:1000px;
+  width: auto !important;
+  width:1000px;
+}
