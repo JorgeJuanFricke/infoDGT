@@ -10,7 +10,8 @@
     "http": "set PROXY=http://42795331:XXXXXXX%40http://proxynet.trafico.es:9001/proxy.pac",
     "https": "set HTTPS-PROXY=http://42795331:XXXXXX%40https://proxynet.trafico.es:9001/proxy.pac",
     "ssl": "set config strict-ssl false -g",
-    "node-debug": "node-debug ./bin/www"
+    "node-debug": "node-debug ./bin/www",
+    "instala": "node instalaServicioBuscaDgt.js"
   },
   "dependencies": {
     "async": "^3.2.0",
