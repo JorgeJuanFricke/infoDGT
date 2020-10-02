@@ -2,3 +2,4 @@ node_modules
 *~
 public/uploads/**
 bin/ssl/**
+bin/daemon/**
