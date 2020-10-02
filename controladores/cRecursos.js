@@ -4,7 +4,7 @@ const config = require('../configuracion.js');
 const d3 = require("d3");
 const fetch = require('node-fetch');
 
-const parseString = require('xml2js').parseString;
+//const parseString = require('xml2js').parseString;
 const moment = require('moment');
 const app = require('../app');
 

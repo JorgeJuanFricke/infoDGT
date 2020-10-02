@@ -112,7 +112,6 @@ const recursosRouter = require("./rutas/rRecursos.js");
 const indexRouter = require("./rutas/rIndex.js");
 
 const usuariosRouter = require("./rutas/rUsuarios");
-const { getMaxListeners } = require("gulp");
 
 app.use("/recurso", recursosRouter);
 app.use("/usuario", usuariosRouter);
