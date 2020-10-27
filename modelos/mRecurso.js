@@ -1,7 +1,7 @@
 
 const mongoose = require('mongoose');
 const Tipo = require('../modelos/mTipo.js');
-const mongoose_fuzzy_searching = require('mongoose-fuzzy-searching');
+
 
 let RecursoSchema = mongoose.Schema({
     url: {
@@ -59,7 +59,7 @@ let RecursoSchema = mongoose.Schema({
 
     
 });
-RecursoSchema.plugin(mongoose_fuzzy_searching, { fields: ['nombre', 'tipoNombre'] });
+
  
 RecursoSchema.index({ nombre: 'text', descripcion: 'text' },
 

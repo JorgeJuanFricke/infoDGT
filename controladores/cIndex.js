@@ -150,7 +150,7 @@ exports.getRecursos = async (req, res, next) => {
         } 
        */
 
-        let totalRecursos = recursos.length;
+        
 
        res.status(200).json({
          message: 'página de recursos cargados correctamente!!.',
