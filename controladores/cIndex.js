@@ -107,9 +107,10 @@ exports.getRecursos = async (req, res, next) => {
     const recursosPagina = config.recursosPagina;
     const texto = req.query.texto;
     const tipo  = req.query.tipo;
-        
+    let usuario = req.Usuario;
+    let recursos = [];   
        try {
-          /*
+          
           let totalRecursos =  await Recurso.find({ 
               $text : { 
                   $search : texto
@@ -128,10 +129,9 @@ exports.getRecursos = async (req, res, next) => {
           .skip((pagina - 1) * recursosPagina)
           .limit(recursosPagina)
           .exec();
-          */
-        let usuario = req.Usuario;
-        let recursos = [];  
-
+          
+        
+          /*
         if (tipo) {
           recursos = await Recurso.fuzzySearch({query:texto, prefixOnly: true, minSize: 4 }, {tipo: tipo})
           .populate('tipo')
@@ -148,7 +148,7 @@ exports.getRecursos = async (req, res, next) => {
           .exec();
 
         } 
-       
+       */
 
         let totalRecursos = recursos.length;
 
