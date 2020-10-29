@@ -42,12 +42,12 @@ exports.empty = function(mixedVar) {
     var emptyValues = [undef, null, false, 0, '', '0'];
     for (i = 0, len = emptyValues.length; i < len; i++) {
         if (mixedVar === emptyValues[i]) {
-        return true;
+            return true;
         }
     }
     if (typeof mixedVar === 'object') {
         for (key in mixedVar) {
-return false;
+            return false;
         }
         return true;
     }

@@ -2,7 +2,7 @@ const CronJob = require('cron').CronJob;
 const Cron = require('./mongodb_backup.js');
 
 
-// AutoBackUp every week (at 00:00 on Sunday)
+// AutoBackUp todos los dias a la 08 am
 new CronJob(
   '0 8 * * *',
   function() {
