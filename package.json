@@ -30,6 +30,7 @@
   },
   "devDependencies": {},
   "scripts": {
+    "reindexa": "db.getCollectionNames().forEach(function(collection){db[collection].reIndex()});",
     "instala": "node instalaServicioBuscaDgt.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "proxy_npm": "npm config set proxy http://42795331:Kikol2h2@proxy.trafico.es:8080"

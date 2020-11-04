@@ -130,25 +130,7 @@ exports.getRecursos = async (req, res, next) => {
           .limit(recursosPagina)
           .exec();
           
-        
-          /*
-        if (tipo) {
-          recursos = await Recurso.fuzzySearch({query:texto, prefixOnly: true, minSize: 4 }, {tipo: tipo})
-          .populate('tipo')
-          .skip((pagina - 1) * recursosPagina)
-          .limit(recursosPagina)
-          .exec();
-
-        }
-        else  {
-          recursos = await Recurso.fuzzySearch({query:texto, prefixOnly: true, minSize: 4 })
-          .populate('tipo')
-          .skip((pagina - 1) * recursosPagina)
-          .limit(recursosPagina)
-          .exec();
-
-        } 
-       */
+       
 
         
 

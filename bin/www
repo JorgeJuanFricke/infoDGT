@@ -6,8 +6,8 @@ const https = require('https');
 const fs = require('fs');
 
 const options = {
-  key:fs.readFileSync(__dirname + '/ssl/buscadgt.pem'),
-  cert:fs.readFileSync(__dirname + '/ssl/buscadgt.crt')
+  key:fs.readFileSync(__dirname + '/ssl/certificado.key'),
+  cert:fs.readFileSync(__dirname + '/ssl/certificado.crt')
 }
 
 const port = normalizePort(process.env.PORT || '3000');

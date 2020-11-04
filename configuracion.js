@@ -6,7 +6,7 @@ const desarrollo = 'mongodb://localhost:27017/deDGT';
 const produccion = 'mongodb://localhost:27017/deDGT';
 const upLoadDir = 'C:/Users/jorge/buscaDgt/upload';
 const upLoadUrl = '/upload';
-const servidorApp = "http://86564:3000";
+const servidorApp = "http://localhost:3000";
 // 
 
 module.exports = {

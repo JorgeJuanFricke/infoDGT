@@ -61,15 +61,16 @@ let RecursoSchema = mongoose.Schema({
 });
 
  
-RecursoSchema.index({ nombre: 'text', descripcion: 'text' },
+RecursoSchema.index({ titulonombre: 'text', nombre: 'text', descripcion: 'text' },
 
 {
-    name: "nombreydescripcion",
+    name: "tipo_nombre_descripcion",
 
     //  (default es 1)
     weights: {
+        titulonombre: 7,
         nombre: 5,  
-        descripcion: 4  
+        descripcion: 2  
     }
 });
 
