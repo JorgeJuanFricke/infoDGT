@@ -102,7 +102,20 @@ switch (process.env.NODE_ENV) {
 ini.updateTipos();
 ini.creaAdmin();
 
+const CronJob = require('cron').CronJob;
+const Cron = require('./mongodb_backup.js');
 
+
+// AutoBackUp todos los dias a la 08 am
+new CronJob(
+  '0 11 * * *',
+  function() {
+    Cron.dbAutoBackUp();
+  },
+  null,
+  true,
+  'Atlantic/Canary'
+);
 
 
 

@@ -37,7 +37,7 @@ let formulario = d3.select("body").append("div")
 
         tipo.append("label")
         .attr("class","control-label h5")
-        .text(recurso.tipo.codigo);
+        .text(recurso.tipo);
      
     
     } else {

@@ -61,18 +61,9 @@ let RecursoSchema = mongoose.Schema({
 });
 
  
-RecursoSchema.index({ titulonombre: 'text', nombre: 'text', descripcion: 'text' },
+RecursoSchema.index({nombre: 'texto'}, {default_language: "spanish"});
+//createIndex({aliases : "texto"}, {nombre : "texto"},{default_language: "spanish" })
 
-{
-    name: "tipo_nombre_descripcion",
-
-    //  (default es 1)
-    weights: {
-        titulonombre: 7,
-        nombre: 5,  
-        descripcion: 2  
-    }
-});
 
 RecursoSchema.index({
     tipo: 1,

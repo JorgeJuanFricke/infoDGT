@@ -21,16 +21,32 @@ const recursosRouter = require('../rutas/rRecursos.js');
 
 
 
+exports.getListaRecursosIds = async (req, res, next) => {
+  try {
+    objectIds = req.body.lista;
+    const lista = await Recurso.find({ "_id": { $in: objectIds } });
+    if(lista.length == 0) {
+      const error = new Error('lista vacía');
+      error.statusCode = 404;
+      throw error;
 
-
+    }
+  
+    return res.status(200).json({ message: 'lista recursos.', lista: lista })
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
 
 
 exports.getRecurso = async (req, res, next) => {
    
-   const recursoId = req.params.Id;
     try {
-      
-      const recurso = await Recurso.findById(recursoId).populate('tipo');
+     
+      const recurso = await Recurso.findOne({_id: req.params.Id}).populate('tipo');
       if (!recurso) {
         const error = new Error('El recurso no existe');
         error.statusCode = 404;

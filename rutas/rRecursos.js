@@ -52,6 +52,10 @@ recursosRouter.post('/documento', Auto.esAutenticado,  upload.single('documento'
   });
 
 
+recursosRouter.post('/lista', function (req, res, next) {
+    cRecursos.getListaRecursosIds(req, res, next);
+});
+
 
 recursosRouter.get('/',  function (req, res, next) {
     cRecursos.getRecurso(req, res, next);
@@ -61,6 +65,7 @@ recursosRouter.get('/',  function (req, res, next) {
 recursosRouter.get('/:Id', function (req, res, next) {
     cRecursos.getRecurso(req, res, next);
 });
+
 
 
 recursosRouter.put(

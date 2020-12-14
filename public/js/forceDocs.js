@@ -1,4 +1,37 @@
 
+
+const ListaRecursosIds = function(ids) {
+ 
+  var base_url = base_url = window.location.origin;
+  let url = base_url + '/recurso/lista'
+  let method = 'POST';
+  var json = JSON.stringify({lista: ids});
+  fetch(url, {
+    method: method,
+    body: json,
+    headers: {
+        'Content-Type': 'application/json'
+    }
+  })  
+     
+  .then(res => {
+          
+      if ( res.status !== 200) {
+      
+          throw new Error(res.message);
+      }
+      return res.json();
+      
+  })
+  .then(resultado => {
+    return resultado
+  }).catch(error => alert(error));
+
+};
+
+
+
+
 const getSimsDocs = function(RecursoId) {
  
       // GET VECTOR ID
@@ -6,8 +39,8 @@ const getSimsDocs = function(RecursoId) {
     // buscar semejantes obtener nodes y links
     //const nodes = [{node: 'A', value: 79}],
     //const links = [ {source: 4, target: 8, value: 2},]
-    var base_url = 'http://localhost:8000;
-    let url = base_url + '/sims/' + RecursoId;
+    var base_url = 'http://localhost:8000';
+    let url = base_url + '/docsims/' + RecursoId;
     let method = 'GET';
    
     fetch(url, {
@@ -28,21 +61,18 @@ const getSimsDocs = function(RecursoId) {
     })
     .then(resultado => {
     
-        docs = resultado
-        let links = docs.map(function(sim) {
-            return {RecursoId, sim}
+        docs = resultado.rank
+        recurso = docs.shift()[0];  
+        let links = docs.map(function(doc) {
+            return {s:recurso, d:doc[0], l:doc[1]}
         })
-        
-var roots = numbers.map(function(num) {
-    return Math.sqrt(num);
-        nodes = []
-        nodes.append(recurso)
-        nodes.append(docs)
-        
+        let ids = docs.map(function(doc) {
+            return doc[0]
+        })
+
+        nodes = ListaRecursosIds(ids)
         forceDocs(nodes, links);
     
-            
-        
     }).catch(error => alert(error));
 
 };
@@ -247,4 +277,4 @@ var roots = numbers.map(function(num) {
         const c = d3.rgb(color);
         return (c.r * 0.299 + c.g * 0.587 + c.b * 0.114) > 150 ? 'black' : 'white';
     }
-
+ }
