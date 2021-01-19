@@ -1,3 +1,4 @@
+# DOCKER FILE PAR BUSCADGT
 FROM node:latest
 WORKDIR /app
 COPY package.json ./
